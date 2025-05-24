@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "studifi_backend": {
+      "main": "src/studifi_backend/main.mo",
+      "type": "motoko"
+    },
+    "studifi_frontend": {
+      "dependencies": [
+        "studifi_backend"
+      ],
+      "source": [
+        "src/studifi_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "studifi_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
