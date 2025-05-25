@@ -7,9 +7,10 @@ import Result "mo:base/Result";
 import Array "mo:base/Array";
 import Float "mo:base/Float";
 import Int "mo:base/Int";
+import Iter "mo:base/Iter";
 
 actor IntelligentCredit {
-    
+
     // Types for credit assessment
     public type CreditScore = {
         score: Nat; // 0-1000 scale
@@ -88,8 +89,8 @@ actor IntelligentCredit {
 
     // Initialize from stable storage
     system func preupgrade() {
-        applicationsEntries := Map.toArray(applications);
-        creditScoresEntries := Map.toArray(creditScores);
+        applicationsEntries := Iter.toArray(applications.entries());
+        creditScoresEntries := Iter.toArray(creditScores.entries());
     };
 
     system func postupgrade() {
@@ -114,8 +115,8 @@ actor IntelligentCredit {
             name = "Academic Performance";
             weight = 0.4;
             score = gpaScore;
-            impact = if (gpaScore >= 85) "Excellent GPA boosts creditworthiness" 
-                    else if (gpaScore >= 70) "Good academic standing" 
+            impact = if (gpaScore >= 85) "Excellent GPA boosts creditworthiness"
+                    else if (gpaScore >= 70) "Good academic standing"
                     else "Academic performance needs improvement";
         };
         factors := Array.append(factors, [gpaFactor]);
@@ -128,8 +129,8 @@ actor IntelligentCredit {
             name = "Financial Stability";
             weight = 0.3;
             score = financialScore;
-            impact = if (financialScore >= 80) "Strong financial position" 
-                    else if (financialScore >= 50) "Adequate financial management" 
+            impact = if (financialScore >= 80) "Strong financial position"
+                    else if (financialScore >= 50) "Adequate financial management"
                     else "Financial constraints identified";
         };
         factors := Array.append(factors, [financialFactor]);
@@ -141,8 +142,8 @@ actor IntelligentCredit {
             name = "Program Employability";
             weight = 0.2;
             score = programScore;
-            impact = if (programScore >= 85) "High-demand field with excellent job prospects" 
-                    else if (programScore >= 70) "Good career prospects" 
+            impact = if (programScore >= 85) "High-demand field with excellent job prospects"
+                    else if (programScore >= 70) "Good career prospects"
                     else "Moderate employment outlook";
         };
         factors := Array.append(factors, [programFactor]);
@@ -154,8 +155,8 @@ actor IntelligentCredit {
             name = "Academic Progress";
             weight = 0.1;
             score = yearScore;
-            impact = if (yearScore >= 75) "Advanced student with proven commitment" 
-                    else if (yearScore >= 50) "Good academic progress" 
+            impact = if (yearScore >= 75) "Advanced student with proven commitment"
+                    else if (yearScore >= 50) "Good academic progress"
                     else "Early stage student";
         };
         factors := Array.append(factors, [yearFactor]);
@@ -217,7 +218,7 @@ actor IntelligentCredit {
         };
 
         applications.put(applicationId, application);
-        
+
         // Immediately process the application
         await processApplication(applicationId)
     };
@@ -233,7 +234,7 @@ actor IntelligentCredit {
                 let status = if (creditScore.score >= 500) { #Approved } else { #Rejected };
 
                 let updatedApp = {
-                    app with 
+                    app with
                     status = status;
                     creditScore = ?creditScore;
                     processedAt = ?Time.now();
@@ -253,7 +254,7 @@ actor IntelligentCredit {
     };
 
     public query func getStudentApplications(studentId: Principal) : async [LoanApplication] {
-        let allApps = Array.fromIter(Map.vals(applications));
+        let allApps = Iter.toArray(applications.vals());
         Array.filter<LoanApplication>(allApps, func(app) = app.studentId == studentId)
     };
 
@@ -269,7 +270,7 @@ actor IntelligentCredit {
                         let interestRate = calculateInterestRate(score.riskLevel);
                         let termMonths = 60; // 5 years standard
                         let gracePeriodMonths = 6; // 6 months grace period
-                        
+
                         let terms : LoanTerms = {
                             approvedAmount = calculateApprovedAmount(app.requestedAmount, score.score);
                             interestRate = interestRate;
@@ -277,7 +278,7 @@ actor IntelligentCredit {
                             monthlyPayment = calculateMonthlyPayment(app.requestedAmount, interestRate, termMonths);
                             gracePeriodMonths = gracePeriodMonths;
                         };
-                        
+
                         #ok(terms)
                     };
                     case null {
@@ -326,11 +327,11 @@ actor IntelligentCredit {
         rejectedApplications: Nat;
         averageCreditScore: Float;
     } {
-        let allApps = Array.fromIter(Map.vals(applications));
+        let allApps = Iter.toArray(applications.vals());
         let approved = Array.filter<LoanApplication>(allApps, func(app) = app.status == #Approved);
         let rejected = Array.filter<LoanApplication>(allApps, func(app) = app.status == #Rejected);
-        
-        let allScores = Array.fromIter(Map.vals(creditScores));
+
+        let allScores = Iter.toArray(creditScores.vals());
         let avgScore = if (allScores.size() > 0) {
             let total = Array.foldLeft<CreditScore, Float>(allScores, 0.0, func(acc, score) = acc + Float.fromInt(score.score));
             total / Float.fromInt(allScores.size())

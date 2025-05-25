@@ -7,6 +7,7 @@ import Result "mo:base/Result";
 import Array "mo:base/Array";
 import Int "mo:base/Int";
 import Option "mo:base/Option";
+import Iter "mo:base/Iter";
 
 actor ComplianceGateway {
 
@@ -142,10 +143,10 @@ actor ComplianceGateway {
 
     // Initialize from stable storage
     system func preupgrade() {
-        complianceRecordsEntries := Map.toArray(complianceRecords);
-        auditLogsEntries := Map.toArray(auditLogs);
-        regulatoryReportsEntries := Map.toArray(regulatoryReports);
-        riskAssessmentsEntries := Map.toArray(riskAssessments);
+        complianceRecordsEntries := Iter.toArray(complianceRecords.entries());
+        auditLogsEntries := Iter.toArray(auditLogs.entries());
+        regulatoryReportsEntries := Iter.toArray(regulatoryReports.entries());
+        riskAssessmentsEntries := Iter.toArray(riskAssessments.entries());
     };
 
     system func postupgrade() {
@@ -344,7 +345,7 @@ actor ComplianceGateway {
         var factors : [RiskFactor] = [];
 
         // Check compliance history
-        let complianceHistory = getEntityComplianceHistory(entityId);
+        let complianceHistory = await getEntityComplianceHistory(entityId);
         let complianceFactor : RiskFactor = {
             factor = "Compliance History";
             weight = 0.4;
@@ -449,7 +450,7 @@ actor ComplianceGateway {
     };
 
     public query func getEntityComplianceHistory(entityId: Principal) : async [ComplianceRecord] {
-        let allRecords = Array.fromIter(Map.vals(complianceRecords));
+        let allRecords = Iter.toArray(complianceRecords.vals());
         Array.filter<ComplianceRecord>(allRecords, func(record) = record.entityId == entityId)
     };
 
@@ -458,7 +459,7 @@ actor ComplianceGateway {
     };
 
     public query func getAuditLogs(entityId: ?Principal, limit: Nat) : async [AuditLog] {
-        let allLogs = Array.fromIter(Map.vals(auditLogs));
+        let allLogs = Iter.toArray(auditLogs.vals());
         let filteredLogs = switch (entityId) {
             case (?id) { Array.filter<AuditLog>(allLogs, func(log) = log.entityId == id) };
             case null { allLogs };
@@ -476,7 +477,7 @@ actor ComplianceGateway {
         rejectedRecords: Nat;
         totalAuditLogs: Nat;
     } {
-        let allRecords = Array.fromIter(Map.vals(complianceRecords));
+        let allRecords = Iter.toArray(complianceRecords.vals());
         let verified = Array.filter<ComplianceRecord>(allRecords, func(r) = r.status == #Verified);
         let pending = Array.filter<ComplianceRecord>(allRecords, func(r) = r.status == #Pending or r.status == #InProgress);
         let rejected = Array.filter<ComplianceRecord>(allRecords, func(r) = r.status == #Rejected);
@@ -486,7 +487,7 @@ actor ComplianceGateway {
             verifiedRecords = verified.size();
             pendingRecords = pending.size();
             rejectedRecords = rejected.size();
-            totalAuditLogs = Map.size(auditLogs);
+            totalAuditLogs = auditLogs.size();
         }
     };
 }

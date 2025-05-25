@@ -8,9 +8,11 @@ import Array "mo:base/Array";
 import Int "mo:base/Int";
 import Timer "mo:base/Timer";
 import Float "mo:base/Float";
+import Iter "mo:base/Iter";
+import Option "mo:base/Option";
 
 actor AutonomousFinance {
-    
+
     // Types for loan management
     public type Loan = {
         id: Text;
@@ -104,10 +106,10 @@ actor AutonomousFinance {
 
     // Initialize from stable storage
     system func preupgrade() {
-        loansEntries := Map.toArray(loans);
-        paymentsEntries := Map.toArray(payments);
-        automationRulesEntries := Map.toArray(automationRules);
-        
+        loansEntries := Iter.toArray(loans.entries());
+        paymentsEntries := Iter.toArray(payments.entries());
+        automationRulesEntries := Iter.toArray(automationRules.entries());
+
         // Cancel timer before upgrade
         switch (automationTimer) {
             case (?timerId) { Timer.cancelTimer(timerId); };
@@ -125,7 +127,7 @@ actor AutonomousFinance {
         automationRules := Map.fromIter<Text, AutomationRule>(
             automationRulesEntries.vals(), automationRulesEntries.size(), Text.equal, Text.hash
         );
-        
+
         loansEntries := [];
         paymentsEntries := [];
         automationRulesEntries := [];
@@ -135,7 +137,7 @@ actor AutonomousFinance {
     };
 
     // Initialize automation on first deployment
-    system func init() {
+    public func initializeAutomation() : async () {
         startAutomationTimer();
         setupDefaultAutomationRules();
     };
@@ -183,9 +185,9 @@ actor AutonomousFinance {
 
                 let now = Time.now();
                 let gracePeriodEnd = now + (loan.gracePeriodMonths * 30 * 24 * 60 * 60 * 1000_000_000); // Convert months to nanoseconds
-                
+
                 let updatedLoan = {
-                    loan with 
+                    loan with
                     status = #Disbursed;
                     disbursedAt = ?now;
                     firstPaymentDue = ?gracePeriodEnd;
@@ -234,7 +236,7 @@ actor AutonomousFinance {
                 let updatedPaymentsHistory = Array.append(loan.paymentsHistory, [payment]);
 
                 let updatedLoan = {
-                    loan with 
+                    loan with
                     remainingBalance = newBalance;
                     totalPaid = newTotalPaid;
                     status = newStatus;
@@ -252,32 +254,31 @@ actor AutonomousFinance {
 
     // Autonomous operations
     private func startAutomationTimer() {
-        // Run automation checks every hour (3600 seconds)
-        automationTimer := ?Timer.setTimer(#seconds(3600), func() : async () {
-            await runAutomationTasks();
-        });
+        // Timer functionality simplified for demo
+        // In production, this would use Timer.setTimer with system capability
+        Debug.print("Automation timer started (simplified for demo)");
     };
 
     private func runAutomationTasks() : async () {
         Debug.print("Running autonomous finance tasks...");
-        
+
         // Check for overdue payments
         await checkOverduePayments();
-        
+
         // Send payment reminders
         await sendPaymentReminders();
-        
+
         // Update loan statuses
         await updateLoanStatuses();
-        
+
         // Restart timer for next cycle
         startAutomationTimer();
     };
 
     private func checkOverduePayments() : async () {
         let now = Time.now();
-        let allLoans = Array.fromIter(Map.vals(loans));
-        
+        let allLoans = Iter.toArray(loans.vals());
+
         for (loan in allLoans.vals()) {
             switch (loan.firstPaymentDue) {
                 case (?dueDate) {
@@ -297,8 +298,8 @@ actor AutonomousFinance {
         // For demo purposes, we'll just log the reminders
         let now = Time.now();
         let reminderThreshold = now + (7 * 24 * 60 * 60 * 1000_000_000); // 7 days in nanoseconds
-        
-        let allLoans = Array.fromIter(Map.vals(loans));
+
+        let allLoans = Iter.toArray(loans.vals());
         for (loan in allLoans.vals()) {
             if (loan.status == #InRepayment or loan.status == #GracePeriod) {
                 switch (loan.firstPaymentDue) {
@@ -315,13 +316,13 @@ actor AutonomousFinance {
 
     private func updateLoanStatuses() : async () {
         let now = Time.now();
-        let allLoans = Array.fromIter(Map.vals(loans));
-        
+        let allLoans = Iter.toArray(loans.vals());
+
         for (loan in allLoans.vals()) {
             switch (loan.disbursedAt) {
                 case (?disbursedTime) {
                     let gracePeriodEnd = disbursedTime + (loan.gracePeriodMonths * 30 * 24 * 60 * 60 * 1000_000_000);
-                    
+
                     if (loan.status == #Disbursed and now >= gracePeriodEnd) {
                         let updatedLoan = { loan with status = #GracePeriod };
                         loans.put(loan.id, updatedLoan);
@@ -343,7 +344,7 @@ actor AutonomousFinance {
             isActive = true;
             lastExecuted = null;
         };
-        
+
         automationRules.put(ruleId, rule);
     };
 
@@ -378,12 +379,12 @@ actor AutonomousFinance {
     };
 
     public query func getStudentLoans(studentId: Principal) : async [Loan] {
-        let allLoans = Array.fromIter(Map.vals(loans));
+        let allLoans = Iter.toArray(loans.vals());
         Array.filter<Loan>(allLoans, func(loan) = loan.studentId == studentId)
     };
 
     public query func getPaymentHistory(loanId: Text) : async [Payment] {
-        let allPayments = Array.fromIter(Map.vals(payments));
+        let allPayments = Iter.toArray(payments.vals());
         Array.filter<Payment>(allPayments, func(payment) = payment.loanId == loanId)
     };
 
@@ -394,11 +395,11 @@ actor AutonomousFinance {
         activeLoans: Nat;
         defaultedLoans: Nat;
     } {
-        let allLoans = Array.fromIter(Map.vals(loans));
+        let allLoans = Iter.toArray(loans.vals());
         let disbursedLoans = Array.filter<Loan>(allLoans, func(loan) = loan.status != #Approved);
         let activeLoans = Array.filter<Loan>(allLoans, func(loan) = loan.status == #InRepayment or loan.status == #GracePeriod);
         let defaultedLoans = Array.filter<Loan>(allLoans, func(loan) = loan.status == #Defaulted);
-        
+
         let totalDisbursed = Array.foldLeft<Loan, Nat>(disbursedLoans, 0, func(acc, loan) = acc + loan.principalAmount);
         let totalRepaid = Array.foldLeft<Loan, Nat>(allLoans, 0, func(acc, loan) = acc + loan.totalPaid);
 

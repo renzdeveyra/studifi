@@ -6,9 +6,10 @@ import Text "mo:base/Text";
 import Result "mo:base/Result";
 import Array "mo:base/Array";
 import Option "mo:base/Option";
+import Iter "mo:base/Iter";
 
 actor IdentityManager {
-    
+
     // Types for student identity and verification
     public type StudentProfile = {
         id: Principal;
@@ -57,8 +58,8 @@ actor IdentityManager {
 
     // Initialize from stable storage
     system func preupgrade() {
-        studentProfilesEntries := Map.toArray(studentProfiles);
-        verificationRequestsEntries := Map.toArray(verificationRequests);
+        studentProfilesEntries := Iter.toArray(studentProfiles.entries());
+        verificationRequestsEntries := Iter.toArray(verificationRequests.entries());
     };
 
     system func postupgrade() {
@@ -75,7 +76,7 @@ actor IdentityManager {
     // Public functions for identity management
     public shared(msg) func createStudentProfile(request: VerificationRequest) : async Result.Result<StudentProfile, Text> {
         let caller = msg.caller;
-        
+
         // Check if profile already exists
         switch (studentProfiles.get(caller)) {
             case (?existing) {
@@ -106,7 +107,7 @@ actor IdentityManager {
 
         // In a real implementation, this would trigger HTTP outcalls to university APIs
         // For demo purposes, we'll simulate verification
-        await simulateUniversityVerification(request);
+        let _ = await simulateUniversityVerification(request);
 
         #ok(profile)
     };
@@ -117,11 +118,11 @@ actor IdentityManager {
 
     public shared(msg) func updateKYCStatus(status: KYCStatus) : async Result.Result<StudentProfile, Text> {
         let caller = msg.caller;
-        
+
         switch (studentProfiles.get(caller)) {
             case (?profile) {
                 let updatedProfile = {
-                    profile with 
+                    profile with
                     kycStatus = status;
                     updatedAt = Time.now();
                 };
@@ -136,11 +137,11 @@ actor IdentityManager {
 
     public shared(msg) func verifyStudent(gpa: Float) : async Result.Result<StudentProfile, Text> {
         let caller = msg.caller;
-        
+
         switch (studentProfiles.get(caller)) {
             case (?profile) {
                 let updatedProfile = {
-                    profile with 
+                    profile with
                     gpa = gpa;
                     isVerified = true;
                     kycStatus = #Verified;
@@ -164,22 +165,22 @@ actor IdentityManager {
             isValid = true; // Mock successful verification
             verifiedAt = Time.now();
         };
-        
+
         Debug.print("Simulated university verification for: " # request.fullName);
         verification
     };
 
     // Query functions for frontend
     public query func getAllVerifiedStudents() : async [StudentProfile] {
-        let profiles = Map.vals(studentProfiles);
-        Array.filter<StudentProfile>(Array.fromIter(profiles), func(p) = p.isVerified)
+        let profiles = studentProfiles.vals();
+        Array.filter<StudentProfile>(Iter.toArray(profiles), func(p) = p.isVerified)
     };
 
     public query func getVerificationStats() : async {totalStudents: Nat; verifiedStudents: Nat; pendingVerifications: Nat} {
-        let profiles = Array.fromIter(Map.vals(studentProfiles));
+        let profiles = Iter.toArray(studentProfiles.vals());
         let verified = Array.filter<StudentProfile>(profiles, func(p) = p.isVerified);
         let pending = Array.filter<StudentProfile>(profiles, func(p) = p.kycStatus == #Pending);
-        
+
         {
             totalStudents = profiles.size();
             verifiedStudents = verified.size();

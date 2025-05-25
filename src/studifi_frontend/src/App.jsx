@@ -770,7 +770,7 @@ function App() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 StudiFi. Built on Internet Computer Protocol.</p>
+          <p>&copy; 2025 StudiFi. Built on Internet Computer Protocol.</p>
         </div>
       </footer>
     </div>

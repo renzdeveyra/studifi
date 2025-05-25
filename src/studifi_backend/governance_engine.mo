@@ -8,9 +8,10 @@ import Array "mo:base/Array";
 import Int "mo:base/Int";
 import Float "mo:base/Float";
 import Option "mo:base/Option";
+import Iter "mo:base/Iter";
 
 actor GovernanceEngine {
-    
+
     // Types for governance and scholarships
     public type Proposal = {
         id: Text;
@@ -152,11 +153,11 @@ actor GovernanceEngine {
 
     // Initialize from stable storage
     system func preupgrade() {
-        proposalsEntries := Map.toArray(proposals);
-        votesEntries := Map.toArray(votes);
-        scholarshipsEntries := Map.toArray(scholarships);
-        applicationsEntries := Map.toArray(applications);
-        stakeholdersEntries := Map.toArray(stakeholders);
+        proposalsEntries := Iter.toArray(proposals.entries());
+        votesEntries := Iter.toArray(votes.entries());
+        scholarshipsEntries := Iter.toArray(scholarships.entries());
+        applicationsEntries := Iter.toArray(applications.entries());
+        stakeholdersEntries := Iter.toArray(stakeholders.entries());
     };
 
     system func postupgrade() {
@@ -175,7 +176,7 @@ actor GovernanceEngine {
         stakeholders := Map.fromIter<Principal, Stakeholder>(
             stakeholdersEntries.vals(), stakeholdersEntries.size(), Principal.equal, Principal.hash
         );
-        
+
         proposalsEntries := [];
         votesEntries := [];
         scholarshipsEntries := [];
@@ -186,7 +187,7 @@ actor GovernanceEngine {
     // Stakeholder management
     public shared(msg) func registerStakeholder(stakeholderType: StakeholderType) : async Result.Result<Stakeholder, Text> {
         let caller = msg.caller;
-        
+
         switch (stakeholders.get(caller)) {
             case (?existing) {
                 return #err("Stakeholder already registered");
@@ -226,7 +227,7 @@ actor GovernanceEngine {
         votingPeriodDays: Nat
     ) : async Result.Result<Proposal, Text> {
         let caller = msg.caller;
-        
+
         // Check if caller is a registered stakeholder
         switch (stakeholders.get(caller)) {
             case (?stakeholder) {
@@ -262,7 +263,7 @@ actor GovernanceEngine {
 
     public shared(msg) func vote(proposalId: Text, choice: VoteChoice) : async Result.Result<Vote, Text> {
         let caller = msg.caller;
-        
+
         switch (stakeholders.get(caller)) {
             case (?stakeholder) {
                 switch (proposals.get(proposalId)) {
@@ -298,21 +299,21 @@ actor GovernanceEngine {
                         let updatedProposal = switch (choice) {
                             case (#For) {
                                 {
-                                    proposal with 
+                                    proposal with
                                     votesFor = proposal.votesFor + stakeholder.votingPower;
                                     totalVotingPower = proposal.totalVotingPower + stakeholder.votingPower;
                                 }
                             };
                             case (#Against) {
                                 {
-                                    proposal with 
+                                    proposal with
                                     votesAgainst = proposal.votesAgainst + stakeholder.votingPower;
                                     totalVotingPower = proposal.totalVotingPower + stakeholder.votingPower;
                                 }
                             };
                             case (#Abstain) {
                                 {
-                                    proposal with 
+                                    proposal with
                                     totalVotingPower = proposal.totalVotingPower + stakeholder.votingPower;
                                 }
                             };
@@ -391,7 +392,7 @@ actor GovernanceEngine {
                 };
 
                 let updatedProposal = {
-                    proposal with 
+                    proposal with
                     status = #Executed;
                     executedAt = ?Time.now();
                 };
@@ -438,7 +439,7 @@ actor GovernanceEngine {
         supportingDocuments: [Text]
     ) : async Result.Result<ScholarshipApplication, Text> {
         let caller = msg.caller;
-        
+
         switch (scholarships.get(scholarshipId)) {
             case (?scholarship) {
                 if (scholarship.status != #Open) {
@@ -477,13 +478,13 @@ actor GovernanceEngine {
     public shared(msg) func donate(amount: Nat) : async Result.Result<Text, Text> {
         treasuryBalance += amount;
         totalDonations += amount;
-        
+
         // Update donor's voting power
         switch (stakeholders.get(msg.caller)) {
             case (?stakeholder) {
                 let bonusVotingPower = amount / 1000; // 1 voting power per 1000 units donated
                 let updatedStakeholder = {
-                    stakeholder with 
+                    stakeholder with
                     votingPower = stakeholder.votingPower + bonusVotingPower;
                     lastActive = Time.now();
                 };
@@ -501,7 +502,7 @@ actor GovernanceEngine {
     };
 
     public query func getAllActiveProposals() : async [Proposal] {
-        let allProposals = Array.fromIter(Map.vals(proposals));
+        let allProposals = Iter.toArray(proposals.vals());
         Array.filter<Proposal>(allProposals, func(p) = p.status == #Active)
     };
 
@@ -510,7 +511,7 @@ actor GovernanceEngine {
     };
 
     public query func getOpenScholarships() : async [Scholarship] {
-        let allScholarships = Array.fromIter(Map.vals(scholarships));
+        let allScholarships = Iter.toArray(scholarships.vals());
         Array.filter<Scholarship>(allScholarships, func(s) = s.status == #Open)
     };
 
@@ -518,7 +519,7 @@ actor GovernanceEngine {
         {
             balance = treasuryBalance;
             totalDonations = totalDonations;
-            totalStakeholders = Map.size(stakeholders);
+            totalStakeholders = stakeholders.size();
         }
     };
 
@@ -528,7 +529,7 @@ actor GovernanceEngine {
         passedProposals: Nat;
         totalVotes: Nat;
     } {
-        let allProposals = Array.fromIter(Map.vals(proposals));
+        let allProposals = Iter.toArray(proposals.vals());
         let activeProposals = Array.filter<Proposal>(allProposals, func(p) = p.status == #Active);
         let passedProposals = Array.filter<Proposal>(allProposals, func(p) = p.status == #Passed or p.status == #Executed);
 
@@ -536,7 +537,7 @@ actor GovernanceEngine {
             totalProposals = allProposals.size();
             activeProposals = activeProposals.size();
             passedProposals = passedProposals.size();
-            totalVotes = Map.size(votes);
+            totalVotes = votes.size();
         }
     };
 }
