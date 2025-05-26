@@ -1,24 +1,29 @@
 {
   "canisters": {
     "identity_manager": {
-      "main": "src/studifi_backend/identity_manager.mo",
-      "type": "motoko"
+      "type": "rust",
+      "package": "identity_manager",
+      "candid": "src/studifi_backend/identity_manager/identity_manager.did"
     },
     "intelligent_credit": {
-      "main": "src/studifi_backend/intelligent_credit.mo",
-      "type": "motoko"
+      "type": "rust",
+      "package": "intelligent_credit",
+      "candid": "src/studifi_backend/intelligent_credit/intelligent_credit.did"
     },
     "autonomous_finance": {
-      "main": "src/studifi_backend/autonomous_finance.mo",
-      "type": "motoko"
+      "type": "rust",
+      "package": "autonomous_finance",
+      "candid": "src/studifi_backend/autonomous_finance/autonomous_finance.did"
     },
     "governance_engine": {
-      "main": "src/studifi_backend/governance_engine.mo",
-      "type": "motoko"
+      "type": "rust",
+      "package": "governance_engine",
+      "candid": "src/studifi_backend/governance_engine/governance_engine.did"
     },
     "compliance_gateway": {
-      "main": "src/studifi_backend/compliance_gateway.mo",
-      "type": "motoko"
+      "type": "rust",
+      "package": "compliance_gateway",
+      "candid": "src/studifi_backend/compliance_gateway/compliance_gateway.did"
     },
     "studifi_frontend": {
       "dependencies": [
