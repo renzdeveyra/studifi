@@ -9,9 +9,175 @@ type StudiFiError = variant {
   NetworkError : text;
 };
 
-type StudiFiResult = variant {
-  Ok : text;
+type StudiFiResultLoan = variant {
+  Ok : Loan;
   Err : StudiFiError;
+};
+
+type StudiFiResultPayment = variant {
+  Ok : Payment;
+  Err : StudiFiError;
+};
+
+type StudiFiResultBreakdown = variant {
+  Ok : PaymentBreakdown;
+  Err : StudiFiError;
+};
+
+type StudiFiResultPayoffInfo = variant {
+  Ok : EarlyPayoffInfo;
+  Err : StudiFiError;
+};
+
+type StudiFiResult = variant {
+  Ok : null;
+  Err : StudiFiError;
+};
+
+type LoanStatus = variant {
+  Active;
+  Late;
+  Default;
+  PaidOff;
+  Deferred;
+  InGracePeriod;
+  Cancelled;
+};
+
+type PaymentType = variant {
+  Regular;
+  EarlyPayment;
+  LatePayment;
+  PartialPayment;
+  FullPayoff;
+  LateFee;
+};
+
+type PaymentMethod = variant {
+  ICP;
+  BankTransfer;
+  CreditCard;
+  Other : text;
+};
+
+type PaymentStatus = variant {
+  Pending;
+  Processing;
+  Completed;
+  Failed;
+  Cancelled;
+  Refunded;
+};
+
+type TreasuryHealthStatus = variant {
+  Excellent;
+  Good;
+  Fair;
+  Poor;
+  Critical;
+};
+
+type Loan = record {
+  id : text;
+  student_id : principal;
+  original_amount : nat64;
+  current_balance : nat64;
+  interest_rate : float64;
+  term_months : nat32;
+  monthly_payment : nat64;
+  grace_period_months : nat32;
+  origination_fee : nat64;
+  status : LoanStatus;
+  created_at : nat64;
+  first_payment_due : nat64;
+  last_payment_date : opt nat64;
+  payments_made : nat32;
+  late_payments : nat32;
+  purpose : text;
+  collateral_required : bool;
+  cosigner_id : opt principal;
+  special_conditions : vec text;
+};
+
+type Payment = record {
+  id : text;
+  loan_id : text;
+  student_id : principal;
+  amount : nat64;
+  principal_portion : nat64;
+  interest_portion : nat64;
+  late_fee : nat64;
+  payment_type : PaymentType;
+  payment_method : PaymentMethod;
+  status : PaymentStatus;
+  created_at : nat64;
+  processed_at : opt nat64;
+  transaction_hash : opt text;
+  notes : text;
+};
+
+type PaymentBreakdown = record {
+  total_amount : nat64;
+  principal_portion : nat64;
+  interest_portion : nat64;
+  late_fee : nat64;
+  remaining_balance : nat64;
+};
+
+type EarlyPayoffInfo = record {
+  remaining_balance : nat64;
+  prepayment_penalty : nat64;
+  total_payoff_amount : nat64;
+  interest_savings : nat64;
+  is_eligible : bool;
+};
+
+type TreasuryConfig = record {
+  total_funds : nat64;
+  available_funds : nat64;
+  reserved_funds : nat64;
+  minimum_reserve_ratio : float64;
+  maximum_loan_to_fund_ratio : float64;
+  interest_reserve_ratio : float64;
+  emergency_fund_ratio : float64;
+  auto_rebalance_enabled : bool;
+  last_rebalance : nat64;
+};
+
+type TreasuryHealth = record {
+  total_funds : nat64;
+  available_funds : nat64;
+  reserved_funds : nat64;
+  reserve_ratio : float64;
+  loan_to_fund_ratio : float64;
+  utilization_rate : float64;
+  default_rate : float64;
+  health_score : float64;
+  health_status : TreasuryHealthStatus;
+  recommendations : vec text;
+};
+
+type TreasuryStats = record {
+  total_loans_outstanding : nat64;
+  total_loans_disbursed : nat64;
+  total_payments_received : nat64;
+  total_interest_earned : nat64;
+  total_defaults : nat64;
+  active_loan_count : nat32;
+  default_rate : float64;
+  average_loan_size : nat64;
+  portfolio_yield : float64;
+};
+
+type StudentLoanStats = record {
+  total_borrowed : nat64;
+  current_balance : nat64;
+  total_paid : nat64;
+  active_loans : nat32;
+  completed_loans : nat32;
+  on_time_payments : nat32;
+  late_payments : nat32;
+  credit_score_impact : int32;
 };
 
 type Statistics = record {
@@ -24,6 +190,38 @@ type Statistics = record {
 };
 
 service : {
-  create_loan : (principal, nat64, float64, nat32, nat32) -> (StudiFiResult);
+  // Loan Management
+  create_loan : (principal, nat64, float64, nat32, nat32, text, bool, opt principal, vec text) -> (StudiFiResultLoan);
+  get_loan : (text) -> (opt Loan) query;
+  get_student_loans : (principal) -> (vec Loan) query;
+  get_my_loans : () -> (vec Loan) query;
+  get_all_active_loans : () -> (vec Loan) query;
+  get_overdue_loans : () -> (vec Loan) query;
+
+  // Payment Processing
+  process_payment : (text, nat64, PaymentMethod) -> (StudiFiResultPayment);
+  make_early_payoff : (text, PaymentMethod) -> (StudiFiResultPayment);
+  get_payment : (text) -> (opt Payment) query;
+  get_loan_payments : (text) -> (vec Payment) query;
+  get_my_payments : () -> (vec Payment) query;
+  calculate_payment_breakdown : (text, nat64) -> (StudiFiResultBreakdown) query;
+  get_early_payoff_info : (text) -> (StudiFiResultPayoffInfo) query;
+
+  // Treasury Management
+  get_treasury_health : () -> (TreasuryHealth) query;
+  get_treasury_config : () -> (TreasuryConfig) query;
+  update_treasury_config : (TreasuryConfig) -> (StudiFiResult);
+  add_treasury_funds : (nat64, text) -> (StudiFiResult);
+  withdraw_treasury_funds : (nat64, text) -> (StudiFiResult);
+  rebalance_treasury : () -> (StudiFiResult);
+
+  // Statistics and Reporting
   get_platform_stats : () -> (Statistics) query;
+  get_treasury_stats : () -> (TreasuryStats) query;
+  get_student_loan_stats : (principal) -> (StudentLoanStats) query;
+  get_my_loan_stats : () -> (StudentLoanStats) query;
+
+  // Automation and Maintenance
+  run_automation_tasks : () -> (StudiFiResult);
+  update_loan_status : (text, LoanStatus) -> (StudiFiResultLoan);
 }
