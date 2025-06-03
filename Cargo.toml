@@ -1,11 +1,11 @@
 [workspace]
 members = [
-    "src/studifi_backend/autonomous_finance",
-    "src/studifi_backend/compliance_gateway",
-    "src/studifi_backend/governance_engine",
-    "src/studifi_backend/identity_manager",
-    "src/studifi_backend/intelligent_credit",
-    "src/studifi_backend/shared"
+    "src/backend/autonomous_finance",
+    "src/backend/compliance_gateway",
+    "src/backend/governance_engine",
+    "src/backend/identity_manager",
+    "src/backend/intelligent_credit",
+    "src/backend/shared"
 ]
 resolver = "2"
 

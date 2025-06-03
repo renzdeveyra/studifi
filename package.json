@@ -1,18 +1,36 @@
 {
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
-  },
-  "name": "studifi",
+  "name": "./juno-project",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "prebuild": "npm run prebuild --workspaces --if-present",
-    "pretest": "npm run prebuild --workspaces --if-present",
-    "start": "npm start --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "postinstall:copy-auth": "node -e \"require('fs').cpSync('node_modules/@junobuild/core/dist/workers/', './public/workers', {recursive: true});\"",
+    "postinstall": "npm run postinstall:copy-auth"
   },
-  "type": "module",
-  "workspaces": [
-    "src/studifi_frontend"
-  ]
+  "dependencies": {
+    "@junobuild/core": "^0.1.11",
+    "nanoid": "^5.1.5",
+    "next": "15.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@junobuild/config": "^0.1.6",
+    "@junobuild/nextjs-plugin": "^3.3.0",
+    "@next/eslint-plugin-next": "^15.2.3",
+    "@tailwindcss/postcss": "^4.0.15",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.2.3",
+    "postcss": "^8",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^4.0.15",
+    "typescript": "^5"
+  }
 }
