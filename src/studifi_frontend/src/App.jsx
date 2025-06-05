@@ -44,7 +44,7 @@ function App() {
       case 'governance':
         return <GovernancePage />;
       case 'dashboard':
-        return <DashboardPage />;
+        return <DashboardPage setCurrentView={setCurrentView} addNotification={addNotification} />;
       default:
         return <HomePage setCurrentView={setCurrentView} />;
     }
