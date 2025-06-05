@@ -76,6 +76,31 @@ type AcademicInfo = record {
   previous_degrees : vec text;
 };
 
+type LoanStatus = variant {
+  Current;
+  Late;
+  Default;
+  PaidOff;
+  Deferred;
+};
+
+type PreviousLoan = record {
+  loan_type : text;
+  original_amount : nat64;
+  remaining_balance : nat64;
+  monthly_payment : nat64;
+  status : LoanStatus;
+  on_time_payments : nat32;
+  late_payments : nat32;
+};
+
+type FinancialAid = record {
+  aid_type : text;
+  amount : nat64;
+  renewable : bool;
+  requirements : text;
+};
+
 type FinancialInfo = record {
   monthly_income : nat64;
   monthly_expenses : nat64;
@@ -84,6 +109,8 @@ type FinancialInfo = record {
   savings : nat64;
   employment_status : EmploymentStatus;
   credit_history_length_months : nat32;
+  previous_loans : vec PreviousLoan;
+  financial_aid : vec FinancialAid;
 };
 
 type CreditScore = record {
