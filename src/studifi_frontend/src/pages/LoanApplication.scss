@@ -1,7 +1,37 @@
-@import './DashboardPage.scss';
-
 .loan-application-page-section {
-  @extend .dashboard-page-section;
+  background-color: #1e1e1e;
+  color: white;
+  min-height: 100vh;
+  padding: 6rem 0;
+  position: relative;
+  overflow-x: hidden;
+  background-image:
+    linear-gradient(rgba(169, 169, 169, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(169, 169, 169, 0.05) 1px, #1e1e1e 1px);
+  background-size: 160px 160px, 160px 160px;
+  background-position: -39px -39px, -39px -39px;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
 
   .loan-application-header {
     margin-bottom: 3rem;
@@ -71,6 +101,196 @@
           line-height: 1.6;
         }
       }
+    }
+  }
+
+  // Dashboard section wrapper and components
+  .dashboard-section-wrapper {
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .section-header-left {
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        border-radius: 2px;
+      }
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .payment-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+  }
+
+  .section-content-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .aid-status-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(127, 255, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.08), transparent);
+      transition: left 0.6s ease;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: rgba(127, 255, 0, 0.4);
+      box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    .card-image-container {
+      flex-shrink: 0;
+      
+      .card-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, rgba(127, 255, 0, 0.1), rgba(50, 205, 50, 0.05));
+        border: 2px solid rgba(127, 255, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+    }
+
+    .card-details {
+      flex: 1;
+      .card-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .card-subtitle {
+        font-size: 1rem;
+        color: #7fff00;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .card-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #7fff00;
+        margin-bottom: 1rem;
+      }
+      .card-text {
+        opacity: 0.9;
+        line-height: 1.6;
+        margin: 0;
+      }
+      .card-tag {
+        margin-top: 1rem;
+        .tag-text {
+          background: rgba(127, 255, 0, 0.1);
+          color: #7fff00;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          display: inline-block;
+          border: 1px solid rgba(127, 255, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  // Button styles
+  .btn-primary {
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
+    }
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
     }
   }
 
@@ -229,6 +449,15 @@
 // Responsive design improvements
 @media (max-width: 1200px) {
   .loan-application-page-section {
+    .dashboard-section-wrapper {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+
     .loan-application-header .header-content {
       flex-direction: column;
       text-align: center;
@@ -243,6 +472,8 @@
 
 @media (max-width: 768px) {
   .loan-application-page-section {
+    padding: 1rem;
+
     .loan-application-header .header-content {
       padding: 1.5rem;
 
@@ -261,6 +492,10 @@
       }
     }
 
+    .section-title {
+      font-size: 1.8rem;
+    }
+
     .form-group.aid-status-card {
       flex-direction: column;
       text-align: center;
@@ -268,6 +503,7 @@
 
       .card-image-container {
         align-self: center;
+        margin-bottom: 1rem;
       }
     }
 
@@ -278,6 +514,14 @@
       .btn-secondary {
         width: 100%;
         justify-content: center;
+      }
+    }
+
+    .aid-status-card {
+      flex-direction: column;
+      text-align: center;
+      .card-image-container {
+        margin-bottom: 1rem;
       }
     }
   }
