@@ -3,37 +3,41 @@ import './App.scss';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
 import KYCPage from './pages/KYCPage';
-import DashboardPage from './pages/DashboardPage'; // Import DashboardPage
+import DashboardPage from './pages/DashboardPage';
+import LoanApplication from './pages/LoanApplication'; // Import LoanApplication
+import ScholarshipsPage from './pages/ScholarshipsPage'; // Import ScholarshipsPage
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
-  const [isKycSubmitted, setIsKycSubmitted] = useState(false); // State to track KYC submission
+  const [isKycSubmitted, setIsKycSubmitted] = useState(false);
+  const [notifications, setNotifications] = useState([]); // State for notifications
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
 
   const navigateTo = (page) => {
     setCurrentPage(page);
-    window.scrollTo(0, 0); // Scroll to top on page change
+    window.scrollTo(0, 0);
   };
 
-  // Handler for KYC submission completion
   const handleKycSubmissionComplete = () => {
-    setIsKycSubmitted(true); // Set KYC submitted status to true
-    navigateTo('dashboard'); // Navigate to the dashboard page
+    setIsKycSubmitted(true);
+    navigateTo('dashboard');
   };
 
-  // Handler for logout
   const handleLogout = () => {
-    setIsKycSubmitted(false); // Reset KYC submitted status
-    navigateTo('home'); // Navigate back to the home page
+    setIsKycSubmitted(false);
+    navigateTo('home');
   };
 
   return (
     <div className="App">
-      {/* Pass isKycSubmitted and handleLogout to the Navigation component */}
       <Navigation navigateTo={navigateTo} isKycSubmitted={isKycSubmitted} onLogout={handleLogout} />
       {currentPage === 'home' && <HomePage navigateTo={navigateTo} />}
-      {/* Pass the new submission handler to KYCPage */}
       {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} />}
       {currentPage === 'dashboard' && <DashboardPage />}
+      {currentPage === 'loan' && (
+        <LoanApplication />
+      )}
+      {currentPage === 'scholarship' && <ScholarshipsPage />}
     </div>
   );
 };
