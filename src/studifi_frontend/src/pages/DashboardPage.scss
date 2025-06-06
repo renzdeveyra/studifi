@@ -2,25 +2,27 @@
   background-color: #1e1e1e;
   color: white;
   min-height: 100vh;
-  padding: 6rem 0;
+  padding: 2rem 0;
   position: relative;
   overflow-x: hidden;
+  margin-left: 280px; // Account for sidebar width
   background-image:
     linear-gradient(rgba(169, 169, 169, 0.05) 1px, transparent 1px),
     linear-gradient(to right, rgba(169, 169, 169, 0.05) 1px, #1e1e1e 1px);
   background-size: 160px 160px, 160px 160px;
   background-position: -39px -39px, -39px -39px;
+  transition: margin-left 0.3s ease; // Smooth transition for responsive behavior
 
   &::before {
     content: '';
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    left: 280px; // Start after sidebar
+    width: calc(100vw - 280px); // Adjust width to account for sidebar
     height: 100vh;
-
     pointer-events: none;
     z-index: 1;
+    transition: left 0.3s ease, width 0.3s ease;
   }
 
   > * {
@@ -37,6 +39,7 @@
 
 .dashboard-header {
   margin-bottom: 3rem;
+  margin-top: 1rem; // Add some top margin since we removed the large top padding
   
   .profile-section {
     display: flex;
@@ -435,6 +438,7 @@
   }
 }
 
+// Responsive design for sidebar layout
 @media (max-width: 1200px) {
   .dashboard-section-wrapper {
     grid-template-columns: 1fr;
@@ -446,9 +450,20 @@
   }
 }
 
+// Tablet and smaller screens
 @media (max-width: 768px) {
   .dashboard-page-section {
-    padding: 1rem;
+    margin-left: 250px; // Adjust for smaller sidebar width
+    padding: 1rem 0;
+
+    &::before {
+      left: 250px;
+      width: calc(100vw - 250px);
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
   }
 
   .dashboard-header .profile-section {
@@ -488,5 +503,57 @@
     .wallet-address-value {
         max-width: unset;
     }
+  }
+}
+
+// Small tablets
+@media (max-width: 600px) {
+  .dashboard-page-section {
+    margin-left: 220px; // Adjust for even smaller sidebar
+
+    &::before {
+      left: 220px;
+      width: calc(100vw - 220px);
+    }
+  }
+}
+
+// Mobile screens - sidebar becomes overlay/collapsible
+@media (max-width: 480px) {
+  .dashboard-page-section {
+    margin-left: 0; // No margin when sidebar is hidden/overlay
+    padding: 1rem 0;
+
+    &::before {
+      left: 0;
+      width: 100vw;
+    }
+
+    .container {
+      padding: 0 0.5rem;
+    }
+  }
+
+  .dashboard-header {
+    margin-top: 0.5rem;
+    
+    .profile-section {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-section-wrapper {
+    gap: 1.5rem;
+  }
+
+  .aid-status-card,
+  .active-application-item,
+  .overview-card {
+    padding: 1.5rem;
   }
 }

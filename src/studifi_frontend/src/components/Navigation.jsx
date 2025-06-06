@@ -4,44 +4,63 @@ import './Navigation.scss';
 // Accept navigateTo, isKycSubmitted, and onLogout as props
 const Navigation = ({ navigateTo, isKycSubmitted, onLogout }) => {
   return (
-    <nav className="navbar">
-      <div className="logo">
-        Studi<span className="green">fi</span>
-      </div>
-      <ul className="nav-menu">
-
-        {/* Links shown BEFORE KYC is submitted */}
-        {!isKycSubmitted && (
-          <>
+    <>
+      {/* Top Navbar - shown when KYC is NOT submitted */}
+      {!isKycSubmitted && (
+        <nav className="navbar">
+          <div className="logo">
+            Studi<span className="green">fi</span>
+          </div>
+          <ul className="nav-menu">
             <li><a href="#" onClick={() => navigateTo('home')}>Home</a></li>   
             <li><a href="#service">Service</a></li>
             <li><a href="#about">About Us</a></li>
             <li><a href="#contact">Contact</a></li>
-          </>
-        )}
-        {/* Links shown AFTER KYC is submitted */}
-        {isKycSubmitted && (
-          <>
-            <li><a href="#" onClick={() => navigateTo('loan')}>Loan</a></li>
-            <li><a href="#" onClick={() => navigateTo('scholarship')}>Scholarship</a></li>
-            <li><a href="#" onClick={() => navigateTo('governance')}>Governance</a></li>
-            <li><a href="#" onClick={() => navigateTo('dashboard')}>Dashboard</a></li>
-          </>
-        )}
-      </ul>
-      <div className="nav-right">
-        {isKycSubmitted ? (
-          // Show Logout button after KYC is submitted
-          <a href="#" className="login-btn" onClick={onLogout}>Logout</a>
-        ) : (
-          // Show Login and Get Started Now buttons before KYC is submitted
-          <>
+          </ul>
+          <div className="nav-right">
             <a href="#login" className="login-btn">Login</a>
             <button className="get-started-btn" onClick={() => navigateTo('kyc')}>Get Started Now</button>
-          </>
-        )}
-      </div>
-    </nav>
+          </div>
+        </nav>
+      )}
+
+      {/* Sidebar - shown when KYC IS submitted */}
+      {isKycSubmitted && (
+        <nav className="sidebar">
+          <div className="sidebar-header">
+            <div className="logo">
+              Studi<span className="green">fi</span>
+            </div>
+          </div>
+          
+          <ul className="sidebar-menu">
+            <li><a href="#" onClick={() => navigateTo('dashboard')}>
+              <span className="menu-icon">📊</span>
+              Dashboard
+            </a></li>
+            <li><a href="#" onClick={() => navigateTo('loan')}>
+              <span className="menu-icon">💰</span>
+              Loan
+            </a></li>
+            <li><a href="#" onClick={() => navigateTo('scholarship')}>
+              <span className="menu-icon">🎓</span>
+              Scholarship
+            </a></li>
+            <li><a href="#" onClick={() => navigateTo('governance')}>
+              <span className="menu-icon">⚖️</span>
+              Governance
+            </a></li>
+          </ul>
+          
+          <div className="sidebar-footer">
+            <a href="#" className="logout-btn" onClick={onLogout}>
+              <span className="menu-icon">🚪</span>
+              Logout
+            </a>
+          </div>
+        </nav>
+      )}
+    </>
   );
 };
 
