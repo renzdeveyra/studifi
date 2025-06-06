@@ -2,7 +2,7 @@
   background-color: #1e1e1e;
   color: white;
   min-height: 100vh;
-  padding: 6rem 0;
+  padding: 3rem 0 6rem 0;
   position: relative;
   overflow-x: hidden;
   background-image:
@@ -11,15 +11,20 @@
   background-size: 160px 160px, 160px 160px;
   background-position: -39px -39px, -39px -39px;
 
+  // Add margin for sidebar when present
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+
   &::before {
     content: '';
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    left: 280px; // Start after sidebar
+    width: calc(100vw - 280px); // Adjust width to account for sidebar
     height: 100vh;
     pointer-events: none;
     z-index: 1;
+    transition: left 0.3s ease, width 0.3s ease;
   }
 
   > * {
@@ -29,26 +34,205 @@
 
   .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: auto;
     padding: 0 2rem;
   }
 
+  /* HEADER STYLING */
   .loan-application-header {
-    margin-bottom: 3rem;
-    
-    .header-content {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-      border-radius: 20px;
-      padding: 2rem;
-      border: 1px solid rgba(127, 255, 0, 0.15);
-      backdrop-filter: blur(15px);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    background-color: #2a2a2a;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(127, 255, 0, 0.15);
 
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #7fff00;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    .page-subtitle {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  /* FORM CONTAINER STYLING */
+  .loan-application-form-container {
+    background-color: #2a2a2a;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(127, 255, 0, 0.15);
+  }
+
+  /* FORM GRID FOR 4 COLUMNS */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for main layout */
+    gap: 1rem 1.2rem; /* Reduced gap for a tighter layout */
+
+    @media (max-width: 1400px) { /* Changed breakpoint to ensure 4 columns at wider screens */
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1000px) { /* Go to 3 columns at this breakpoint */
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem 1.5rem;
+    }
+
+    @media (max-width: 768px) { /* Go to 2 columns */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 500px) { /* Go to 1 column */
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  /* FORM FIELD GROUP STYLING */
+  .form-field-group {
+    display: flex;
+    flex-direction: column;
+
+    .form-label {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #4a4a4a;
+      background-color: #333333;
+      color: white;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #7fff00;
+        box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.2);
+        background-color: #3a3a3a;
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      &[type="number"], &[type="text"], select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+
+      select {
+        background-image: url('data:image/svg+xml;utf8,<svg fill="%237fff00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 18px;
+        padding-right: 40px;
+        cursor: pointer;
+      }
+    }
+
+    .input-hint {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 0.4rem;
+    }
+  }
+
+  /* BUTTON STYLING AND GRID PLACEMENT */
+  .form-actions-bottom {
+    display: flex;
+    gap: 1rem;
+    justify-content: center; /* Horizontally align buttons within the column */
+    align-items: center; /* Vertically align buttons */
+    
+    // Position it in the grid
+    grid-column: 3 / span 2; /* Start at column 3, span 2 columns in a 4-column grid */
+
+    .btn-primary,
+    .btn-secondary {
+      flex: 1; /* Make buttons take equal available width */
+      max-width: 250px; /* Optional: set a max-width to prevent them from becoming too wide on very large screens */
+      text-align: center; /* Ensure text is centered within the button */
+    }
+
+    @media (max-width: 1000px) { /* 3 columns */
+      grid-column: 1 / -1; /* Span all 3 columns */
+      justify-content: center;
+      flex-direction: row; /* Ensure they stay in a row if there's space */
+      .btn-primary,
+      .btn-secondary {
+          flex: 1; /* Still take equal width */
+          max-width: 200px; /* Adjust max width for smaller multi-column layouts */
+      }
+    }
+
+    @media (max-width: 768px) {
+      grid-column: 1 / -1;
+      flex-direction: column; /* Stack vertically */
+      .btn-primary,
+      .btn-secondary {
+        width: 100%; /* Take full width when stacked */
+        max-width: unset; /* Remove max-width when stacked */
+      }
+    }
+
+    @media (max-width: 500px) { /* 1 column */
+      grid-column: 1; /* Span the single column */
+      justify-content: center;
+      flex-direction: column; /* Stack vertically */
+      .btn-primary,
+      .btn-secondary {
+        width: 100%; /* Take full width when stacked */
+        max-width: unset; /* Remove max-width when stacked */
+      }
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Centered content within button */
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(127, 255, 0, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      
       &::before {
         content: '';
         position: absolute;
@@ -56,55 +240,35 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.08), transparent);
-        transition: left 0.6s ease;
-      }
-
-      &:hover {
-        border-color: rgba(127, 255, 0, 0.4);
-        transform: translateY(-2px);
-        box-shadow: 0 15px 35px rgba(127, 255, 0, 0.1);
-
-        &::before {
-          left: 100%;
-        }
-      }
-
-      .header-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #7fff00, #32cd32);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        flex-shrink: 0;
-        box-shadow: 0 8px 20px rgba(127, 255, 0, 0.3);
-      }
-
-      .header-info {
-        flex: 1;
-
-        .page-title {
-          font-size: 2.5rem;
-          font-weight: bold;
-          color: white;
-          margin-bottom: 0.5rem;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .page-subtitle {
-          font-size: 1.2rem;
-          color: rgba(255, 255, 255, 0.7);
-          margin: 0;
-          line-height: 1.6;
-        }
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        animation: loading-shimmer 1.5s infinite;
       }
     }
   }
 
-  // Dashboard section wrapper and components
+  .btn-secondary {
+    background-color: #333333;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    border: 1px solid #4a4a4a;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Centered content within button */
+    gap: 8px;
+
+    &:hover {
+      background-color: #404040;
+      border-color: #707070;
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Existing Application Result Styling (retained for consistency) */
   .dashboard-section-wrapper {
     margin-bottom: 3rem;
     display: grid;
@@ -252,168 +416,6 @@
     }
   }
 
-  // Button styles
-  .btn-primary {
-    background: linear-gradient(135deg, #7fff00, #32cd32);
-    color: #000;
-    padding: 12px 24px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
-    }
-  }
-
-  .btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
-    }
-  }
-
-  .loan-application-form {
-    .form-group {
-      margin-bottom: 0; // Remove margin since we're using card spacing
-
-      &.aid-status-card {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-
-        .card-details {
-          flex: 1;
-
-          .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #7fff00;
-            margin-bottom: 0.8rem;
-            display: block;
-          }
-
-          .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(127, 255, 0, 0.3);
-            background-color: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            margin-bottom: 0.5rem;
-
-            &:focus {
-              outline: none;
-              border-color: #7fff00;
-              box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.2);
-              background-color: rgba(255, 255, 255, 0.08);
-            }
-
-            &::placeholder {
-              color: rgba(255, 255, 255, 0.5);
-            }
-
-            // Custom styling for select dropdowns
-            &[type="number"], &[type="text"], select {
-              appearance: none;
-              -webkit-appearance: none;
-              -moz-appearance: none;
-            }
-
-            // Custom arrow for select elements
-            select {
-              background-image: url('data:image/svg+xml;utf8,<svg fill="%237fff00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-              background-repeat: no-repeat;
-              background-position: right 12px center;
-              background-size: 20px;
-              padding-right: 40px;
-              cursor: pointer;
-            }
-          }
-
-          .card-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin: 0;
-          }
-        }
-      }
-    }
-
-    .form-actions-card {
-      text-align: left;
-
-      .card-details {
-        .card-title {
-          color: white;
-          margin-bottom: 0.8rem;
-        }
-
-        .card-text {
-          margin-bottom: 1.5rem;
-        }
-
-        .form-actions {
-          display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
-
-          .btn-primary {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-
-            &:disabled {
-              opacity: 0.7;
-              cursor: not-allowed;
-              transform: none;
-              
-              &:hover {
-                transform: none;
-                box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
-              }
-            }
-          }
-
-          .btn-secondary {
-            padding: 15px 25px;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-          }
-        }
-      }
-    }
-  }
-
   // Application result styling improvements
   .dashboard-section-wrapper {
     .aid-status-card {
@@ -447,67 +449,61 @@
 }
 
 // Responsive design improvements
-@media (max-width: 1200px) {
+@media (max-width: 1400px) { /* This breakpoint now specifically targets the 4-column layout */
   .loan-application-page-section {
-    .dashboard-section-wrapper {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-    }
-
-    .loan-application-header .header-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 1.5rem;
-
-      .header-info .page-title {
-        font-size: 2rem;
+    .loan-application-header {
+      .page-title {
+        font-size: 1.8rem;
       }
+      .page-subtitle {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 1000px) { /* New breakpoint for 3 columns */
+  .loan-application-page-section {
+    .form-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem 1.5rem;
+    }
+    .form-actions-bottom {
+      grid-column: 1 / -1; /* Span all 3 columns */
+      justify-content: center;
     }
   }
 }
 
 @media (max-width: 768px) {
   .loan-application-page-section {
-    padding: 1rem;
+    margin-left: 250px;
+    padding: 1rem 0;
 
-    .loan-application-header .header-content {
+    &::before {
+      left: 250px;
+      width: calc(100vw - 250px);
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .loan-application-header {
       padding: 1.5rem;
-
-      .header-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
+      .page-title {
+        font-size: 1.4rem;
       }
-
-      .header-info .page-title {
-        font-size: 1.8rem;
-      }
-
-      .header-info .page-subtitle {
-        font-size: 1rem;
+      .page-subtitle {
+        font-size: 0.75rem;
       }
     }
 
     .section-title {
       font-size: 1.8rem;
     }
-
-    .form-group.aid-status-card {
-      flex-direction: column;
-      text-align: center;
-      gap: 1rem;
-
-      .card-image-container {
-        align-self: center;
-        margin-bottom: 1rem;
-      }
-    }
-
-    .form-actions-card .card-details .form-actions {
+    
+    .form-actions-bottom {
       flex-direction: column;
 
       .btn-primary,
@@ -516,13 +512,28 @@
         justify-content: center;
       }
     }
+  }
+}
 
-    .aid-status-card {
-      flex-direction: column;
-      text-align: center;
-      .card-image-container {
-        margin-bottom: 1rem;
-      }
+@media (max-width: 600px) {
+  .loan-application-page-section {
+    margin-left: 220px;
+    
+    &::before {
+      left: 220px;
+      width: calc(100vw - 220px);
+    }
+  }
+}
+
+// Very small screens - sidebar becomes overlay, so remove margin
+@media (max-width: 480px) {
+  .loan-application-page-section {
+    margin-left: 0;
+    
+    &::before {
+      left: 0;
+      width: 100vw;
     }
   }
 }
@@ -557,13 +568,12 @@
   }
 }
 
-// Enhanced hover effects
-.loan-application-page-section {
-  .form-group.aid-status-card {
-    &:hover {
-      .form-input {
-        border-color: rgba(127, 255, 0, 0.5);
-      }
-    }
+// Alternative approach for pages without sidebar (if needed)
+.loan-application-page-section.no-sidebar {
+  margin-left: 0;
+  
+  &::before {
+    left: 0;
+    width: 100vw;
   }
 }
