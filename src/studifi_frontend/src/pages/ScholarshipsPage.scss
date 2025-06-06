@@ -1,0 +1,67 @@
+@import './DashboardPage.scss'; // Import the dashboard styles
+
+.scholarships-page-section {
+  @extend .dashboard-page-section; // Inherit all styles from dashboard-page-section
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .create-scholarship-form {
+    margin-bottom: 3rem;
+  }
+
+  .scholarships-grid {
+    // This will use the .dashboard-section-wrapper and .overview-grid styles
+  }
+
+  .scholarship-card {
+    // Already inherits styles from .overview-card
+
+    .description {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .amount {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #7fff00;
+      margin-bottom: 1rem;
+    }
+
+    .criteria {
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      p {
+        margin: 0.3rem 0;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        strong {
+          color: #7fff00;
+        }
+      }
+    }
+
+    .btn-secondary {
+      margin-top: auto; // Pushes the button to the bottom if cards have varying content
+      width: 100%;
+    }
+  }
+
+  .empty-state {
+    // Already inherits styles from .aid-status-card
+    text-align: center;
+    h3 {
+      font-size: 1.8rem;
+      color: #7fff00;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      opacity: 0.8;
+    }
+  }
+}

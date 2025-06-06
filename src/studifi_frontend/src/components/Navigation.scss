@@ -1,0 +1,129 @@
+// Navigation Bar Styles
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #181818;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  z-index: 2;
+
+  .green {
+    color: #00ff88;
+  }
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #00ff88;
+    }
+  }
+}
+
+.nav-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.login-btn {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #00ff88;
+  }
+}
+
+.get-started-btn {
+  background: linear-gradient(135deg, #7fff00, #32cd32);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Navigation Media Queries
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  
+  .navbar {
+    padding: 0 1rem;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .nav-right {
+    gap: 0.5rem;
+  }
+
+  .get-started-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .login-btn {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 0.5rem;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  .get-started-btn {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+
+  .login-btn {
+    font-size: 0.9rem;
+  }
+}
