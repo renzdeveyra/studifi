@@ -1,0 +1,612 @@
+// Base color palette from App.scss and HomePage.scss
+$primary-bg: #1e1e1e;
+$accent-color: #7fff00;
+$text-color: #ffffff;
+$border-color: rgba(255, 255, 255, 0.1);
+$card-bg: rgba(255, 255, 255, 0.08);
+
+.kyc-container {
+  background-color: $primary-bg;
+  color: $text-color;
+  padding-top: 70px;
+}
+
+.kyc-hero {
+  background: linear-gradient(180deg,
+      $primary-bg 0%,
+      rgba(30, 30, 30, 0.95) 50%,
+      rgba(30, 30, 30, 0.85) 100%);
+  background-image:
+    linear-gradient(rgba(169, 169, 169, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(169, 169, 169, 0.05) 1px, transparent 1px);
+  background-size: 160px 160px;
+  background-position: -39px -39px, -39px -39px;
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    height: 80vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.08) 0%, transparent 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent 0%, $primary-bg 100%);
+    pointer-events: none;
+  }
+}
+
+.kyc-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.brand-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: $accent-color;
+  }
+
+  .brand-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+}
+
+.verification-intro {
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 1rem auto;
+  }
+
+  .security-note {
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+  }
+}
+
+.progress-container {
+  margin-top: 2rem;
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #32cd32, $accent-color);
+      border-radius: 4px;
+      transition: width 0.5s ease-in-out;
+    }
+  }
+
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      position: relative;
+      flex: 1;
+
+      .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .step-label {
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      &.active {
+        opacity: 1;
+
+        .step-number {
+          background-color: $accent-color;
+          color: #000;
+        }
+      }
+
+      &.current {
+        .step-number {
+          border-color: $accent-color;
+          background-color: $primary-bg;
+          color: $accent-color;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+
+.kyc-content {
+  padding: 4rem 0;
+}
+
+.kyc-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(43, 43, 43, 0.5);
+  border: 1px solid $border-color;
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Prevent any scrolling
+}
+
+.form-content {
+  flex: 1;
+  overflow: hidden; // No scrolling within content
+  display: flex;
+  flex-direction: column;
+}
+
+.form-step {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+
+  &.active {
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0; // Don't shrink the header
+
+  h3 {
+    font-size: 1.8rem;
+    color: $accent-color;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+
+  .wallet-icon {
+    font-size: 2rem;
+    margin: 0.5rem 0;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  flex: 1;
+  align-content: start; // Align content to start to prevent stretching
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  input,
+  select,
+  textarea {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $accent-color;
+      box-shadow: 0 0 15px rgba(127, 255, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: $text-color;
+    }
+
+    &:not([value=""]) {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: $text-color;
+    }
+
+    &[type="date"] {
+      &::-webkit-datetime-edit-text,
+      &::-webkit-datetime-edit-month-field,
+      &::-webkit-datetime-edit-day-field,
+      &::-webkit-datetime-edit-year-field {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      &:focus,
+      &:not([value=""]) {
+        &::-webkit-datetime-edit-text,
+        &::-webkit-datetime-edit-month-field,
+        &::-webkit-datetime-edit-day-field,
+        &::-webkit-datetime-edit-year-field {
+          color: $text-color;
+        }
+      }
+
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(70%) sepia(100%) saturate(2000%) hue-rotate(80deg) brightness(120%);
+        cursor: pointer;
+      }
+    }
+
+    option {
+      background-color: $primary-bg;
+      color: $text-color;
+    }
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"><path fill="%237fff00" d="M0,0 L5,6 L10,0 Z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px 6px;
+    padding-right: 35px;
+  }
+
+  textarea {
+    resize: none; // Prevent resizing to maintain consistent height
+    height: 60px; // Fixed height for consistency
+  }
+}
+
+.upload-section {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  align-items: stretch;
+}
+
+.upload-area,
+.selfie-area {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px dashed $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .upload-icon,
+  .selfie-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    opacity: 0.7;
+    font-size: 0.8rem;
+  }
+
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  &:hover {
+    border-color: $accent-color;
+    background: rgba(127, 255, 0, 0.05);
+  }
+
+  &.single-upload {
+    margin-top: 1rem;
+    height: 120px; // Fixed height for single upload areas
+  }
+}
+
+.selfie-btn {
+  background: transparent;
+  border: 1px solid $accent-color;
+  color: $accent-color;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: $accent-color;
+    color: #000;
+  }
+}
+
+.wallet-connection {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .wallet-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .wallet-btn {
+    background: $card-bg;
+    border: 1px solid $border-color;
+    color: $text-color;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+
+    .wallet-logo {
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      border-color: $accent-color;
+      transform: translateY(-3px);
+    }
+  }
+
+  .manual-wallet {
+    .form-group {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.summary-section {
+  flex: 1;
+  overflow: hidden;
+
+  .summary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .summary-card {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid $border-color;
+
+    h4 {
+      color: $accent-color;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid $border-color;
+      padding-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      font-size: 0.8rem;
+
+      span:first-child {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .terms-section {
+    text-align: center;
+    margin-top: 1.25rem; /* Approximately 20px (16px * 1.25 = 20px) */
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+
+      input {
+        display: none;
+      }
+
+      .checkmark {
+        width: 18px;
+        height: 18px;
+        border: 2px solid $border-color;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+        display: inline-block;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      input:checked+.checkmark {
+        background-color: $accent-color;
+        border-color: $accent-color;
+
+        &::after {
+          content: '✔';
+          position: absolute;
+          color: #000;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.form-navigation {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid $border-color;
+  padding-top: 1.5rem;
+  flex-shrink: 0; // Don't shrink the navigation
+
+  .nav-btn {
+    padding: 10px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .prev-btn {
+    background: transparent;
+    color: $text-color;
+    border: 2px solid $border-color;
+
+    &:hover {
+      border-color: $accent-color;
+      color: $accent-color;
+    }
+  }
+
+  .next-btn,
+  .submit-btn {
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(127, 255, 0, 0.3);
+    }
+  }
+
+  .step-indicator {
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 768px) {
+  .kyc-hero-content {
+    padding: 0 1rem;
+  }
+
+  .progress-steps {
+    .step-label {
+      display: none;
+    }
+  }
+
+  .kyc-form-container {
+    padding: 1.5rem;
+    height: auto;
+    min-height: 500px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .upload-section {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .summary-section .summary-row {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+}

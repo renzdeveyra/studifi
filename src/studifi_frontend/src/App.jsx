@@ -1,68 +1,41 @@
-// App.jsx
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import Navigation from './components/Navigation';
-import Footer from './components/Footer';
-import Notifications from './components/Notifications';
 import HomePage from './pages/HomePage';
-import LoanApplication from './pages/LoanApplication';
-import ScholarshipsPage from './pages/ScholarshipsPage';
-import GovernancePage from './pages/GovernancePage';
-import DashboardPage from './pages/DashboardPage';
+import KYCPage from './pages/KYCPage';
+import DashboardPage from './pages/DashboardPage'; // Import DashboardPage
 
-function App() {
-  const [currentView, setCurrentView] = useState('home');
-  const [userProfile, setUserProfile] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [isKycSubmitted, setIsKycSubmitted] = useState(false); // State to track KYC submission
 
-  // Notification system
-  const addNotification = (message, type = 'info') => {
-    const notification = {
-      id: Date.now(),
-      message,
-      type,
-      timestamp: new Date()
-    };
-    setNotifications(prev => [...prev, notification]);
-
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.id !== notification.id));
-    }, 5000);
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0); // Scroll to top on page change
   };
 
-  // Render current view
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'home':
-        return <HomePage setCurrentView={setCurrentView} />;
-      case 'loans':
-        return <LoanApplication addNotification={addNotification} setIsLoading={setIsLoading} isLoading={isLoading} />;
-      case 'scholarships':
-        return <ScholarshipsPage />;
-      case 'governance':
-        return <GovernancePage />;
-      case 'dashboard':
-        return <DashboardPage setCurrentView={setCurrentView} addNotification={addNotification} />;
-      default:
-        return <HomePage setCurrentView={setCurrentView} />;
-    }
+  // Handler for KYC submission completion
+  const handleKycSubmissionComplete = () => {
+    setIsKycSubmitted(true); // Set KYC submitted status to true
+    navigateTo('dashboard'); // Navigate to the dashboard page
+  };
+
+  // Handler for logout
+  const handleLogout = () => {
+    setIsKycSubmitted(false); // Reset KYC submitted status
+    navigateTo('home'); // Navigate back to the home page
   };
 
   return (
-    <div className="studifi-app">
-      <Navigation setCurrentView={setCurrentView} currentView={currentView} />
-
-      <Notifications notifications={notifications} />
-
-      <main className="main-content">
-        {renderCurrentView()}
-      </main>
-
-      <Footer />
+    <div className="App">
+      {/* Pass isKycSubmitted and handleLogout to the Navigation component */}
+      <Navigation navigateTo={navigateTo} isKycSubmitted={isKycSubmitted} onLogout={handleLogout} />
+      {currentPage === 'home' && <HomePage navigateTo={navigateTo} />}
+      {/* Pass the new submission handler to KYCPage */}
+      {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} />}
+      {currentPage === 'dashboard' && <DashboardPage />}
     </div>
   );
-}
+};
 
 export default App;
