@@ -1,68 +1,45 @@
-// App.jsx
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import Navigation from './components/Navigation';
-import Footer from './components/Footer';
-import Notifications from './components/Notifications';
 import HomePage from './pages/HomePage';
-import LoanApplication from './pages/LoanApplication';
-import ScholarshipsPage from './pages/ScholarshipsPage';
-import GovernancePage from './pages/GovernancePage';
+import KYCPage from './pages/KYCPage';
 import DashboardPage from './pages/DashboardPage';
+import LoanApplication from './pages/LoanApplication'; // Import LoanApplication
+import ScholarshipsPage from './pages/ScholarshipsPage'; // Import ScholarshipsPage
 
-function App() {
-  const [currentView, setCurrentView] = useState('home');
-  const [userProfile, setUserProfile] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [isKycSubmitted, setIsKycSubmitted] = useState(false);
+  const [notifications, setNotifications] = useState([]); // State for notifications
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
 
-  // Notification system
-  const addNotification = (message, type = 'info') => {
-    const notification = {
-      id: Date.now(),
-      message,
-      type,
-      timestamp: new Date()
-    };
-    setNotifications(prev => [...prev, notification]);
-
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.id !== notification.id));
-    }, 5000);
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
-  // Render current view
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'home':
-        return <HomePage setCurrentView={setCurrentView} />;
-      case 'loans':
-        return <LoanApplication addNotification={addNotification} setIsLoading={setIsLoading} isLoading={isLoading} />;
-      case 'scholarships':
-        return <ScholarshipsPage />;
-      case 'governance':
-        return <GovernancePage />;
-      case 'dashboard':
-        return <DashboardPage setCurrentView={setCurrentView} addNotification={addNotification} />;
-      default:
-        return <HomePage setCurrentView={setCurrentView} />;
-    }
+  const handleKycSubmissionComplete = () => {
+    setIsKycSubmitted(true);
+    navigateTo('dashboard');
+  };
+
+  const handleLogout = () => {
+    setIsKycSubmitted(false);
+    navigateTo('home');
   };
 
   return (
-    <div className="studifi-app">
-      <Navigation setCurrentView={setCurrentView} currentView={currentView} />
-
-      <Notifications notifications={notifications} />
-
-      <main className="main-content">
-        {renderCurrentView()}
-      </main>
-
-      <Footer />
+    <div className="App">
+      <Navigation navigateTo={navigateTo} isKycSubmitted={isKycSubmitted} onLogout={handleLogout} />
+      {currentPage === 'home' && <HomePage navigateTo={navigateTo} />}
+      {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} />}
+      {currentPage === 'dashboard' && <DashboardPage />}
+      {currentPage === 'loan' && (
+        <LoanApplication />
+      )}
+      {currentPage === 'scholarship' && <ScholarshipsPage />}
     </div>
   );
-}
+};
 
 export default App;
