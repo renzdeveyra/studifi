@@ -9,6 +9,7 @@ import LoanApplication from './pages/LoanApplication';
 import ScholarshipsPage from './pages/ScholarshipsPage';
 import GovernancePage from './pages/GovernancePage';
 import DashboardPage from './pages/DashboardPage';
+import { RegistrationPage } from './pages/RegistrationPage';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -45,6 +46,8 @@ function App() {
         return <GovernancePage />;
       case 'dashboard':
         return <DashboardPage setCurrentView={setCurrentView} addNotification={addNotification} />;
+      case 'register':
+        return <RegistrationPage setCurrentView={setCurrentView} addNotification={addNotification} />;
       default:
         return <HomePage setCurrentView={setCurrentView} />;
     }

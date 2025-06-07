@@ -129,6 +129,74 @@ type Statistics = record {
   average_amount : nat64;
 };
 
+type CredentialArgument = variant {
+  Text : text;
+  Number : float64;
+  Boolean : bool;
+};
+
+type IssuerInfo = record {
+  origin : text;
+  canister_id : opt principal;
+};
+
+type CredentialSpec = record {
+  credential_type : text;
+  arguments : vec record { text; CredentialArgument };
+};
+
+type VerifiableCredentialRequest = record {
+  issuer : IssuerInfo;
+  credential_spec : CredentialSpec;
+  credential_subject : principal;
+  derivation_origin : opt text;
+};
+
+type VerifiableCredentialResponse = record {
+  verifiable_presentation : text;
+  verified : bool;
+  credential_type : text;
+  issuer : text;
+  subject : principal;
+  issued_at : nat64;
+  expires_at : opt nat64;
+  claims : vec record { text; CredentialArgument };
+};
+
+type VcVerificationStatus = variant {
+  Pending;
+  InProgress;
+  Completed;
+  Failed;
+  Expired;
+};
+
+type VcVerificationSession = record {
+  id : text;
+  user_principal : principal;
+  request : VerifiableCredentialRequest;
+  status : VcVerificationStatus;
+  created_at : nat64;
+  updated_at : nat64;
+  response : opt VerifiableCredentialResponse;
+  error_message : opt text;
+};
+
+type StudiFiResultVcSession = variant {
+  Ok : VcVerificationSession;
+  Err : StudiFiError;
+};
+
+type StudiFiResultVcResponse = variant {
+  Ok : VerifiableCredentialResponse;
+  Err : StudiFiError;
+};
+
+type StudiFiResultBool = variant {
+  Ok : bool;
+  Err : StudiFiError;
+};
+
 service : {
   // Core profile management
   create_student_profile : (VerificationRequest) -> (StudiFiResult);
@@ -154,4 +222,11 @@ service : {
   // University configuration (admin functions)
   add_university_config : (UniversityApiConfig) -> (StudiFiResultUnit);
   get_university_configs : () -> (vec UniversityApiConfig) query;
+
+  // Verifiable Credentials (Relying Party)
+  create_vc_verification_session : (text, opt principal, text, text) -> (StudiFiResultVcSession);
+  process_vc_response : (text, text) -> (StudiFiResultVcResponse);
+  get_vc_session_status : (text) -> (opt VcVerificationStatus) query;
+  get_my_vc_sessions : () -> (vec VcVerificationSession) query;
+  verify_presentation : (text) -> (StudiFiResultBool) query;
 }
