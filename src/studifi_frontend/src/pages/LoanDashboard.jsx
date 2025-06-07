@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoanDashboard.scss';
 
-const LoanDashboard = ({ navigateTo }) => { // Accept navigateTo as a prop
+const LoanDashboard = ({ navigateTo }) => {
+  useEffect(() => {
+    console.log('LoanDashboard mounted successfully');
+  }, []); // Accept navigateTo as a prop
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const loanData = {
@@ -63,10 +66,11 @@ const LoanDashboard = ({ navigateTo }) => { // Accept navigateTo as a prop
   ];
 
   const quickActions = [
-    { label: "View Agreement", icon: "📄", color: "blue" },
+    { label: "View Loan Contract", icon: "📄", color: "blue", action: () => navigateTo('smart-contract', { contractType: 'loan' }) },
+    { label: "Make Payment", icon: "💳", color: "green", action: () => navigateTo('payment') },
     { label: "Payment Calculator", icon: "🧮", color: "teal" },
     { label: "Contact Support", icon: "💬", color: "gray" },
-    { label: "Apply for Another", icon: "➕", color: "green", action: () => navigateTo('applyLoan') } // Change 'loan' to 'applyLoan'
+    { label: "Apply for Another", icon: "➕", color: "purple", action: () => navigateTo('applyLoan') }
   ];
 
   return (

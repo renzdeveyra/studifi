@@ -524,15 +524,9 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-@media (max-width: 1200px) {
-  .scholarship-dashboard {
-    margin-left: 250px;
-  }
-}
-
 @media (max-width: 768px) {
   .scholarship-dashboard {
-    margin-left: 0;
+    margin-left: 250px; // Adjust for smaller sidebar width
     padding: 1rem;
   }
 
@@ -570,7 +564,13 @@
 
 @media (max-width: 600px) {
   .scholarship-dashboard {
-    margin-left: 0;
+    margin-left: 220px; // Adjust for smaller sidebar width
+  }
+}
+
+@media (max-width: 480px) {
+  .scholarship-dashboard {
+    margin-left: 0; // Remove margin when sidebar becomes overlay
   }
 
   .section-header {

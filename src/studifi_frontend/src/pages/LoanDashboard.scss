@@ -12,17 +12,18 @@
     linear-gradient(to right, rgba(169, 169, 169, 0.03) 1px, #1e1e1e 1px);
   background-size: 40px 40px;
   
-  &::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 280px;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(127, 255, 0, 0.08) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 1;
-  }
+  // Temporarily disabled to debug content visibility
+  // &::before {
+  //   content: '';
+  //   position: fixed;
+  //   top: 0;
+  //   left: 280px;
+  //   right: 0;
+  //   bottom: 0;
+  //   background: radial-gradient(circle at 70% 30%, rgba(127, 255, 0, 0.08) 0%, transparent 50%);
+  //   pointer-events: none;
+  //   z-index: 1;
+  // }
 }
 
 .dashboard-container {
@@ -835,12 +836,22 @@
 }
 
 // Responsive sidebar adjustments
+@media (max-width: 768px) {
+  .loan-dashboard {
+    margin-left: 250px; // Adjust for smaller sidebar width
+
+    &::before {
+      left: 250px;
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .loan-dashboard {
-    margin-left: 0;
-    
+    margin-left: 220px; // Adjust for smaller sidebar width
+
     &::before {
-      left: 0;
+      left: 220px;
     }
   }
 }
@@ -848,12 +859,12 @@
 // Handle mobile sidebar overlay
 @media (max-width: 480px) {
   .loan-dashboard {
-    margin-left: 0;
-    
+    margin-left: 0; // Remove margin when sidebar becomes overlay
+
     &.sidebar-open {
       filter: blur(2px);
     }
-    
+
     &::before {
       left: 0;
     }

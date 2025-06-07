@@ -1,8 +1,8 @@
 import React from 'react';
 import './Navigation.scss';
 
-// Accept navigateTo, isKycSubmitted, and onLogout as props
-const Navigation = ({ navigateTo, isKycSubmitted, onLogout }) => {
+// Accept navigateTo, isKycSubmitted, onLogout, and currentPage as props
+const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
   return (
     <>
       {/* Top Navbar - shown when KYC is NOT submitted */}
@@ -32,27 +32,84 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout }) => {
             <div className="logo">
               Studi<span className="green">fi</span>
             </div>
+            <div className="chain-indicator">
+              <div className="chain-dot"></div>
+              <span className="chain-text">On-Chain</span>
+            </div>
           </div>
-          
-          <ul className="sidebar-menu">
-            <li><a href="#" onClick={() => navigateTo('dashboard')}>
-              <span className="menu-icon">📊</span>
-              Dashboard
-            </a></li>
-            <li><a href="#" onClick={() => navigateTo('loan')}>
-              <span className="menu-icon">💰</span>
-              Loan
-            </a></li>
-            <li><a href="#" onClick={() => navigateTo('scholarship')}>
-              <span className="menu-icon">🎓</span>
-              Scholarship
-            </a></li>
-          </ul>
-          
+
+          <div className="sidebar-content">
+            <ul className="sidebar-menu">
+              <li className="menu-item">
+                <a
+                  href="#"
+                  onClick={() => navigateTo('dashboard')}
+                  className={`menu-link ${currentPage === 'dashboard' ? 'active' : ''}`}
+                >
+                  <div className="menu-icon-wrapper">
+                    <span className="menu-icon">📊</span>
+                  </div>
+                  <span className="menu-text">Dashboard</span>
+                  <div className="menu-indicator"></div>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a
+                  href="#"
+                  onClick={() => navigateTo('loan')}
+                  className={`menu-link ${currentPage === 'loan' ? 'active' : ''}`}
+                >
+                  <div className="menu-icon-wrapper">
+                    <span className="menu-icon">💰</span>
+                  </div>
+                  <span className="menu-text">Loan</span>
+                  <div className="menu-indicator"></div>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a
+                  href="#"
+                  onClick={() => navigateTo('scholarship')}
+                  className={`menu-link ${currentPage === 'scholarship' ? 'active' : ''}`}
+                >
+                  <div className="menu-icon-wrapper">
+                    <span className="menu-icon">🎓</span>
+                  </div>
+                  <span className="menu-text">Scholarship</span>
+                  <div className="menu-indicator"></div>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a
+                  href="#"
+                  onClick={() => navigateTo('payment')}
+                  className={`menu-link ${currentPage === 'payment' ? 'active' : ''}`}
+                >
+                  <div className="menu-icon-wrapper">
+                    <span className="menu-icon">💳</span>
+                  </div>
+                  <span className="menu-text">Payment</span>
+                  <div className="menu-indicator"></div>
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <div className="sidebar-footer">
+            <div className="user-section">
+              <div className="user-avatar">
+                <span className="avatar-icon">👤</span>
+              </div>
+              <div className="user-info">
+                <span className="user-name">John Doe</span>
+                <span className="user-status">Verified</span>
+              </div>
+            </div>
             <a href="#" className="logout-btn" onClick={onLogout}>
-              <span className="menu-icon">🚪</span>
-              Logout
+              <div className="logout-icon-wrapper">
+                <span className="menu-icon">🚪</span>
+              </div>
+              <span className="logout-text">Logout</span>
             </a>
           </div>
         </nav>

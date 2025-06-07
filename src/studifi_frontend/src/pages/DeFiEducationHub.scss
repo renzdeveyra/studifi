@@ -1,0 +1,926 @@
+// DeFi Education Hub Page Styles - Full-Width Professional Educational Layout
+.defi-education-hub {
+  background: linear-gradient(180deg, #1e1e1e 0%, #0f0f0f 100%);
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  padding: 3rem 0 5rem 0; // Optimized padding for full-width layout
+  position: relative;
+  line-height: 1.6; // Improved base line height for readability
+  width: 100%; // Ensure full viewport width utilization
+
+  // Ensure seamless background coverage across entire viewport
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e1e1e 0%, #0f0f0f 100%);
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  // Simplified background layer for full-width coverage
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0; // Start from natural left edge
+    width: 100%; // Cover full width
+    height: 100%;
+    background: linear-gradient(180deg, #1e1e1e 0%, #0f0f0f 100%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1400px; // Increased max-width to utilize additional space
+    margin: 0 auto;
+    padding: 0 4rem; // Increased horizontal padding for better content margins in full-width layout
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Professional Breadcrumb Navigation
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; // Slightly increased for better visual separation
+  margin-bottom: 3rem; // Increased margin for better section separation
+  font-size: 0.95rem; // Slightly larger for better readability
+  font-weight: 500;
+
+  .breadcrumb-link {
+    color: #7fff00;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0.5rem; // Added padding for better click target
+    border-radius: 4px;
+
+    &:hover {
+      color: #32cd32;
+      background: rgba(127, 255, 0, 0.1);
+      text-decoration: none; // Remove underline for cleaner look
+    }
+  }
+
+  .breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+  }
+
+  .breadcrumb-current {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+  }
+}
+
+// Professional Hero Section - Educational Focus
+.education-hero {
+  text-align: center;
+  margin-bottom: 5rem; // Increased for better section separation
+  padding: 4rem 3rem; // Increased padding for more prominent hero presence
+  background: linear-gradient(135deg, rgba(127, 255, 0, 0.08), rgba(127, 255, 0, 0.03));
+  border-radius: 24px; // Slightly larger radius for modern look
+  border: 1px solid rgba(127, 255, 0, 0.15);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); // Added subtle shadow for depth
+
+  .hero-content {
+    margin-bottom: 3rem; // Increased spacing between content and stats
+
+    .hero-title {
+      font-size: 3.2rem; // Slightly larger for impact
+      font-weight: 700; // Increased weight for authority
+      color: white;
+      margin: 0 0 1.5rem 0; // Increased bottom margin
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      letter-spacing: -0.02em; // Improved letter spacing
+
+      .title-accent {
+        font-size: 2.8rem;
+        filter: drop-shadow(0 4px 8px rgba(127, 255, 0, 0.3));
+      }
+    }
+
+    .hero-description {
+      font-size: 1.25rem; // Slightly larger for better readability
+      color: rgba(255, 255, 255, 0.95);
+      max-width: 800px; // Increased max-width to utilize full-width layout
+      margin: 0 auto;
+      line-height: 1.7; // Improved line height for readability
+      font-weight: 400;
+    }
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 5rem; // Further increased gap to utilize full-width layout
+    flex-wrap: wrap;
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem; // Added padding for better touch targets
+
+      .stat-number {
+        display: block;
+        font-size: 2.5rem; // Larger for more impact
+        font-weight: 800; // Increased weight
+        color: #7fff00;
+        text-shadow: 0 0 24px rgba(127, 255, 0, 0.4);
+        margin-bottom: 0.5rem; // Added margin for separation
+      }
+
+      .stat-label {
+        font-size: 1rem; // Slightly larger
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        letter-spacing: 0.02em;
+      }
+    }
+  }
+}
+
+// Professional Section Headers - Educational Hierarchy
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem; // Increased for better content separation
+  padding: 0 1rem; // Added horizontal padding for mobile
+
+  .section-title {
+    font-size: 2.75rem; // Slightly larger for better hierarchy
+    font-weight: 700; // Increased weight for authority
+    color: white;
+    margin: 0 0 1.5rem 0; // Increased bottom margin
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    position: relative;
+    letter-spacing: -0.01em; // Improved letter spacing
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px; // Moved further down
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px; // Increased width
+      height: 4px; // Increased height
+      background: linear-gradient(135deg, #7fff00, #32cd32);
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(127, 255, 0, 0.3); // Added glow effect
+    }
+  }
+
+  .section-description {
+    font-size: 1.2rem; // Increased for better readability
+    color: rgba(255, 255, 255, 0.9); // Increased opacity
+    max-width: 900px; // Further increased to utilize full-width layout
+    margin: 0 auto;
+    line-height: 1.7; // Improved line height
+    font-weight: 400;
+    padding: 0 1rem; // Added padding for mobile
+  }
+}
+
+// What is DeFi Section - Educational Foundation
+.what-is-defi {
+  margin-bottom: 6rem; // Increased for better section separation
+
+  .defi-explanation {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); // Optimized for full-width layout
+    gap: 3rem; // Increased gap to utilize additional space
+
+    .explanation-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+      border-radius: 24px; // Larger radius for modern look
+      padding: 2.5rem 2rem; // Increased vertical padding
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      // Subtle gradient overlay for depth
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.3), transparent);
+      }
+
+      &:hover {
+        transform: translateY(-10px); // Increased hover effect
+        border-color: rgba(127, 255, 0, 0.5);
+        box-shadow: 0 25px 50px rgba(127, 255, 0, 0.2);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+      }
+
+      .card-icon {
+        font-size: 3.5rem; // Larger for better visual impact
+        margin-bottom: 1.5rem; // Increased spacing
+        filter: drop-shadow(0 6px 12px rgba(127, 255, 0, 0.4));
+        display: block;
+      }
+
+      h3 {
+        font-size: 1.6rem; // Slightly larger
+        font-weight: 700; // Increased weight
+        color: #7fff00;
+        margin: 0 0 1.25rem 0; // Increased bottom margin
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        letter-spacing: -0.01em;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.7; // Improved line height
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+// Benefits Section - Professional Information Display
+.benefits-section {
+  margin-bottom: 6rem; // Increased for better section separation
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); // Optimized for full-width layout
+    gap: 2.5rem; // Increased gap to utilize additional horizontal space
+
+    .benefit-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      border-radius: 20px; // Larger radius for consistency
+      padding: 2rem; // Increased padding for better content breathing room
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      // Subtle top border accent
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.4), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-8px); // Increased hover effect
+        border-color: rgba(127, 255, 0, 0.4);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+        box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      .benefit-icon {
+        font-size: 2.5rem; // Larger for better visual impact
+        margin-bottom: 1.25rem; // Increased spacing
+        display: block;
+        filter: drop-shadow(0 4px 8px rgba(127, 255, 0, 0.2));
+      }
+
+      .benefit-title {
+        font-size: 1.35rem; // Larger for better hierarchy
+        font-weight: 700; // Increased weight
+        color: white;
+        margin: 0 0 0.75rem 0; // Increased bottom margin
+        letter-spacing: -0.01em;
+      }
+
+      .benefit-description {
+        color: rgba(255, 255, 255, 0.9); // Increased opacity
+        line-height: 1.6; // Improved line height
+        margin: 0;
+        font-size: 1rem; // Slightly larger
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+// Interactive Learning Modules - Educational Engagement
+.learning-modules {
+  margin-bottom: 6rem; // Increased for better section separation
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); // Optimized for full-width layout
+    gap: 2.5rem; // Increased gap to utilize additional horizontal space
+
+    .module-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+      border-radius: 20px; // Larger radius for consistency
+      padding: 2rem; // Increased padding
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      // Interactive indicator
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, transparent, rgba(127, 255, 0, 0.6), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-8px); // Increased hover effect
+        border-color: rgba(127, 255, 0, 0.5);
+        box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      &.active {
+        border-color: rgba(127, 255, 0, 0.7);
+        background: linear-gradient(135deg, rgba(127, 255, 0, 0.12), rgba(127, 255, 0, 0.06));
+        box-shadow: 0 15px 35px rgba(127, 255, 0, 0.2);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      .module-header {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem; // Increased gap
+        margin-bottom: 1.25rem; // Increased spacing
+
+        .module-icon {
+          font-size: 1.75rem; // Larger for better visual impact
+          color: #7fff00;
+          filter: drop-shadow(0 2px 4px rgba(127, 255, 0, 0.3));
+        }
+
+        .module-title {
+          font-size: 1.4rem; // Larger for better hierarchy
+          font-weight: 700; // Increased weight
+          color: white;
+          margin: 0;
+          letter-spacing: -0.01em;
+        }
+      }
+
+      .module-description {
+        color: rgba(255, 255, 255, 0.9); // Increased opacity
+        line-height: 1.6; // Improved line height
+        margin: 0 0 1.25rem 0; // Increased bottom margin
+        font-size: 1rem; // Slightly larger
+        font-weight: 400;
+      }
+
+      .module-content {
+        background: linear-gradient(135deg, rgba(127, 255, 0, 0.08), rgba(127, 255, 0, 0.04));
+        border-radius: 16px; // Larger radius
+        padding: 1.5rem; // Increased padding
+        border: 1px solid rgba(127, 255, 0, 0.25);
+        margin-top: 1.5rem; // Increased spacing
+        animation: fadeIn 0.4s ease;
+        backdrop-filter: blur(10px);
+
+        p {
+          color: rgba(255, 255, 255, 0.95);
+          line-height: 1.7; // Improved line height
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Professional Comparison Section - Educational Analysis
+.comparison-section {
+  margin-bottom: 6rem; // Increased for better section separation
+
+  .comparison-table {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+    border-radius: 24px; // Larger radius for modern look
+    padding: 3rem; // Increased padding for better content breathing room
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    overflow-x: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); // Added subtle shadow
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem; // Increased gap
+      margin-bottom: 2rem; // Increased spacing
+      padding-bottom: 1.5rem; // Increased padding
+      border-bottom: 3px solid rgba(127, 255, 0, 0.4); // Thicker border
+
+      .header-cell {
+        font-weight: 700; // Increased weight
+        text-align: center;
+        padding: 1rem; // Increased padding
+        border-radius: 16px; // Larger radius
+        font-size: 1.1rem; // Larger text
+        letter-spacing: 0.01em;
+
+        &.traditional {
+          background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.08));
+          color: #ff6b6b;
+          border: 1px solid rgba(255, 107, 107, 0.4);
+          box-shadow: 0 4px 12px rgba(255, 107, 107, 0.1);
+        }
+
+        &.defi {
+          background: linear-gradient(135deg, rgba(127, 255, 0, 0.15), rgba(127, 255, 0, 0.08));
+          color: #7fff00;
+          border: 1px solid rgba(127, 255, 0, 0.4);
+          box-shadow: 0 4px 12px rgba(127, 255, 0, 0.1);
+        }
+      }
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem; // Increased gap
+      margin-bottom: 1rem; // Increased spacing
+      padding: 1rem 0; // Increased padding
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .cell {
+        padding: 0.75rem; // Increased padding
+        border-radius: 12px; // Larger radius
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        &.category {
+          font-weight: 700; // Increased weight
+          color: white;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        &.traditional {
+          color: rgba(255, 107, 107, 0.95);
+          background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(255, 107, 107, 0.04));
+          border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        &.defi {
+          color: rgba(127, 255, 0, 0.95);
+          background: linear-gradient(135deg, rgba(127, 255, 0, 0.08), rgba(127, 255, 0, 0.04));
+          border: 1px solid rgba(127, 255, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+
+
+// Professional Call to Action - Educational Engagement
+.cta-section {
+  text-align: center;
+  padding: 4rem 3rem; // Increased padding for better prominence
+  margin: 2rem 0; // Added margin for better section separation
+  background: linear-gradient(135deg, rgba(127, 255, 0, 0.12), rgba(127, 255, 0, 0.05));
+  border-radius: 28px; // Larger radius for modern look
+  border: 1px solid rgba(127, 255, 0, 0.25);
+  backdrop-filter: blur(25px);
+  box-shadow: 0 12px 40px rgba(127, 255, 0, 0.1); // Added subtle glow
+  position: relative;
+  overflow: hidden;
+
+  // Subtle animated background effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.6), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+
+    .cta-title {
+      font-size: 2.8rem; // Larger for better impact
+      font-weight: 800; // Increased weight for authority
+      color: white;
+      margin: 0 0 1.5rem 0; // Increased bottom margin
+      text-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      letter-spacing: -0.02em;
+    }
+
+    .cta-description {
+      font-size: 1.25rem; // Larger for better readability
+      color: rgba(255, 255, 255, 0.95);
+      margin: 0 0 3rem 0; // Increased bottom margin
+      max-width: 800px; // Further increased to utilize full-width layout
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7; // Improved line height
+      font-weight: 400;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 2rem; // Increased gap
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 1.25rem 2.5rem; // Increased padding
+        border-radius: 30px; // Larger radius
+        font-weight: 700; // Increased weight
+        font-size: 1.1rem; // Larger text
+        border: none;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem; // Increased gap
+        letter-spacing: 0.02em;
+        position: relative;
+        overflow: hidden;
+        min-width: 200px; // Minimum width for consistency
+        justify-content: center;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+          transition: left 0.6s ease;
+        }
+
+        &:hover::before {
+          left: 100%;
+        }
+
+        .btn-icon {
+          font-size: 1.2rem; // Larger icon
+        }
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        color: #000;
+        box-shadow: 0 6px 20px rgba(127, 255, 0, 0.4);
+
+        &:hover {
+          transform: translateY(-4px) scale(1.03); // Increased hover effect
+          box-shadow: 0 12px 35px rgba(127, 255, 0, 0.5);
+        }
+
+        &:active {
+          transform: translateY(-2px) scale(1.01);
+        }
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+
+        &:hover {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12));
+          border-color: rgba(127, 255, 0, 0.5);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        &:active {
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
+// Shimmer animation for CTA
+@keyframes shimmer {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+// Professional Responsive Design - Full-Width Educational Standards
+@media (max-width: 768px) {
+  .defi-education-hub {
+    padding: 2rem 0 4rem 0; // Maintain adequate padding for tablet
+
+    &::after {
+      left: 0; // Natural left edge for full-width
+      width: 100%; // Full width coverage
+    }
+
+    .container {
+      max-width: 1200px; // Slightly reduced for tablet
+      padding: 0 3rem; // Maintain adequate horizontal padding
+    }
+
+    // Ensure background still covers full viewport on tablet
+    &::before {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  .education-hero {
+    padding: 3rem 2rem; // Adjusted padding for tablet
+
+    .hero-title {
+      font-size: 2.8rem; // Maintain good size on tablet
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .hero-stats {
+      gap: 2.5rem; // Maintain adequate spacing
+    }
+  }
+
+  .section-header {
+    .section-title {
+      font-size: 2.4rem; // Maintain hierarchy
+    }
+
+    .section-description {
+      font-size: 1.1rem; // Maintain readability
+    }
+  }
+
+  // Adjust grid layouts for tablet - optimized for full-width
+  .defi-explanation {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); // Better utilization of tablet width
+    gap: 2.5rem;
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); // Optimized for tablet
+    gap: 2rem;
+  }
+
+  .modules-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); // Better tablet layout
+    gap: 2rem;
+  }
+
+  .comparison-table {
+    padding: 2rem; // Reduced padding for tablet
+
+    .table-header,
+    .table-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .cell {
+      text-align: left;
+      padding: 1rem; // Maintain adequate padding
+    }
+  }
+
+  .cta-section {
+    padding: 3rem 2rem; // Adjusted padding
+
+    .cta-content {
+      .cta-title {
+        font-size: 2.4rem; // Maintain impact
+      }
+
+      .cta-description {
+        font-size: 1.1rem; // Maintain readability
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+
+        .btn-primary,
+        .btn-secondary {
+          width: 100%;
+          max-width: 350px; // Larger max-width for better proportion
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .defi-education-hub {
+    padding: 1.5rem 0 3rem 0; // Optimized padding for small tablet
+
+    &::after {
+      left: 0; // Natural left edge for full-width
+      width: 100%; // Full width coverage
+    }
+
+    .container {
+      max-width: 1000px; // Adjusted for small tablet
+      padding: 0 2rem; // Adequate horizontal padding
+    }
+
+    // Ensure background still covers full viewport on small tablet
+    &::before {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  // Adjust layouts for small tablet - maintain some multi-column where possible
+  .defi-explanation {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); // Allow 2 columns on wider small tablets
+    gap: 2rem;
+  }
+
+  .benefits-grid,
+  .modules-grid {
+    grid-template-columns: 1fr; // Single column for better readability
+    gap: 1.5rem;
+  }
+
+  .education-hero {
+    padding: 2.5rem 1.5rem;
+
+    .hero-title {
+      font-size: 2.4rem;
+    }
+
+    .hero-stats {
+      gap: 2rem;
+    }
+  }
+
+  .section-header .section-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .defi-education-hub {
+    padding: 1rem 0 2rem 0; // Optimized padding for mobile
+
+    &::after {
+      left: 0; // Natural left edge for full-width
+      width: 100%; // Full width coverage
+    }
+
+    .container {
+      max-width: 100%; // Full width utilization on mobile
+      padding: 0 1.5rem; // Adequate horizontal padding for mobile
+    }
+
+    // Ensure background still covers full viewport on mobile
+    &::before {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  .education-hero {
+    padding: 2rem 1rem;
+
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+    }
+
+    .hero-stats {
+      gap: 1.5rem;
+
+      .stat-item {
+        .stat-number {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+
+    .section-title {
+      font-size: 1.8rem;
+    }
+
+    .section-description {
+      font-size: 1rem;
+    }
+  }
+
+  // Mobile-specific adjustments
+  .what-is-defi,
+  .benefits-section,
+  .learning-modules,
+  .comparison-section {
+    margin-bottom: 4rem;
+  }
+
+  .explanation-card,
+  .benefit-card,
+  .module-card {
+    padding: 1.5rem;
+  }
+
+  .comparison-table {
+    padding: 1.5rem;
+  }
+
+  .cta-section {
+    padding: 2.5rem 1rem;
+    margin: 1rem 0;
+
+    .cta-content {
+      .cta-title {
+        font-size: 2rem;
+      }
+
+      .cta-description {
+        font-size: 1rem;
+      }
+
+      .cta-buttons {
+        gap: 1rem;
+
+        .btn-primary,
+        .btn-secondary {
+          padding: 1rem 2rem;
+          font-size: 1rem;
+          min-width: auto;
+        }
+      }
+    }
+  }
+}

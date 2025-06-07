@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ScholarshipDashboard.scss'; // Import the SCSS file
 
 const ScholarshipDashboard = () => {
+  useEffect(() => {
+    console.log('ScholarshipDashboard mounted successfully');
+  }, []);
   const [activeTab, setActiveTab] = useState('browse');
 
   const scholarshipData = [
