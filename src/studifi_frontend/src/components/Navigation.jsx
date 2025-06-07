@@ -18,7 +18,8 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout }) => {
             <li><a href="#contact">Contact</a></li>
           </ul>
           <div className="nav-right">
-            <a href="#login" className="login-btn">Login</a>
+            {/* Updated Login button to navigate to 'login' page */}
+            <a href="#" className="login-btn" onClick={() => navigateTo('login')}>Login</a>
             <button className="get-started-btn" onClick={() => navigateTo('kyc')}>Get Started Now</button>
           </div>
         </nav>

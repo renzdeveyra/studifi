@@ -40,7 +40,7 @@ const HomePage = ({ navigateTo }) => {
       {/* Why Choose StudiFi Section */}
       <section className="section-two" id="why-choose">
         <div className="container">
-          <div className="section-header">
+          <div className="Hsection-header">
             <h2>Why Choose StudiFi?</h2>
             <p>Discover the advantages that make us the preferred choice for students</p>
           </div>
@@ -88,7 +88,7 @@ const HomePage = ({ navigateTo }) => {
       {/* Our Offerings Section */}
         <section className="section-three" id="offerings">
         <div className="container">
-            <div className="section-header">
+            <div className="Hsection-header">
             <h2>Our Offerings</h2>
             <p>Explore our comprehensive loan and scholarship options designed to fuel your educational journey and unlock your potential.</p>
             <button className="cta-btn" onClick={() => navigateTo('kyc')}>Apply Now ⚡</button>
