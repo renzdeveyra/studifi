@@ -46,10 +46,6 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout }) => {
               <span className="menu-icon">🎓</span>
               Scholarship
             </a></li>
-            <li><a href="#" onClick={() => navigateTo('governance')}>
-              <span className="menu-icon">⚖️</span>
-              Governance
-            </a></li>
           </ul>
           
           <div className="sidebar-footer">

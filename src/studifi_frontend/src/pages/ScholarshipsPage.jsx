@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { governance_engine } from 'declarations/governance_engine';
-import './ScholarshipsPage.scss'; // Import the new SCSS file
 
 const ScholarshipsPage = () => {
   const [scholarships, setScholarships] = useState([]);
