@@ -1,9 +1,12 @@
 // KYCPage.jsx
 import React, { useState } from 'react';
 import './KYCPage.scss';
-import ConfirmationModal from '../components/ConfirmationModal'; // Import the new modal component
+import ConfirmationModal from '../components/ConfirmationModal';
+import { KycVerification } from '../components/KycVerification'; // Import KycVerification
 
-const KYCPage = ({ onSubmissionComplete }) => {
+// Assume identityManagerActor is passed as a prop for this example
+// In a real app, you might initialize it here or pass it from a higher-level component
+const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add identityManagerActor prop
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -11,18 +14,16 @@ const KYCPage = ({ onSubmissionComplete }) => {
     nationality: '',
     contactNumber: '',
     email: '',
-    studentId: '',
     idDocument: null,
     selfieWithId: null,
-    schoolSelection: '',
-    enrollmentCertificate: null,
+    studentVerificationDetails: null, // New field to store details from KycVerification
     walletAddress: '',
     permanentAddress: '',
     billingStatement: null
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // NEW STATE: To track if terms are agreed via the modal
   const [termsAgreedViaModal, setTermsAgreedViaModal] = useState(false);
+  const [kycVerificationComplete, setKycVerificationComplete] = useState(false); // State for KycVerification status
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -38,8 +39,24 @@ const KYCPage = ({ onSubmissionComplete }) => {
     }));
   };
 
+  // Function to display a temporary pop-up message
+  const showAppAlert = (message) => {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'app-alert-popup'; // Use the new SCSS class
+    messageDiv.textContent = message;
+    document.body.appendChild(messageDiv);
+    setTimeout(() => {
+      document.body.removeChild(messageDiv);
+    }, 3000); // Remove message after 3 seconds
+  };
+
   const nextStep = () => {
-    if (currentStep < 5) {
+    // Add validation specific to each step before advancing
+    if (currentStep === 2 && !kycVerificationComplete) {
+      showAppAlert('Please complete the Student Verification first.');
+      return;
+    }
+    if (currentStep < 5) { // steps.length - 1
       setCurrentStep(currentStep + 1);
     }
   };
@@ -50,22 +67,18 @@ const KYCPage = ({ onSubmissionComplete }) => {
     }
   };
 
-  // NEW FUNCTION: Handles the click on the terms checkbox
   const handleTermsCheckboxClick = () => {
-    // Only open the modal if terms haven't been agreed yet
+    // This checkbox now primarily just opens the modal
     if (!termsAgreedViaModal) {
       setIsModalOpen(true);
     }
   };
 
-  // MODIFIED: This function is now called when the user confirms IN THE MODAL
   const handleConfirmSubmission = () => {
-    setTermsAgreedViaModal(true); // Set agreement to true
-    setIsModalOpen(false); // Close the modal
-    // Actual form submission will now happen via the main "Submit Application" button
+    setTermsAgreedViaModal(true);
+    setIsModalOpen(false);
   };
 
-  // NEW FUNCTION: Handles the final form submission
   const handleFinalSubmission = () => {
     if (termsAgreedViaModal) {
       console.log('Submitting application:', formData);
@@ -73,16 +86,27 @@ const KYCPage = ({ onSubmissionComplete }) => {
         onSubmissionComplete();
       }
     } else {
-      // This case should ideally not be reached if the button is disabled,
-      // but good for fallback or if user tries to bypass
-      alert('Please agree to the Terms of Service and Privacy Policy by clicking the checkbox.');
+      showAppAlert('Please agree to the Terms of Service and Privacy Policy by clicking the checkbox.');
+    }
+  };
+
+  // Handler for KycVerification completion, now accepting verificationDetails
+  const handleKycVerificationComplete = (verified, details) => {
+    setKycVerificationComplete(verified);
+    if (verified) {
+      setFormData(prev => ({
+        ...prev,
+        studentVerificationDetails: details // Store the returned details
+      }));
+      // Automatically advance to the next step if verification is successful
+      setCurrentStep(prev => prev < 5 ? prev + 1 : prev); // Go to step 4 after VC
     }
   };
 
   const steps = [
     'Personal Information',
     'ID Verification',
-    'Proof of Enrollment',
+    'Student Verification (VC)', // Updated step name
     'Blockchain Wallet Link',
     'Address Verification',
     'Review & Confirm'
@@ -185,16 +209,6 @@ const KYCPage = ({ onSubmissionComplete }) => {
                         onChange={(e) => handleInputChange('email', e.target.value)}
                       />
                     </div>
-
-                    <div className="form-group full-width">
-                      <label>Student ID Number (Optional)</label>
-                      <input
-                        type="text"
-                        placeholder="Enter your Student ID"
-                        value={formData.studentId}
-                        onChange={(e) => handleInputChange('studentId', e.target.value)}
-                      />
-                    </div>
                   </div>
                 </div>
               )}
@@ -203,14 +217,14 @@ const KYCPage = ({ onSubmissionComplete }) => {
                 <div className="form-step active">
                   <div className="step-header">
                     <h3>Step 2: ID Verification</h3>
-                    <p>Upload a valid government-issued ID</p>
+                    <p>Upload a valid government-issued ID and a selfie with it.</p>
                   </div>
 
                   <div className="upload-section">
                     <div className="upload-area">
                       <div className="upload-icon">📄</div>
-                      <h4>Upload ID</h4>
-                      <p>Choose file</p>
+                      <h4>Upload ID Document</h4>
+                      <p>Choose file: {formData.idDocument ? formData.idDocument.name : 'No file chosen'}</p>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -221,8 +235,8 @@ const KYCPage = ({ onSubmissionComplete }) => {
 
                     <div className="selfie-area">
                       <div className="selfie-icon">🤳</div>
-                      <h4>Selfie with ID</h4>
-                      <p>Upload a photo holding your ID</p>
+                      <h4>Upload Selfie with ID</h4>
+                      <p>Choose file: {formData.selfieWithId ? formData.selfieWithId.name : 'No file chosen'}</p>
                       <input
                         type="file"
                         accept="image/*"
@@ -240,40 +254,21 @@ const KYCPage = ({ onSubmissionComplete }) => {
               {currentStep === 2 && (
                 <div className="form-step active">
                   <div className="step-header">
-                    <h3>Step 3: Proof of Enrollment</h3>
-                    <p>Upload your current Certificate of Enrollment</p>
+                    <h3>Step 3: Student Verification (Verifiable Credential)</h3>
+                    <p>Complete your student status verification using Verifiable Credentials.</p>
                   </div>
-
-                  <div className="form-grid">
-                    <div className="form-group full-width">
-                      <label>Select Your School</label>
-                      <input
-                        type="text"
-                        list="schools"
-                        placeholder="Choose your institution or enter manually"
-                        value={formData.schoolSelection}
-                        onChange={(e) => handleInputChange('schoolSelection', e.target.value)}
-                      />
-                      <datalist id="schools">
-                        <option value="University of the Philippines" />
-                        <option value="Ateneo de Manila University" />
-                        <option value="De La Salle University" />
-                        <option value="Other" />
-                      </datalist>
-                    </div>
-
-                    <div className="upload-area full-width single-upload">
-                      <div className="upload-icon">📋</div>
-                      <h4>Upload Certificate</h4>
-                      <p>Choose file</p>
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleFileUpload('enrollmentCertificate', e.target.files[0])}
-                        className="file-input"
-                      />
-                    </div>
+                  {/* Integrate KycVerification component here */}
+                  <div className="kyc-verification-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <KycVerification
+                      identityManagerActor={identityManagerActor}
+                      onVerificationComplete={handleKycVerificationComplete}
+                    />
                   </div>
+                  {!kycVerificationComplete && (
+                    <p className="text-center mt-4 text-gray-500">
+                      You must complete this verification step to proceed.
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -281,34 +276,19 @@ const KYCPage = ({ onSubmissionComplete }) => {
                 <div className="form-step active">
                   <div className="step-header">
                     <h3>Step 4: Blockchain Wallet Link</h3>
-                    <div className="wallet-icon">💼</div>
-                    <p>Connect your wallet for secure transactions.</p>
+                    <p>Link your blockchain wallet to receive funds and manage assets.</p>
+                    <div className="wallet-icon">🔗</div>
                   </div>
-
-                  <div className="wallet-connection">
-                    <div className="wallet-options">
-                      <button className="wallet-btn">
-                        <span className="wallet-logo">🦊</span>
-                        Connect MetaMask
-                      </button>
-                      <button className="wallet-btn">
-                        <span className="wallet-logo">👛</span>
-                        Connect WalletConnect
-                      </button>
-                    </div>
-
-                    <div className="manual-wallet">
-                      <div className="form-group full-width">
-                        <label>Or enter wallet address manually:</label>
-                        <input
-                          type="text"
-                          placeholder="0x..."
-                          value={formData.walletAddress}
-                          onChange={(e) => handleInputChange('walletAddress', e.target.value)}
-                        />
-                      </div>
-                    </div>
+                  <div className="form-group full-width">
+                    <label>Wallet Address</label>
+                    <input
+                      type="text"
+                      placeholder="Enter your wallet address (e.g., ICP, Ethereum)"
+                      value={formData.walletAddress}
+                      onChange={(e) => handleInputChange('walletAddress', e.target.value)}
+                    />
                   </div>
+                  {/* Add more wallet linking details or integration here */}
                 </div>
               )}
 
@@ -316,9 +296,8 @@ const KYCPage = ({ onSubmissionComplete }) => {
                 <div className="form-step active">
                   <div className="step-header">
                     <h3>Step 5: Address Verification</h3>
-                    <p>Please verify your address.</p>
+                    <p>Provide your permanent address and upload a billing statement.</p>
                   </div>
-
                   <div className="form-grid">
                     <div className="form-group full-width">
                       <label>Permanent Address</label>
@@ -326,14 +305,12 @@ const KYCPage = ({ onSubmissionComplete }) => {
                         placeholder="Enter your permanent address"
                         value={formData.permanentAddress}
                         onChange={(e) => handleInputChange('permanentAddress', e.target.value)}
-                        rows="2"
-                      />
+                      ></textarea>
                     </div>
-
                     <div className="upload-area full-width single-upload">
                       <div className="upload-icon">🧾</div>
-                      <h4>Upload Billing Statement (Optional)</h4>
-                      <p>Choose file</p>
+                      <h4>Upload Billing Statement</h4>
+                      <p>Choose file: {formData.billingStatement ? formData.billingStatement.name : 'No file chosen'}</p>
                       <input
                         type="file"
                         accept="image/*,.pdf"
@@ -348,55 +325,48 @@ const KYCPage = ({ onSubmissionComplete }) => {
               {currentStep === 5 && (
                 <div className="form-step active">
                   <div className="step-header">
-                    <h3>Final Step: Summary & Confirmation</h3>
-                    <p>Review your details before submission.</p>
+                    <h3>Step 6: Review & Confirm</h3>
+                    <p>Please review your information before submitting.</p>
                   </div>
+                  <div className="review-summary">
+                    <h4>Personal Information</h4>
+                    <p><strong>Full Name:</strong> {formData.fullName}</p>
+                    <p><strong>Date of Birth:</strong> {formData.dateOfBirth}</p>
+                    <p><strong>Nationality:</strong> {formData.nationality}</p>
+                    <p><strong>Contact Number:</strong> {formData.contactNumber}</p>
+                    <p><strong>Email:</strong> {formData.email}</p>
 
-                  <div className="summary-section">
-                    <div className="summary-row">
-                      <div className="summary-card">
-                        <h4>Personal Information</h4>
-                        <div className="summary-item">
-                          <span>Name:</span>
-                          <span>{formData.fullName || 'Not provided'}</span>
-                        </div>
-                        <div className="summary-item">
-                          <span>Email:</span>
-                          <span>{formData.email || 'Not provided'}</span>
-                        </div>
-                        <div className="summary-item">
-                          <span>Nationality:</span>
-                          <span>{formData.nationality || 'Not provided'}</span>
-                        </div>
-                      </div>
+                    <h4 className="mt-4">ID Verification</h4>
+                    <p><strong>ID Document:</strong> {formData.idDocument ? formData.idDocument.name : 'Not uploaded'}</p>
+                    <p><strong>Selfie with ID:</strong> {formData.selfieWithId ? formData.selfieWithId.name : 'Not uploaded'}</p>
 
-                      <div className="summary-card">
-                        <h4>Documents</h4>
-                        <div className="summary-item">
-                          <span>ID Document:</span>
-                          <span>{formData.idDocument ? '✅ Uploaded' : '❌ Missing'}</span>
-                        </div>
-                        <div className="summary-item">
-                          <span>Selfie with ID:</span>
-                          <span>{formData.selfieWithId ? '✅ Uploaded' : '❌ Missing'}</span>
-                        </div>
-                        <div className="summary-item">
-                          <span>Enrollment Certificate:</span>
-                          <span>{formData.enrollmentCertificate ? '✅ Uploaded' : '❌ Missing'}</span>
-                        </div>
-                        <div className="summary-item">
-                          <span>Wallet Connected:</span>
-                          <span>{formData.walletAddress ? '✅ Connected' : '❌ Not connected'}</span>
-                        </div>
-                      </div>
-                    </div>
+                    <h4 className="mt-4">Student Verification (VC)</h4>
+                    {kycVerificationComplete && formData.studentVerificationDetails ? (
+                      <>
+                        <p><strong>Status:</strong> Completed</p>
+                        <p><strong>University:</strong> {formData.studentVerificationDetails.universityName}</p>
+                        <p><strong>Student ID:</strong> {formData.studentVerificationDetails.studentId}</p>
+                        <p><strong>Program:</strong> {formData.studentVerificationDetails.program}</p>
+                        <p><strong>Year of Study:</strong> {formData.studentVerificationDetails.yearOfStudy}</p>
+                        <p><strong>Expected Graduation:</strong> {formData.studentVerificationDetails.expectedGraduation}</p>
+                      </>
+                    ) : (
+                      <p><strong>Status:</strong> Not completed</p>
+                    )}
 
-                    <div className="terms-section">
-                      <label className="checkbox-label">
+                    <h4 className="mt-4">Blockchain Wallet Link</h4>
+                    <p><strong>Wallet Address:</strong> {formData.walletAddress || 'Not provided'}</p>
+
+                    <h4 className="mt-4">Address Verification</h4>
+                    <p><strong>Permanent Address:</strong> {formData.permanentAddress || 'Not provided'}</p>
+                    <p><strong>Billing Statement:</strong> {formData.billingStatement ? formData.billingStatement.name : 'Not uploaded'}</p>
+
+                    <div className="terms-checkbox mt-4">
+                      <label className="checkbox-container">
                         <input
                           type="checkbox"
-                          checked={termsAgreedViaModal} // Reflects the state
-                          onChange={handleTermsCheckboxClick} // Opens modal on click
+                          checked={termsAgreedViaModal}
+                          onChange={handleTermsCheckboxClick}
                         />
                         <span className="checkmark"></span>
                         I agree to the Terms of Service and Privacy Policy
@@ -425,8 +395,8 @@ const KYCPage = ({ onSubmissionComplete }) => {
               ) : (
                 <button
                   className="nav-btn submit-btn"
-                  onClick={handleFinalSubmission} // Calls the final submission handler
-                  disabled={!termsAgreedViaModal} // Button disabled until terms are agreed
+                  onClick={handleFinalSubmission}
+                  disabled={!termsAgreedViaModal}
                 >
                   Submit Application ⚡
                 </button>

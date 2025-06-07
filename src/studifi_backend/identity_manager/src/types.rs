@@ -207,14 +207,3 @@ pub enum DocumentType {
     Other(String),
 }
 
-/// Document verification result
-#[derive(CandidType, Deserialize, Clone, Debug, Serialize)]
-pub struct DocumentVerification {
-    pub document_type: DocumentType,
-    pub document_hash: String,
-    pub is_valid: bool,
-    pub confidence_score: f64,
-    pub verification_method: String,
-    pub verified_at: Timestamp,
-    pub expiry_date: Option<Timestamp>,
-}
