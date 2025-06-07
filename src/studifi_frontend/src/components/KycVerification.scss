@@ -1,0 +1,600 @@
+// KycVerification.scss - Fixed version with consistent height and no expansion
+$primary-bg: #1e1e1e;
+$accent-color: #7fff00;
+$text-color: #ffffff;
+$border-color: rgba(255, 255, 255, 0.1);
+$card-bg: rgba(255, 255, 255, 0.08);
+$success-color: #22c55e;
+$error-color: #ef4444;
+$warning-color: #f59e0b;
+
+.kyc-verification-container {
+  background: transparent;
+  color: $text-color;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 380px; // Match form-step minimum height
+  max-height: 380px; // Fixed maximum height to match form-step
+  position: relative;
+  overflow: hidden;
+  
+  .verification-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+    height: 32px; // Fixed height for header
+    
+    .header-icon {
+      color: $accent-color;
+      
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: $text-color;
+      margin: 0;
+      line-height: 1.2;
+    }
+  }
+  
+  .verification-alert {
+    margin-bottom: 1rem;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1px solid;
+    flex-shrink: 0;
+    min-height: 44px; // Fixed minimum height
+    max-height: 80px; // Prevent excessive growth
+    overflow: hidden;
+    
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      height: 100%;
+      
+      .alert-icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+      
+      .alert-text {
+        flex: 1;
+        min-width: 0; // Allow text to shrink
+      }
+      
+      .alert-title {
+        font-weight: 500;
+        margin-bottom: 0.2rem;
+        font-size: 0.85rem;
+        line-height: 1.2;
+      }
+      
+      .alert-subtitle {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        line-height: 1.2;
+      }
+    }
+    
+    .alert-close {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.2rem;
+      flex-shrink: 0;
+      
+      svg {
+        width: 0.9rem;
+        height: 0.9rem;
+      }
+      
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+    
+    &.success {
+      background-color: rgba($success-color, 0.1);
+      border-color: rgba($success-color, 0.3);
+      color: #22c55e;
+    }
+    
+    &.error {
+      background-color: rgba($error-color, 0.1);
+      border-color: rgba($error-color, 0.3);
+      color: #ef4444;
+
+      .alert-content {
+        justify-content: space-between;
+      }
+    }
+  }
+  
+  .verification-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    max-height: calc(100% - 12px); // Account for header and alert space
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      flex-shrink: 0;
+      height: 24px; // Fixed height
+      
+      .section-icon {
+        width: 1rem;
+        height: 1rem;
+        color: $accent-color;
+        flex-shrink: 0;
+      }
+      
+      span {
+        color: $text-color;
+        font-weight: 500;
+        font-size: 0.9rem;
+        line-height: 1.2;
+      }
+    }
+    
+    .section-description {
+      color: rgba($text-color, 0.8);
+      font-size: 0.8rem;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+      max-height: 52px; // Limit description height
+      overflow: hidden;
+    }
+  }
+  
+  .verification-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    flex-shrink: 0;
+    height: 40px; // Fixed button height
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    &.primary {
+      background: linear-gradient(135deg, #7fff00, #32cd32);
+      color: #000;
+      
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($accent-color, 0.3);
+      }
+    }
+    
+    &.secondary {
+      background: transparent;
+      color: $text-color;
+      border: 1px solid $border-color;
+      
+      &:hover:not(:disabled) {
+        border-color: $accent-color;
+        color: $accent-color;
+      }
+    }
+  }
+  
+  .verification-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%; // Prevent expansion
+    overflow: hidden;
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      flex-shrink: 0;
+      margin-bottom: 0.8rem;
+      
+      .full-width {
+        grid-column: 1 / -1;
+      }
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      
+      label {
+        margin-bottom: 0.3rem;
+        font-size: 0.8rem;
+        color: rgba($text-color, 0.9);
+        font-weight: 500;
+        flex-shrink: 0;
+        line-height: 1.2;
+      }
+      
+      input,
+      select {
+        background-color: rgba(0, 0, 0, 0.3);
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        padding: 0.5rem;
+        color: rgba($text-color, 0.8);
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        height: 36px; // Fixed input height
+        flex-shrink: 0;
+        box-sizing: border-box;
+        
+        &:focus {
+          outline: none;
+          border-color: $accent-color;
+          box-shadow: 0 0 0 2px rgba($accent-color, 0.2);
+          background-color: rgba(0, 0, 0, 0.5);
+          color: $text-color;
+        }
+        
+        &::placeholder {
+          color: rgba($text-color, 0.4);
+          font-size: 0.8rem;
+        }
+      }
+      
+      select {
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5"><path fill="%237fff00" d="M0,0 L4,5 L8,0 Z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 8px 5px;
+        padding-right: 30px;
+        
+        option {
+          background-color: $primary-bg;
+          color: $text-color;
+        }
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: auto; // Push to bottom
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      height: 64px; // Fixed actions height
+      align-items: flex-start;
+    }
+  }
+  
+  .verification-history {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 220px; // Fixed maximum height for history
+    
+    h4 {
+      color: $accent-color;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      height: 24px; // Fixed header height
+      line-height: 1.2;
+    }
+    
+    .history-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      overflow-y: auto;
+      padding-right: 4px;
+      min-height: 0;
+      
+      &::-webkit-scrollbar {
+        width: 3px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: rgba($accent-color, 0.5);
+        border-radius: 2px;
+        
+        &:hover {
+          background: rgba($accent-color, 0.7);
+        }
+      }
+    }
+    
+    .history-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      padding: 0.6rem;
+      flex-shrink: 0;
+      min-height: 80px; // Minimum item height
+      max-height: 120px; // Maximum item height
+      overflow: hidden;
+      
+      .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.4rem;
+        height: 20px; // Fixed header height
+        
+        .status-info {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          min-width: 0;
+          
+          .status-icon {
+            width: 0.9rem;
+            height: 0.9rem;
+            flex-shrink: 0;
+            
+            &.completed {
+              color: $success-color;
+            }
+            
+            &.failed {
+              color: $error-color;
+            }
+            
+            &.pending {
+              color: $warning-color;
+            }
+            
+            &.default {
+              color: rgba($text-color, 0.6);
+            }
+          }
+          
+          .status-text {
+            font-weight: 500;
+            font-size: 0.8rem;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            
+            &.completed {
+              color: $success-color;
+            }
+            
+            &.failed {
+              color: $error-color;
+            }
+            
+            &.inprogress,
+            &.pending {
+              color: $warning-color;
+            }
+          }
+        }
+        
+        .history-date {
+          font-size: 0.75rem;
+          color: rgba($text-color, 0.6);
+          flex-shrink: 0;
+          line-height: 1.2;
+        }
+      }
+      
+      .history-details {
+        margin-bottom: 0.4rem;
+        flex: 1;
+        overflow: hidden;
+        
+        p {
+          font-size: 0.75rem;
+          color: rgba($text-color, 0.8);
+          margin: 0.2rem 0;
+          line-height: 1.3;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      
+      .history-error {
+        font-size: 0.75rem;
+        color: $error-color;
+        margin-top: 0.4rem;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .history-success {
+        font-size: 0.75rem;
+        color: $success-color;
+        margin-top: 0.4rem;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// Additional constraint for the wrapper in KYCPage
+.kyc-verification-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px; // Match form-step height
+  max-height: 380px; // Fixed maximum height
+  overflow: hidden;
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 1rem;
+  }
+
+  .text-gray-500 {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .kyc-verification-container {
+    min-height: 380px;
+    max-height: 380px; // Keep consistent height on mobile too
+    
+    .verification-form {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        height: 100px; // Adjust height for stacked buttons
+        
+        .verification-btn {
+          width: 100%;
+        }
+      }
+    }
+    
+    .verification-alert {
+      padding: 0.5rem;
+      margin-bottom: 0.75rem;
+      min-height: 40px;
+      max-height: 70px;
+      
+      .alert-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+    
+    .verification-history {
+      max-height: 180px;
+      
+      .history-item {
+        padding: 0.5rem;
+        min-height: 70px;
+        max-height: 100px;
+        
+        .history-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.25rem;
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .kyc-verification-wrapper {
+    min-height: 380px;
+    max-height: 380px;
+  }
+}
+
+// Small screen adjustments
+@media (max-width: 480px) {
+  .kyc-verification-container {
+    min-height: 380px;
+    max-height: 380px;
+    
+    .verification-header {
+      margin-bottom: 0.8rem;
+      height: 28px;
+      
+      h3 {
+        font-size: 1rem;
+      }
+    }
+    
+    .verification-section {
+      max-height: calc(100% - 100px);
+      
+      .section-description {
+        font-size: 0.75rem;
+        margin-bottom: 0.8rem;
+        max-height: 40px;
+      }
+    }
+    
+    .verification-form {
+      .form-grid {
+        gap: 0.4rem;
+      }
+      
+      .form-group {
+        label {
+          margin-bottom: 0.2rem;
+          font-size: 0.75rem;
+        }
+        
+        input,
+        select {
+          padding: 0.4rem;
+          font-size: 0.75rem;
+          height: 32px;
+        }
+      }
+      
+      .form-actions {
+        padding-top: 0.6rem;
+        height: 90px;
+      }
+    }
+    
+    .verification-history {
+      max-height: 160px;
+      
+      .history-item {
+        min-height: 60px;
+        max-height: 80px;
+      }
+    }
+  }
+
+  .kyc-verification-wrapper {
+    min-height: 380px;
+    max-height: 380px;
+  }
+}
