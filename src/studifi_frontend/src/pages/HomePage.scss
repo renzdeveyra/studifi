@@ -119,6 +119,7 @@
 
 // Why Choose StudiFi Section (Section Two)
 .section-two {
+      text-align: center;
   background-color: #1e1e1e;
   padding: 6rem 0;
   color: white;
@@ -235,7 +236,7 @@
     z-index: 1;
   }
 
-  .section-header {
+  .Hsection-header {
     text-align: center;
     margin-bottom: 5rem;
     position: relative;
@@ -440,6 +441,7 @@
     position: relative;
 
     h3 {
+      
       font-size: 1.6rem;
       font-weight: bold;
       color: white;
@@ -724,7 +726,7 @@
     }
   }
 
-  .section-three .section-header h2 {
+  .section-three .Hsection-header h2 {
     font-size: 2.4rem;
   }
 }
