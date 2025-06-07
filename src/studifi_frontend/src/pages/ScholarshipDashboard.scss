@@ -1,0 +1,594 @@
+.scholarship-dashboard {
+  background-color: #1e1e1e;
+  color: white;
+  min-height: 100vh;
+  padding: 2rem;
+  margin-left: 280px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: rgba(255, 255, 255, 0.12);
+
+    &::before {
+      left: 100%;
+    }
+  }
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(127, 255, 0, 0.3));
+}
+
+.stat-trend {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+
+  &.active {
+    color: #7fff00;
+    border-bottom-color: #7fff00;
+  }
+
+  &:hover {
+    color: #7fff00;
+    background: rgba(127, 255, 0, 0.05);
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.new-proposal-btn {
+  background: linear-gradient(135deg, #7fff00, #32cd32);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
+  }
+}
+
+.scholarship-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.scholarship-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(127, 255, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(127, 255, 0, 0.08), transparent);
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+    box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+
+    &::before {
+      left: 100%;
+    }
+  }
+}
+
+.scholarship-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.scholarship-info {
+  h3 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.university {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+}
+
+.scholarship-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.tutored, &.active {
+    background: rgba(127, 255, 0, 0.2);
+    color: #7fff00;
+  }
+
+  &.research, &.needs-review {
+    background: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+  }
+
+  &.sustainability {
+    background: rgba(50, 205, 50, 0.2);
+    color: #32cd32;
+  }
+}
+
+.scholarship-amount {
+  text-align: right;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #7fff00;
+  text-shadow: 0 2px 4px rgba(127, 255, 0, 0.3);
+}
+
+.scholarship-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+}
+
+.voting-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.voting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.status {
+  color: #7fff00;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.time-left {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  &.for {
+    background: #32cd32;
+  }
+  &.against {
+    background: #ff6b6b;
+  }
+  &.abstain {
+    background: #ffa500;
+  }
+}
+
+.vote-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.vote-stat {
+  text-align: center;
+}
+
+.vote-label {
+  &.for {
+    color: #32cd32;
+    font-weight: 600;
+  }
+  &.against {
+    color: #ff6b6b;
+    font-weight: 600;
+  }
+  &.abstain {
+    color: #ffa500;
+    font-weight: 600;
+  }
+}
+
+.vote-count {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.2rem;
+}
+
+.quorum-status {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.scholarship-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cast-vote-btn {
+  background: linear-gradient(135deg, #7fff00, #32cd32);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
+  }
+}
+
+.view-details-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.create-proposal-content {
+  .section-header {
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.proposal-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sform-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.sform-group {
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    display: block;
+    color: #7fff00;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(127, 255, 0, 0.3);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #7fff00;
+      box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.1);
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.submit-proposal-btn {
+  background: linear-gradient(135deg, #7fff00, #32cd32);
+  color: #000;
+  padding: 15px 30px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
+  }
+}
+
+.draft-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.bottom-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.bottom-stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+.bottom-stat-icon {
+  font-size: 2rem;
+  width: 50px;
+  text-align: center;
+}
+
+.bottom-stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #7fff00;
+}
+
+.bottom-stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 1200px) {
+  .scholarship-dashboard {
+    margin-left: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scholarship-dashboard {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .scholarship-card {
+    padding: 1.5rem;
+  }
+
+  .scholarship-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .scholarship-actions {
+    flex-direction: column;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .scholarship-dashboard {
+    margin-left: 0;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+
+    h2 {
+      font-size: 2rem;
+    }
+  }
+
+  .vote-stats {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .bottom-stats {
+    grid-template-columns: 1fr;
+  }
+}

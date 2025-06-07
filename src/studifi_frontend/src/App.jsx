@@ -1,17 +1,17 @@
+// App.jsx
 import React, { useState } from 'react';
 import './App.scss';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
 import KYCPage from './pages/KYCPage';
 import DashboardPage from './pages/DashboardPage';
-import LoanApplication from './pages/LoanApplication'; // Import LoanApplication
-import ScholarshipsPage from './pages/ScholarshipsPage'; // Import ScholarshipsPage
+import LoanDashboard from './pages/LoanDashboard';
+import LoanApplication from './pages/LoanApplication'; // Import LoanApplication component
+import ScholarshipDashboard from './pages/ScholarshipDashboard';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isKycSubmitted, setIsKycSubmitted] = useState(false);
-  const [notifications, setNotifications] = useState([]); // State for notifications
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
 
   const navigateTo = (page) => {
     setCurrentPage(page);
@@ -35,9 +35,12 @@ const App = () => {
       {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} />}
       {currentPage === 'dashboard' && <DashboardPage />}
       {currentPage === 'loan' && (
-        <LoanApplication />
+        <LoanDashboard navigateTo={navigateTo} />
       )}
-      {currentPage === 'scholarship' && <ScholarshipsPage />}
+      {currentPage === 'applyLoan' && ( // Add a new condition for LoanApplication
+        <LoanApplication navigateTo={navigateTo} /> // Render LoanApplication when currentPage is 'applyLoan'
+      )}
+      {currentPage === 'scholarship' && <ScholarshipDashboard />}
     </div>
   );
 };
