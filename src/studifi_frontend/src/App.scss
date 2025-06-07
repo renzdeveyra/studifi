@@ -7,13 +7,16 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; 
+  scroll-padding-top: 80px;
+  background-color: #1e1e1e; // Ensure no white background at root level
 }
 
 .App {
   font-family: Arial, sans-serif;
   color: white;
   scroll-behavior: smooth;
+  background-color: #1e1e1e; // Ensure consistent dark background
+  min-height: 100vh;
 }
 
 // Shared Container

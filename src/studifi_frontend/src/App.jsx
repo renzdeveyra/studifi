@@ -8,14 +8,19 @@ import DashboardPage from './pages/DashboardPage';
 import LoanDashboard from './pages/LoanDashboard';
 import LoanApplication from './pages/LoanApplication';
 import ScholarshipDashboard from './pages/ScholarshipDashboard';
+import PaymentPage from './pages/PaymentPage';
+import SmartContractAgreement from './pages/SmartContractAgreement';
+import DeFiEducationHub from './pages/DeFiEducationHub';
 import OAuthLogin from './pages/OAuthLogin'; // Import the OAuthLogin component
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
+  const [pageData, setPageData] = useState(null);
   const [isKycSubmitted, setIsKycSubmitted] = useState(false);
 
-  const navigateTo = (page) => {
+  const navigateTo = (page, data = null) => {
     setCurrentPage(page);
+    setPageData(data);
     window.scrollTo(0, 0);
   };
 
@@ -43,10 +48,10 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navigation navigateTo={navigateTo} isKycSubmitted={isKycSubmitted} onLogout={handleLogout} />
+      <Navigation navigateTo={navigateTo} isKycSubmitted={isKycSubmitted} onLogout={handleLogout} currentPage={currentPage} />
       {currentPage === 'home' && <HomePage navigateTo={navigateTo} />}
       {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} />}
-      {currentPage === 'dashboard' && <DashboardPage />}
+      {currentPage === 'dashboard' && <DashboardPage navigateTo={navigateTo} />}
       {currentPage === 'loan' && (
         <LoanDashboard navigateTo={navigateTo} />
       )}
@@ -54,6 +59,9 @@ const App = () => {
         <LoanApplication navigateTo={navigateTo} />
       )}
       {currentPage === 'scholarship' && <ScholarshipDashboard />}
+      {currentPage === 'payment' && <PaymentPage navigateTo={navigateTo} />}
+      {currentPage === 'smart-contract' && <SmartContractAgreement navigateTo={navigateTo} contractType={pageData?.contractType || 'loan'} />}
+      {currentPage === 'defi-education' && <DeFiEducationHub navigateTo={navigateTo} />}
       {currentPage === 'login' && <OAuthLogin onLogin={handleOAuthLogin} navigateTo={navigateTo} />} {/* Render OAuthLogin when currentPage is 'login' */}
     </div>
   );

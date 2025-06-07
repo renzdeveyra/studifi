@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './DashboardPage.scss';
 
-const DashboardPage = () => {
+const DashboardPage = ({ navigateTo }) => {
+  useEffect(() => {
+    console.log('DashboardPage mounted successfully');
+  }, []);
+
   return (
     <section className="dashboard-page-section">
       <div className="container">
@@ -70,7 +74,7 @@ const DashboardPage = () => {
               Get a quick glance at your loan details, including disbursed amounts and payment schedules.
             </p>
             <div className="payment-actions">
-                <button className="btn-primary">View Loan Details</button> {/* Style updated */}
+                <button className="btn-primary" onClick={() => navigateTo('loan')}>View Loan Details</button>
             </div>
           </div>
           <div className="section-content-right">
@@ -108,7 +112,7 @@ const DashboardPage = () => {
               Track the progress of your scholarship applications and discover what's next.
             </p>
             <div className="payment-actions">
-              <button className="btn-primary">View All Scholarships</button> {/* Style updated */}
+              <button className="btn-primary" onClick={() => navigateTo('scholarship')}>View All Scholarships</button>
             </div>
           </div>
           <div className="section-content-right">
@@ -177,7 +181,7 @@ const DashboardPage = () => {
             </p>
             <div className="payment-actions">
               <button className="btn-primary">View All Activity</button>
-              <button className="btn-secondary">Make a Payment</button>
+              <button className="btn-secondary" onClick={() => navigateTo('payment')}>Make a Payment</button>
             </div>
           </div>
           <div className="section-content-right">
@@ -228,3 +232,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

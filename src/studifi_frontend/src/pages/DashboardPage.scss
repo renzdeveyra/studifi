@@ -13,17 +13,18 @@
   background-position: -39px -39px, -39px -39px;
   transition: margin-left 0.3s ease; // Smooth transition for responsive behavior
 
-  &::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 280px; // Start after sidebar
-    width: calc(100vw - 280px); // Adjust width to account for sidebar
-    height: 100vh;
-    pointer-events: none;
-    z-index: 1;
-    transition: left 0.3s ease, width 0.3s ease;
-  }
+  // Temporarily disabled to debug content visibility
+  // &::before {
+  //   content: '';
+  //   position: fixed;
+  //   top: 0;
+  //   left: 280px; // Start after sidebar
+  //   width: calc(100vw - 280px); // Adjust width to account for sidebar
+  //   height: 100vh;
+  //   pointer-events: none;
+  //   z-index: 1;
+  //   transition: left 0.3s ease, width 0.3s ease;
+  // }
 
   > * {
     position: relative;
@@ -465,51 +466,11 @@
       padding: 0 1rem;
     }
   }
-
-  .dashboard-header .profile-section {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-
-  .profile-actions {
-    flex-direction: column;
-    width: 100%;
-    
-    .btn-primary,
-    .btn-secondary {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-
-  .overview-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .aid-status-card,
-  .active-application-item {
-    flex-direction: column;
-    text-align: center;
-    .card-image-container,
-    .application-icon {
-        margin-bottom: 1rem;
-    }
-    .wallet-address-value {
-        max-width: unset;
-    }
-  }
 }
 
-// Small tablets
 @media (max-width: 600px) {
   .dashboard-page-section {
-    margin-left: 220px; // Adjust for even smaller sidebar
+    margin-left: 220px; // Adjust for smaller sidebar width
 
     &::before {
       left: 220px;
@@ -518,10 +479,10 @@
   }
 }
 
-// Mobile screens - sidebar becomes overlay/collapsible
+// Very small screens - sidebar becomes overlay
 @media (max-width: 480px) {
   .dashboard-page-section {
-    margin-left: 0; // No margin when sidebar is hidden/overlay
+    margin-left: 0; // Remove margin when sidebar is hidden/overlay
     padding: 1rem 0;
 
     &::before {
@@ -536,11 +497,29 @@
 
   .dashboard-header {
     margin-top: 0.5rem;
-    
+
     .profile-section {
-      padding: 1.5rem;
+      flex-direction: column;
+      text-align: center;
       gap: 1rem;
+      padding: 1.5rem;
     }
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    width: 100%;
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .section-title {
@@ -554,6 +533,17 @@
   .aid-status-card,
   .active-application-item,
   .overview-card {
+    flex-direction: column;
+    text-align: center;
     padding: 1.5rem;
+
+    .card-image-container,
+    .application-icon {
+      margin-bottom: 1rem;
+    }
+
+    .wallet-address-value {
+      max-width: unset;
+    }
   }
 }
