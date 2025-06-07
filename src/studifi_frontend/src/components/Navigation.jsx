@@ -38,6 +38,12 @@ const Navigation = ({ setCurrentView, currentView }) => (
       >
         Dashboard
       </button>
+      <button
+        className={currentView === 'register' ? 'active' : ''}
+        onClick={() => setCurrentView('register')}
+      >
+        Register
+      </button>
     </div>
   </nav>
 );
