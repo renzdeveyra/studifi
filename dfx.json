@@ -25,13 +25,19 @@
       "package": "compliance_gateway",
       "candid": "src/studifi_backend/compliance_gateway/compliance_gateway.did"
     },
+    "university_issuer": {
+      "type": "rust",
+      "package": "university_issuer",
+      "candid": "src/studifi_backend/university_issuer/university_issuer.did"
+    },
     "studifi_frontend": {
       "dependencies": [
         "identity_manager",
         "intelligent_credit",
         "autonomous_finance",
         "governance_engine",
-        "compliance_gateway"
+        "compliance_gateway",
+        "university_issuer"
       ],
       "source": [
         "src/studifi_frontend/dist"

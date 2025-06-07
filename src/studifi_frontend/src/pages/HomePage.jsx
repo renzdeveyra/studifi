@@ -188,8 +188,8 @@ const HomePage = ({ setCurrentPage }) => {
                             </div>
                         </div>
                     </div>
-                    <button onClick={() => setCurrentPage('kyc')} className="action-button submit-button w-full">
-                        <div className="button-text">Submit Application</div>
+                    <button onClick={() => setCurrentView('register')} className="action-button submit-button w-full">
+                        <div className="button-text">Register & Apply</div>
                     </button>
                 </div>
             </section>
