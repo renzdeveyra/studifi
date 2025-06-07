@@ -192,6 +192,13 @@ $card-bg: rgba(255, 255, 255, 0.08);
   display: none;
   flex: 1;
   min-height: 380px;
+  /* KYCPage.scss - This is the correct property */
+  max-height: 380px;
+  /* KYCPage.scss - This is the correct property */
+  overflow-y: auto;
+  /* KYCPage.scss - This is the correct property */
+  padding-right: 0.5rem;
+  /* Add padding to prevent content from being hidden by scrollbar */
 
   &.active {
     display: flex;
@@ -590,7 +597,12 @@ $card-bg: rgba(255, 255, 255, 0.08);
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
+  min-height: 380px;
+  /* Match form-step height */
+  max-height: 380px;
+  /* Fixed maximum height */
+  overflow: hidden;
+  /* This overflow is okay for the wrapper if the content inside .kyc-verification-container handles its own scrolling */
 
   .text-center {
     text-align: center;
@@ -626,10 +638,25 @@ $card-bg: rgba(255, 255, 255, 0.08);
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, -60%); }
-  10% { opacity: 1; transform: translate(-50%, -50%); }
-  90% { opacity: 1; transform: translate(-50%, -50%); }
-  100% { opacity: 0; transform: translate(-50%, -40%); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
 }
 
 @media (max-width: 768px) {
@@ -674,6 +701,7 @@ $card-bg: rgba(255, 255, 255, 0.08);
   }
 
   .form-group {
+
     input,
     select,
     textarea {
