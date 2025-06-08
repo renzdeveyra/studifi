@@ -344,6 +344,7 @@
     align-items: center;
     gap: 0.5rem;
     box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+    
     /* Removed margin-top as it's now explicitly below the message group */
     position: relative;
     overflow: hidden;
@@ -373,7 +374,6 @@
     &:active:not(:disabled) {
       transform: translateY(-1px) scale(1.01);
     }
-
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
@@ -695,7 +695,7 @@
   }
 
   .sf-contact-main-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Stack content on smaller screens */
     gap: 3rem;
   }
 
@@ -740,18 +740,18 @@
       }
     }
     .sf-team-contact-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; /* Stack team cards */
     }
   }
 
   .sf-contact-us-section {
-    padding: 4rem 0;
+    padding: 4rem 0; /* Adjust padding for smaller screens */
     &::before {
-      background-size: 80px 80px;
+      background-size: 80px 80px; /* Adjust background pattern size */
       background-position: -20px -20px;
     }
     &::after {
-      width: 95vw;
+      width: 95vw; /* Adjust radial gradient width */
       height: 60vh;
       top: 15%;
     }
