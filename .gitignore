@@ -1,0 +1,39 @@
+# Various IDEs and Editors
+.vscode/
+.idea/
+
+# Operating System Temporary Files
+# Mac OSX
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# dfx (Dfinity/Internet Computer) temporary files
+.dfx/
+
+# Node.js and Frontend specific ignores
+node_modules/
+dist/
+.svelte-kit/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Rust
+target/
+
+# Generated files / Cache / Temporary
+**/declarations/
+**/*~ # Files ending with ~ (often backup files from editors)
+*.tmp
+*.cachedasd

@@ -1,0 +1,916 @@
+// Contact Us Section Styles
+.sf-contact-us-section {
+  background-color: #1e1e1e;
+  color: white;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+
+  // Background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(169, 169, 169, 0.03) 1px, transparent 1px), 
+      linear-gradient(to right, rgba(169, 169, 169, 0.03) 1px, transparent 1px);
+    background-size: 120px 120px;
+    background-position: -30px -30px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Radial gradient overlay
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    width: 90vw;
+    height: 70vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.06) 0%, transparent 60%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sf-contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Header Section
+.sf-contact-header {
+  text-align: center;
+  margin-bottom: 5rem;
+
+  .sf-contact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(127, 255, 0, 0.1);
+    border: 1px solid rgba(127, 255, 0, 0.3);
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(127, 255, 0, 0.15);
+      border-color: rgba(127, 255, 0, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .sf-badge-icon {
+      font-size: 1.2rem;
+    }
+
+    .sf-badge-text {
+      font-weight: 600;
+      color: #7fff00;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .sf-contact-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+
+    .sf-contact-highlight {
+      color: #7fff00;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        border-radius: 2px;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .sf-contact-description {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+// Contact Methods Section
+.sf-contact-methods {
+  margin-bottom: 6rem;
+
+  .sf-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+}
+
+.sf-contact-method-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.1),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 20px 40px rgba(127, 255, 0, 0.15),
+      0 0 0 1px rgba(127, 255, 0, 0.2);
+
+    &::before {
+      left: 100%;
+    }
+
+    .sf-card-glow {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  .sf-method-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 4px 8px rgba(127, 255, 0, 0.3));
+  }
+
+  .sf-method-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    color: #7fff00;
+  }
+
+  .sf-method-description {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+  }
+
+  .sf-method-contact {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .sf-method-response {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    color: #7fff00;
+  }
+
+  .sf-card-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.1), transparent 70%);
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    transition: all 0.6s ease;
+    pointer-events: none;
+  }
+}
+
+// Main Content Grid
+.sf-contact-main-content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  margin-bottom: 6rem;
+}
+
+// Contact Form Section
+.sf-contact-form-section {
+  .sf-form-header {
+    margin-bottom: 2.5rem;
+
+    h2 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      color: white;
+    }
+
+    p {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+.sf-contact-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 25px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+
+  .sf-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sf-form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #7fff00;
+    }
+
+    input,
+    select,
+    textarea {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      resize: vertical;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: rgba(127, 255, 0, 0.5);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.1);
+      }
+    }
+
+    select {
+      cursor: pointer;
+
+      option {
+        background: #2a2a2a;
+        color: white;
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      font-family: inherit;
+    }
+  }
+
+  .sf-submit-btn {
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+    padding: 1rem 2.5rem;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(127, 255, 0, 0.4);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .sf-btn-icon {
+      font-size: 1.1rem;
+    }
+  }
+
+  .sf-submit-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(127, 255, 0, 0.1);
+    border: 1px solid rgba(127, 255, 0, 0.3);
+    border-radius: 12px;
+    color: #7fff00;
+    font-weight: 500;
+  }
+}
+
+// FAQ Section
+.sf-faq-section {
+  .sf-faq-header {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      color: white;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+  }
+
+  .sf-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .sf-faq-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(127, 255, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .sf-faq-question {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+
+      .sf-faq-icon {
+        font-size: 1.2rem;
+        color: #7fff00;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        line-height: 1.4;
+      }
+    }
+
+    .sf-faq-answer {
+      padding-left: 2rem;
+
+      p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        opacity: 0.8;
+        margin: 0;
+      }
+    }
+  }
+
+  .sf-faq-footer {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .sf-faq-contact-btn {
+      background: linear-gradient(135deg, rgba(127, 255, 0, 0.8), rgba(50, 205, 50, 0.6));
+      color: #000;
+      padding: 0.8rem 1.8rem;
+      border-radius: 25px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(127, 255, 0, 0.3);
+      }
+
+      .sf-btn-icon {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Team Contact Section
+.sf-team-contact-section {
+  .sf-team-contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+  }
+
+  .sf-team-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+}
+
+.sf-team-contact-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.08),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 35px rgba(127, 255, 0, 0.1);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  .sf-team-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sf-team-info {
+    h4 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .sf-team-role {
+      font-size: 1rem;
+      color: #7fff00;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+    }
+
+    .sf-team-contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+
+      .sf-contact-detail {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(127, 255, 0, 0.1);
+          transform: translateX(5px);
+        }
+
+        .sf-contact-icon {
+          font-size: 1rem;
+          color: #7fff00;
+        }
+
+        span:last-child {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .sf-team-expertise {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      opacity: 0.8;
+      font-style: italic;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .sf-contact-header {
+    .sf-contact-title {
+      font-size: 2.5rem;
+    }
+
+    .sf-contact-description {
+      font-size: 1.1rem;
+    }
+  }
+
+  .sf-methods-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-contact-main-content {
+    grid-template-columns: 1fr; /* Stack content on smaller screens */
+    gap: 3rem;
+  }
+
+  .sf-contact-form {
+    padding: 2rem;
+    .sf-form-row {
+      grid-template-columns: 1fr; /* Stack form fields */
+    }
+  }
+
+  .sf-faq-section {
+    .sf-faq-header {
+      h2 {
+        font-size: 1.8rem;
+      }
+    }
+    .sf-faq-item {
+      padding: 1.2rem;
+      .sf-faq-question {
+        h4 {
+          font-size: 1rem;
+        }
+      }
+      .sf-faq-answer {
+        padding-left: 1.5rem;
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .sf-team-contact-section {
+    .sf-team-contact-header {
+      h2 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
+    .sf-team-contact-grid {
+      grid-template-columns: 1fr; /* Stack team cards */
+    }
+  }
+
+  .sf-contact-us-section {
+    padding: 4rem 0; /* Adjust padding for smaller screens */
+    &::before {
+      background-size: 80px 80px; /* Adjust background pattern size */
+      background-position: -20px -20px;
+    }
+    &::after {
+      width: 95vw; /* Adjust radial gradient width */
+      height: 60vh;
+      top: 15%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sf-contact-us-section {
+    padding: 3rem 0;
+
+    .sf-contact-container {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .sf-contact-header {
+    margin-bottom: 3rem;
+
+    .sf-contact-badge {
+      padding: 0.6rem 1.2rem;
+      margin-bottom: 1.5rem;
+
+      .sf-badge-icon {
+        font-size: 1rem;
+      }
+
+      .sf-badge-text {
+        font-size: 0.8rem;
+      }
+    }
+
+    .sf-contact-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .sf-contact-description {
+      font-size: 1rem;
+    }
+  }
+
+  .sf-contact-methods {
+    margin-bottom: 4rem;
+    .sf-methods-grid {
+      gap: 1.5rem;
+    }
+  }
+
+  .sf-contact-method-card {
+    padding: 1.5rem;
+
+    .sf-method-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .sf-method-title {
+      font-size: 1.2rem;
+    }
+
+    .sf-method-description {
+      font-size: 0.9rem;
+    }
+
+    .sf-method-contact {
+      font-size: 1rem;
+    }
+
+    .sf-method-response {
+      font-size: 0.8rem;
+    }
+  }
+
+  .sf-contact-main-content {
+    gap: 2.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .sf-contact-form-section {
+    .sf-form-header {
+      margin-bottom: 2rem;
+      h2 {
+        font-size: 1.8rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .sf-contact-form {
+    padding: 1.5rem;
+    .sf-form-row {
+      gap: 1rem;
+    }
+    .sf-form-group {
+      label {
+        font-size: 0.9rem;
+      }
+      input,
+      select,
+      textarea {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
+    .sf-submit-btn {
+      padding: 0.8rem 2rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .sf-faq-section {
+    .sf-faq-header {
+      h2 {
+        font-size: 1.6rem;
+      }
+      p {
+        font-size: 0.9rem;
+      }
+    }
+
+    .sf-faq-item {
+      padding: 1rem;
+      .sf-faq-question {
+        gap: 0.6rem;
+        .sf-faq-icon {
+          font-size: 1rem;
+        }
+        h4 {
+          font-size: 1rem;
+        }
+      }
+      .sf-faq-answer {
+        padding-left: 1.2rem;
+        p {
+          font-size: 0.85rem;
+        }
+      }
+    }
+
+    .sf-faq-footer {
+      padding: 1.5rem;
+      p {
+        font-size: 1rem;
+      }
+      .sf-faq-contact-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .sf-team-contact-section {
+    .sf-team-contact-header {
+      h2 {
+        font-size: 1.8rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
+    .sf-team-contact-grid {
+      gap: 1.5rem;
+    }
+  }
+
+  .sf-team-contact-card {
+    padding: 1.5rem;
+
+    .sf-team-avatar {
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .sf-team-info {
+      h4 {
+        font-size: 1.2rem;
+      }
+      .sf-team-role {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      .sf-team-contact-details {
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+        .sf-contact-detail {
+          padding: 0.4rem;
+          .sf-contact-icon {
+            font-size: 0.9rem;
+          }
+          span:last-child {
+            font-size: 0.8rem;
+          }
+        }
+      }
+      .sf-team-expertise {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .sf-contact-header {
+    .sf-contact-title {
+      font-size: 1.8rem;
+    }
+  }
+
+  .sf-contact-form {
+    padding: 1rem;
+    .sf-form-group {
+      input,
+      select,
+      textarea {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .sf-team-contact-card {
+    padding: 1.2rem;
+  }
+}
