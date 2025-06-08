@@ -23,7 +23,6 @@
     z-index: 1;
   }
 
-  //  overlay
   &::after {
     content: '';
     position: absolute;
@@ -137,6 +136,7 @@
     }
   }
 }
+
 
 .member-image {
   position: relative;

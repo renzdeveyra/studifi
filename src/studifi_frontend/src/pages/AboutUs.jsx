@@ -61,7 +61,6 @@ const AboutUs = () => {
     e.target.parentElement.style.background = 'linear-gradient(135deg, #333, #555)';
     e.target.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem; color: rgba(127, 255, 0, 0.6);">👤</div>';
   };
-
   return (
     <section className="about-us-section">
       <div className="container">
