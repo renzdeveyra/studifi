@@ -16,10 +16,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
     email: '',
     idDocument: null,
     selfieWithId: null,
-    studentVerificationDetails: null, // New field to store details from KycVerification
-    walletAddress: '',
-    permanentAddress: '',
-    billingStatement: null
+    studentVerificationDetails: null // New field to store details from KycVerification
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [termsAgreedViaModal, setTermsAgreedViaModal] = useState(false);
@@ -56,7 +53,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
       showAppAlert('Please complete the Student Verification first.');
       return;
     }
-    if (currentStep < 5) { // steps.length - 1
+    if (currentStep < 3) { // Updated to reflect new total steps (4 steps, 0-3)
       setCurrentStep(currentStep + 1);
     }
   };
@@ -99,7 +96,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
         studentVerificationDetails: details // Store the returned details
       }));
       // Automatically advance to the next step if verification is successful
-      setCurrentStep(prev => prev < 5 ? prev + 1 : prev); // Go to step 4 after VC
+      setCurrentStep(prev => prev < 3 ? prev + 1 : prev); // Go to step 4 (Review) after VC
     }
   };
 
@@ -107,8 +104,6 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
     'Personal Information',
     'ID Verification',
     'Student Verification (VC)', // Updated step name
-    'Blockchain Wallet Link',
-    'Address Verification',
     'Review & Confirm'
   ];
 
@@ -270,57 +265,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
               {currentStep === 3 && (
                 <div className="form-step active">
                   <div className="step-header">
-                    <h3>Step 4: Blockchain Wallet Link</h3>
-                    <p>Link your blockchain wallet to receive funds and manage assets.</p>
-                    <div className="wallet-icon">🔗</div>
-                  </div>
-                  <div className="form-group full-width">
-                    <label>Wallet Address</label>
-                    <input
-                      type="text"
-                      placeholder="Enter your wallet address (e.g., ICP, Ethereum)"
-                      value={formData.walletAddress}
-                      onChange={(e) => handleInputChange('walletAddress', e.target.value)}
-                    />
-                  </div>
-                  {/* Add more wallet linking details or integration here */}
-                </div>
-              )}
-
-              {currentStep === 4 && (
-                <div className="form-step active">
-                  <div className="step-header">
-                    <h3>Step 5: Address Verification</h3>
-                    <p>Provide your permanent address and upload a billing statement.</p>
-                  </div>
-                  <div className="form-grid">
-                    <div className="form-group full-width">
-                      <label>Permanent Address</label>
-                      <textarea
-                        placeholder="Enter your permanent address"
-                        value={formData.permanentAddress}
-                        onChange={(e) => handleInputChange('permanentAddress', e.target.value)}
-                      ></textarea>
-                    </div>
-                    <div className="upload-area full-width single-upload">
-                      <div className="upload-icon">🧾</div>
-                      <h4>Upload Billing Statement</h4>
-                      <p>Choose file: {formData.billingStatement ? formData.billingStatement.name : 'No file chosen'}</p>
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleFileUpload('billingStatement', e.target.files[0])}
-                        className="file-input"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {currentStep === 5 && (
-                <div className="form-step active">
-                  <div className="step-header">
-                    <h3>Step 6: Review & Confirm</h3>
+                    <h3>Step 4: Review & Confirm</h3>
                     <p>Please review your information before submitting.</p>
                   </div>
                   <div className="review-summary">
@@ -349,13 +294,6 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
                       <p><strong>Status:</strong> Not completed</p>
                     )}
 
-                    <h4 className="mt-4">Blockchain Wallet Link</h4>
-                    <p><strong>Wallet Address:</strong> {formData.walletAddress || 'Not provided'}</p>
-
-                    <h4 className="mt-4">Address Verification</h4>
-                    <p><strong>Permanent Address:</strong> {formData.permanentAddress || 'Not provided'}</p>
-                    <p><strong>Billing Statement:</strong> {formData.billingStatement ? formData.billingStatement.name : 'Not uploaded'}</p>
-
                     <div className="terms-checkbox mt-4">
                       <label className="checkbox-container">
                         <input
@@ -383,7 +321,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
                 Step {currentStep + 1} of {steps.length}
               </div>
 
-              {currentStep < 5 ? (
+              {currentStep < 3 ? (
                 <button className="nav-btn next-btn" onClick={nextStep}>
                   Next →
                 </button>
