@@ -1,0 +1,868 @@
+// Services Page Styles
+.services-page {
+  background-color: #1e1e1e;
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden; // Prevent horizontal scroll
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%; // Ensure container doesn't exceed viewport
+  box-sizing: border-box; // Include padding in width calculation
+}
+
+// Hero Section
+.services-hero {
+  padding: 8rem 0 6rem;
+  background-image:
+    linear-gradient(rgba(169, 169, 169, 0.03) 1px, transparent 1px),
+    linear-gradient(to right, rgba(169, 169, 169, 0.03) 1px, #1e1e1e 1px);
+  background-size: 120px 120px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: min(60vw, 800px); // Limit max width
+    height: 40vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.08) 0%, transparent 60%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+
+      .highlight {
+        color: #7fff00;
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Section Headers
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+
+  h2 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+// Core Services Section
+.core-services {
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden; // Prevent pseudo-elements from causing overflow
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: -10%; // Reduced from -20%
+    width: min(30vw, 400px); // Limit width
+    height: 50vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.service-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border-radius: 25px;
+  padding: 2.5rem;
+  border: 1px solid rgba(127, 255, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  height: fit-content;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.08),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &.featured {
+    border-color: rgba(127, 255, 0, 0.4);
+    background: linear-gradient(135deg, rgba(127, 255, 0, 0.1), rgba(255, 255, 255, 0.05));
+
+    .service-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #7fff00, #32cd32);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+    box-shadow:
+      0 25px 50px rgba(127, 255, 0, 0.15),
+      0 0 0 1px rgba(127, 255, 0, 0.2);
+
+    &::before {
+      left: 100%;
+    }
+
+    .service-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  .service-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(127, 255, 0, 0.3));
+  }
+
+  h3 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .service-subtitle {
+    color: #7fff00;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+}
+
+.service-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(127, 255, 0, 0.3);
+  }
+
+  .feature-icon {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    flex-shrink: 0; // Prevent icon from shrinking
+  }
+
+  span:last-child {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    word-break: break-word; // Prevent text overflow
+  }
+}
+
+// DAO Governance Section
+.dao-governance {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, rgba(127, 255, 0, 0.03), transparent);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: -5%; // Reduced from -15%
+    width: min(25vw, 300px); // Limit width
+    height: 40vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.governance-content {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 4rem;
+  align-items: start;
+  width: 100%;
+}
+
+.governance-info {
+  h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: white;
+  }
+
+  p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+}
+
+.dao-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.dao-stat {
+  text-align: center;
+  padding: 1.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(127, 255, 0, 0.2);
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(127, 255, 0, 0.4);
+    transform: translateY(-3px);
+  }
+
+  .stat-number {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #7fff00;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+}
+
+.governance-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.governance-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(127, 255, 0, 0.3);
+    transform: translateY(-5px);
+  }
+
+  .governance-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  h4 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    line-height: 1.5;
+  }
+}
+
+// Technology Stack Section
+.tech-stack {
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    right: -5%; // Reduced from -10%
+    width: min(20vw, 250px); // Limit width
+    height: 30vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  width: 100%;
+}
+
+.tech-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(127, 255, 0, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(127, 255, 0, 0.1);
+  }
+
+  .tech-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+}
+
+// Platform Statistics Section
+.platform-stats {
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: min(60vw, 800px); // Limit max width
+    height: 60vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.04) 0%, transparent 60%);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 4rem;
+
+  h2 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  border: 1px solid rgba(127, 255, 0, 0.15);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.05),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+    box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  .stat-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #7fff00;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 0.8rem;
+  }
+
+  .stat-description {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+}
+
+// Media Queries for Responsiveness
+@media (max-width: 1200px) {
+  .services-container {
+    padding: 0 1.5rem;
+    max-width: 100%;
+  }
+  
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .service-card {
+    padding: 2rem;
+  }
+  
+  .governance-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .services-hero {
+    padding: 6rem 0 4rem;
+    
+    .hero-content h1 {
+      font-size: 3rem;
+    }
+    
+    .hero-content p {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .section-header {
+    h2 {
+      font-size: 2.2rem;
+    }
+    p {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .governance-features {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+  
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .services-container {
+    padding: 0 1rem;
+  }
+  
+  .services-hero {
+    padding: 5rem 0 3rem;
+    
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+      font-size: 1rem;
+    }
+  }
+  
+  .section-header {
+    margin-bottom: 3rem;
+    
+    h2 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  .core-services,
+  .dao-governance,
+  .tech-stack,
+  .platform-stats {
+    padding: 4rem 0;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .service-card {
+    padding: 2rem;
+    
+    .service-icon {
+      font-size: 3rem;
+    }
+    
+    h3 {
+      font-size: 1.6rem;
+    }
+    
+    .service-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .feature-item {
+    padding: 0.7rem;
+    
+    span:last-child {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .governance-info {
+    h2 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  .dao-stat {
+    padding: 1rem;
+    
+    .stat-number {
+      font-size: 1.8rem;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .governance-card {
+    padding: 1.5rem;
+    
+    .governance-icon {
+      font-size: 2rem;
+    }
+    
+    h4 {
+      font-size: 1.2rem;
+    }
+    
+    p {
+      font-size: 0.85rem;
+    }
+  }
+  
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tech-card {
+    padding: 2rem;
+    
+    .tech-icon {
+      font-size: 3rem;
+    }
+    
+    h3 {
+      font-size: 1.2rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .stats-header {
+    h2 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  
+  .stat-card {
+    padding: 2rem;
+    
+    .stat-icon {
+      font-size: 2.5rem;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+    }
+    
+    .stat-label {
+      font-size: 1rem;
+    }
+    
+    .stat-description {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .services-container {
+    padding: 0 1rem;
+  }
+  
+  .services-hero {
+    padding: 4rem 0 2rem;
+    
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .service-card {
+    padding: 1.5rem;
+  }
+  
+  .dao-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .dao-stat {
+    flex: 1 1 45%;
+    max-width: 180px;
+  }
+  
+  .governance-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .services-hero {
+    .hero-content h1 {
+      font-size: 1.8rem;
+    }
+    
+    .hero-content p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .section-header {
+    h2 {
+      font-size: 1.6rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .service-card {
+    padding: 1.2rem;
+    
+    .service-icon {
+      font-size: 2.5rem;
+    }
+    
+    h3 {
+      font-size: 1.4rem;
+    }
+  }
+  
+  .feature-item {
+    font-size: 0.85rem;
+  }
+  
+  .dao-stat {
+    .stat-number {
+      font-size: 1.5rem;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .governance-card {
+    padding: 1.2rem;
+  }
+  
+  .tech-card {
+    padding: 1.5rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+  }
+}
