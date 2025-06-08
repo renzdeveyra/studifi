@@ -27,6 +27,9 @@ fn init() {
         storage.set_treasury_config(treasury_config);
     });
 
+    // Initialize separate treasuries
+    let _ = TreasuryEngine::initialize_treasuries();
+
     // Start automation timer (runs every hour)
     unsafe {
         AUTOMATION_TIMER = Some(set_timer_interval(
@@ -392,27 +395,84 @@ fn update_treasury_config(config: TreasuryConfig) -> StudiFiResult<()> {
     Ok(())
 }
 
-/// Add funds to treasury (governance approved)
-#[update]
-#[candid_method(update)]
-fn add_treasury_funds(amount: Amount, source: String) -> StudiFiResult<()> {
-    // TODO: Add governance authorization check
-    TreasuryEngine::add_treasury_funds(amount, source)
+// ============================================================================
+// SEPARATE TREASURY MANAGEMENT FUNCTIONS
+// ============================================================================
+
+/// Get configuration for a specific treasury type
+#[query]
+#[candid_method(query)]
+fn get_separate_treasury_config(treasury_type: TreasuryType) -> StudiFiResult<SeparateTreasuryConfig> {
+    TreasuryEngine::get_treasury_config(treasury_type)
 }
 
-/// Withdraw funds from treasury (governance approved)
+/// Get all separate treasury configurations
+#[query]
+#[candid_method(query)]
+fn get_all_separate_treasuries() -> Vec<SeparateTreasuryConfig> {
+    with_storage(|storage| storage.get_all_separate_treasuries())
+}
+
+/// Add funds to a specific treasury (governance approved)
 #[update]
 #[candid_method(update)]
-fn withdraw_treasury_funds(amount: Amount, purpose: String) -> StudiFiResult<()> {
+fn add_treasury_funds(treasury_type: TreasuryType, amount: Amount, source: String) -> StudiFiResult<()> {
     // TODO: Add governance authorization check
-    TreasuryEngine::withdraw_treasury_funds(amount, purpose)
+    TreasuryEngine::add_treasury_funds(treasury_type, amount, source)
+}
+
+/// Allocate funds from a specific treasury (with governance check)
+#[update]
+#[candid_method(update)]
+fn allocate_treasury_funds(
+    treasury_type: TreasuryType,
+    amount: Amount,
+    purpose: String,
+    governance_approved: bool,
+) -> StudiFiResult<()> {
+    TreasuryEngine::allocate_treasury_funds(treasury_type, amount, purpose, governance_approved)
+}
+
+/// Transfer funds between treasuries (requires governance approval)
+#[update]
+#[candid_method(update)]
+fn transfer_between_treasuries(
+    from_treasury: TreasuryType,
+    to_treasury: TreasuryType,
+    amount: Amount,
+    governance_approved: bool,
+) -> StudiFiResult<()> {
+    TreasuryEngine::transfer_between_treasuries(from_treasury, to_treasury, amount, governance_approved)
+}
+
+/// Get multi-treasury health overview
+#[query]
+#[candid_method(query)]
+fn get_multi_treasury_health() -> StudiFiResult<MultiTreasuryHealth> {
+    TreasuryEngine::get_multi_treasury_health()
+}
+
+/// Get treasury health for a specific treasury type
+#[query]
+#[candid_method(query)]
+fn get_treasury_health_for_type(treasury_type: TreasuryType) -> StudiFiResult<TreasuryHealth> {
+    TreasuryEngine::get_treasury_health_for_type(treasury_type)
+}
+
+/// Legacy treasury functions (for backward compatibility)
+#[update]
+#[candid_method(update)]
+fn add_legacy_treasury_funds(amount: Amount, source: String) -> StudiFiResult<()> {
+    // Default to loan treasury for backward compatibility
+    TreasuryEngine::add_treasury_funds(TreasuryType::Loan, amount, source)
 }
 
 /// Manually trigger treasury rebalancing
 #[update]
 #[candid_method(update)]
 fn rebalance_treasury() -> StudiFiResult<()> {
-    TreasuryEngine::rebalance_treasury()
+    // TODO: Implement cross-treasury rebalancing logic
+    Ok(())
 }
 
 // ============================================================================

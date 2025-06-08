@@ -34,6 +34,21 @@ type StudiFiResult = variant {
   Err : StudiFiError;
 };
 
+type StudiFiResultTreasuryConfig = variant {
+  Ok : SeparateTreasuryConfig;
+  Err : StudiFiError;
+};
+
+type StudiFiResultMultiTreasuryHealth = variant {
+  Ok : MultiTreasuryHealth;
+  Err : StudiFiError;
+};
+
+type StudiFiResultTreasuryHealth = variant {
+  Ok : TreasuryHealth;
+  Err : StudiFiError;
+};
+
 type LoanStatus = variant {
   Active;
   Late;
@@ -75,6 +90,33 @@ type TreasuryHealthStatus = variant {
   Fair;
   Poor;
   Critical;
+};
+
+type TreasuryType = variant {
+  Loan;
+  Scholarship;
+  Protocol;
+};
+
+type SeparateTreasuryConfig = record {
+  treasury_type : TreasuryType;
+  total_funds : nat64;
+  available_funds : nat64;
+  reserved_funds : nat64;
+  minimum_reserve_ratio : float64;
+  maximum_allocation_ratio : float64;
+  governance_required : bool;
+  created_at : nat64;
+  last_updated : nat64;
+};
+
+type MultiTreasuryHealth = record {
+  loan_treasury : TreasuryHealth;
+  scholarship_treasury : TreasuryHealth;
+  protocol_treasury : TreasuryHealth;
+  total_platform_funds : nat64;
+  overall_health_score : float64;
+  cross_treasury_recommendations : vec text;
 };
 
 type Loan = record {
@@ -207,13 +249,21 @@ service : {
   calculate_payment_breakdown : (text, nat64) -> (StudiFiResultBreakdown) query;
   get_early_payoff_info : (text) -> (StudiFiResultPayoffInfo) query;
 
-  // Treasury Management
+  // Treasury Management (Legacy)
   get_treasury_health : () -> (TreasuryHealth) query;
   get_treasury_config : () -> (TreasuryConfig) query;
   update_treasury_config : (TreasuryConfig) -> (StudiFiResult);
-  add_treasury_funds : (nat64, text) -> (StudiFiResult);
-  withdraw_treasury_funds : (nat64, text) -> (StudiFiResult);
+  add_legacy_treasury_funds : (nat64, text) -> (StudiFiResult);
   rebalance_treasury : () -> (StudiFiResult);
+
+  // Separate Treasury Management
+  get_separate_treasury_config : (TreasuryType) -> (StudiFiResultTreasuryConfig) query;
+  get_all_separate_treasuries : () -> (vec SeparateTreasuryConfig) query;
+  add_treasury_funds : (TreasuryType, nat64, text) -> (StudiFiResult);
+  allocate_treasury_funds : (TreasuryType, nat64, text, bool) -> (StudiFiResult);
+  transfer_between_treasuries : (TreasuryType, TreasuryType, nat64, bool) -> (StudiFiResult);
+  get_multi_treasury_health : () -> (StudiFiResultMultiTreasuryHealth) query;
+  get_treasury_health_for_type : (TreasuryType) -> (StudiFiResultTreasuryHealth) query;
 
   // Statistics and Reporting
   get_platform_stats : () -> (Statistics) query;
