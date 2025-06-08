@@ -264,11 +264,6 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
                       onVerificationComplete={handleKycVerificationComplete}
                     />
                   </div>
-                  {!kycVerificationComplete && (
-                    <p className="text-center mt-4 text-gray-500">
-                      You must complete this verification step to proceed.
-                    </p>
-                  )}
                 </div>
               )}
 
