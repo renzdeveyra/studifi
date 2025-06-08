@@ -1,7 +1,6 @@
 // App.jsx
-import React, { useState, useEffect } from 'react';
-import { AuthClient } from '@dfinity/auth-client';
-import { createActor } from 'declarations/student_identity_service';
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './App.scss';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -17,54 +16,25 @@ import OAuthLogin from './pages/OAuthLogin';
 import ServicesPage from './pages/ServicesPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import GovernancePage from './pages/GovernancePage';
 
 
 
-const App = () => {
+// Main App component that uses AuthContext
+const AppContent = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [pageData, setPageData] = useState(null);
   const [isKycSubmitted, setIsKycSubmitted] = useState(false);
-  const [authClient, setAuthClient] = useState(null);
-  const [identity, setIdentity] = useState(null);
-  const [identityManagerActor, setIdentityManagerActor] = useState(null);
-  const [error, setError] = useState(null);
 
-  // Initialize authentication on app load
-  useEffect(() => {
-    initAuth();
-  }, []);
-
-  const initAuth = async () => {
-    try {
-      console.log('Initializing auth...');
-      const client = await AuthClient.create();
-      setAuthClient(client);
-
-      if (await client.isAuthenticated()) {
-        console.log('User is already authenticated');
-        const userIdentity = client.getIdentity();
-        setIdentity(userIdentity);
-
-        // Create identity manager actor with authenticated identity
-        try {
-          const actor = createActor(import.meta.env.VITE_CANISTER_ID_STUDENT_IDENTITY_SERVICE, {
-            agentOptions: {
-              identity: userIdentity,
-            },
-          });
-          setIdentityManagerActor(actor);
-        } catch (actorError) {
-          console.warn('Failed to create identity manager actor:', actorError);
-          // Don't set error here, just log it - the app can still function
-        }
-      }
-      console.log('Auth initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize auth:', error);
-      // Don't set error for auth initialization failure - let the app load without auth
-      console.warn('App will continue without authentication');
-    }
-  };
+  const {
+    isAuthenticated,
+    isLoading,
+    error,
+    actors,
+    login,
+    logout,
+    clearError
+  } = useAuth();
 
   const navigateTo = (page, data = null) => {
     setCurrentPage(page);
@@ -79,11 +49,7 @@ const App = () => {
 
   const handleLogout = async () => {
     try {
-      if (authClient) {
-        await authClient.logout();
-        setIdentity(null);
-        setIdentityManagerActor(null);
-      }
+      await logout();
       setIsKycSubmitted(false);
       navigateTo('home');
     } catch (error) {
@@ -91,41 +57,12 @@ const App = () => {
     }
   };
 
-  // Function to handle Internet Identity login
   const handleInternetIdentityLogin = async () => {
-    if (!authClient) return;
-
     try {
-      // Always use the mainnet Internet Identity for now to avoid local deployment issues
-      const identityProvider = "https://identity.ic0.app";
-
-      console.log('Attempting to login with Internet Identity...');
-
-      await authClient.login({
-        identityProvider,
-        onSuccess: async () => {
-          console.log('Internet Identity login successful');
-          const userIdentity = authClient.getIdentity();
-          setIdentity(userIdentity);
-
-          // Create identity manager actor with authenticated identity
-          const actor = createActor(import.meta.env.VITE_CANISTER_ID_STUDENT_IDENTITY_SERVICE, {
-            agentOptions: {
-              identity: userIdentity,
-            },
-          });
-          setIdentityManagerActor(actor);
-
-          navigateTo('kyc'); // Navigate to KYC after login
-        },
-        onError: (error) => {
-          console.error('Login failed:', error);
-          setError('Internet Identity login failed. Please try again.');
-        }
-      });
+      await login();
+      navigateTo('kyc'); // Navigate to KYC after login
     } catch (error) {
       console.error('Login error:', error);
-      setError('Failed to connect to Internet Identity. Please check your connection.');
     }
   };
 
@@ -144,11 +81,22 @@ const App = () => {
         <h1>StudiFi</h1>
         <p style={{color: '#ff6b6b'}}>Error: {error}</p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={clearError}
           style={{padding: '10px 20px', backgroundColor: '#7fff00', color: 'black', border: 'none', borderRadius: '5px'}}
         >
-          Reload Page
+          Clear Error
         </button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="App" style={{backgroundColor: '#1e1e1e', minHeight: '100vh', color: 'white', padding: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <div>
+          <h1>StudiFi</h1>
+          <p>Loading...</p>
+        </div>
       </div>
     );
   }
@@ -163,22 +111,32 @@ const App = () => {
         onLogout={handleLogout}
         currentPage={currentPage}
         onInternetIdentityLogin={handleInternetIdentityLogin}
-        isAuthenticated={!!identity}
+        isAuthenticated={isAuthenticated}
       />
       {currentPage === 'home' && <HomePage navigateTo={navigateTo} onInternetIdentityLogin={handleInternetIdentityLogin} />}
-      {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} identityManagerActor={identityManagerActor} onInternetIdentityLogin={handleInternetIdentityLogin} />}
+      {currentPage === 'kyc' && <KYCPage onSubmissionComplete={handleKycSubmissionComplete} identityManagerActor={actors.studentIdentity} onInternetIdentityLogin={handleInternetIdentityLogin} />}
       {currentPage === 'dashboard' && <DashboardPage navigateTo={navigateTo} />}
       {currentPage === 'loan' && <LoanDashboard navigateTo={navigateTo} />}
       {currentPage === 'applyLoan' && <LoanApplication navigateTo={navigateTo} />}
       {currentPage === 'scholarship' && <ScholarshipDashboard />}
-      {currentPage === 'payment' && <PaymentPage navigateTo={navigateTo} />}
+      {currentPage === 'governance' && <GovernancePage />}
+      {currentPage === 'payment' && <PaymentPage navigateTo={navigateTo} loanId={pageData?.loanId} />}
       {currentPage === 'smart-contract' && <SmartContractAgreement navigateTo={navigateTo} contractType={pageData?.contractType || 'loan'} />}
       {currentPage === 'defi-education' && <DeFiEducationHub navigateTo={navigateTo} />}
       {currentPage === 'login' && <OAuthLogin onLogin={handleOAuthLogin} navigateTo={navigateTo} />}
-      {currentPage === 'services' && <ServicesPage />} 
+      {currentPage === 'services' && <ServicesPage />}
       {currentPage === 'about' && <AboutUs />}
       {currentPage === 'contact' && <ContactUs />}
     </div>
+  );
+};
+
+// Main App wrapper with AuthProvider
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

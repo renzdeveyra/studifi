@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dao_governance_service } from 'declarations/dao_governance_service';
+import { useAuth } from '../contexts/AuthContext';
 
 const GovernancePage = () => {
   const [proposals, setProposals] = useState([]);
@@ -8,58 +8,85 @@ const GovernancePage = () => {
   const [myVotingPower, setMyVotingPower] = useState(0);
   const [showCreateProposal, setShowCreateProposal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { isAuthenticated, actors } = useAuth();
 
   useEffect(() => {
-    loadGovernanceData();
-  }, []);
+    if (isAuthenticated && actors.daoGovernance) {
+      loadGovernanceData();
+    }
+  }, [isAuthenticated, actors.daoGovernance]);
 
   const loadGovernanceData = async () => {
+    if (!actors.daoGovernance) {
+      setError('DAO governance service not available');
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     try {
       const [proposalsResult, statsResult, tokensResult, votingPowerResult] = await Promise.all([
-        dao_governance_service.get_active_proposals(),
-        dao_governance_service.get_governance_stats(),
-        dao_governance_service.get_my_tokens(),
-        dao_governance_service.get_my_voting_power()
+        actors.daoGovernance.get_active_proposals(),
+        actors.daoGovernance.get_governance_stats(),
+        actors.daoGovernance.get_my_tokens(),
+        actors.daoGovernance.get_my_voting_power()
       ]);
 
-      setProposals(proposalsResult);
+      setProposals(proposalsResult || []);
       setStats(statsResult);
-      setMyTokens(tokensResult[0] || null); // Handle Option type
-      setMyVotingPower(Number(votingPowerResult));
+      setMyTokens(tokensResult?.[0] || null); // Handle Option type
+      setMyVotingPower(Number(votingPowerResult || 0));
     } catch (error) {
       console.error('Error loading governance data:', error);
+      setError('Failed to load governance data');
     } finally {
       setLoading(false);
     }
   };
 
   const handleVote = async (proposalId, voteType) => {
+    if (!actors.daoGovernance) {
+      setError('DAO governance service not available');
+      return;
+    }
+
     try {
-      const result = await dao_governance_service.vote_on_proposal(proposalId, { [voteType]: null });
-      if (result.Ok) {
+      const result = await actors.daoGovernance.vote_on_proposal(proposalId, { [voteType]: null });
+      if (result?.Ok) {
         console.log('Vote cast successfully');
         loadGovernanceData(); // Refresh data
       } else {
-        console.error('Vote failed:', result.Err);
+        console.error('Vote failed:', result?.Err);
+        setError('Failed to cast vote: ' + JSON.stringify(result?.Err));
       }
     } catch (error) {
       console.error('Error casting vote:', error);
+      setError('Error casting vote');
     }
   };
 
   const handleInitializeDemo = async () => {
+    if (!actors.daoGovernance) {
+      setError('DAO governance service not available');
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     try {
-      const result = await dao_governance_service.initialize_demo_governance();
-      if (result.Ok) {
+      const result = await actors.daoGovernance.initialize_demo_governance();
+      if (result?.Ok) {
         console.log('Demo governance initialized');
         loadGovernanceData(); // Refresh data
       } else {
-        console.error('Initialization failed:', result.Err);
+        console.error('Initialization failed:', result?.Err);
+        setError('Failed to initialize demo governance');
       }
     } catch (error) {
       console.error('Error initializing demo:', error);
+      setError('Error initializing demo governance');
     } finally {
       setLoading(false);
     }

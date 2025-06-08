@@ -1,21 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import './PaymentPage.scss';
 
-const PaymentPage = ({ navigateTo }) => {
-  useEffect(() => {
-    console.log('PaymentPage mounted successfully');
-  }, []);
+const PaymentPage = ({ navigateTo, loanId }) => {
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [notes, setNotes] = useState('');
   const [isPartialPaymentAllowed] = useState(true);
+  const [loanData, setLoanData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Mock loan data - in real app this would come from props or API
-  const loanData = {
-    outstandingAmount: 45250.00,
-    dueDate: 'Dec 15, 2024',
-    loanId: 'EDU-2024-001',
-    minimumPayment: 500.00
+  const { isAuthenticated, actors } = useAuth();
+
+  useEffect(() => {
+    console.log('PaymentPage mounted successfully');
+    if (isAuthenticated && actors.loanManagement && loanId) {
+      loadLoanData();
+    }
+  }, [isAuthenticated, actors.loanManagement, loanId]);
+
+  const loadLoanData = async () => {
+    if (!actors.loanManagement || !loanId) {
+      // Use mock data if no loan ID provided
+      setLoanData({
+        outstandingAmount: 45250.00,
+        dueDate: 'Dec 15, 2024',
+        loanId: 'EDU-2024-001',
+        minimumPayment: 500.00
+      });
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const loan = await actors.loanManagement.get_loan(loanId);
+      if (loan && loan.length > 0) {
+        const loanInfo = loan[0];
+        setLoanData({
+          outstandingAmount: Number(loanInfo.current_balance) / 100, // Convert from cents
+          dueDate: new Date(Number(loanInfo.first_payment_due) / 1000000).toLocaleDateString(),
+          loanId: loanInfo.id,
+          minimumPayment: Number(loanInfo.monthly_payment) / 100
+        });
+      } else {
+        setError('Loan not found');
+      }
+    } catch (error) {
+      console.error('Error loading loan data:', error);
+      setError('Failed to load loan data');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const paymentMethods = [
@@ -27,6 +64,33 @@ const PaymentPage = ({ navigateTo }) => {
 
   const processingFee = 25.00;
   const totalAmount = paymentAmount ? parseFloat(paymentAmount) + processingFee : 0;
+
+  if (loading) {
+    return (
+      <section className="payment-page-section">
+        <div className="container">
+          <div style={{ textAlign: 'center', padding: '50px' }}>
+            <h2>Loading...</h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!loanData) {
+    return (
+      <section className="payment-page-section">
+        <div className="container">
+          <div style={{ textAlign: 'center', padding: '50px' }}>
+            <h2>No loan data available</h2>
+            <button onClick={() => navigateTo('dashboard')} className="btn-primary">
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const handlePaymentAmountChange = (e) => {
     setPaymentAmount(e.target.value);
@@ -44,16 +108,47 @@ const PaymentPage = ({ navigateTo }) => {
     navigateTo('dashboard');
   };
 
-  const handleConfirmPayment = () => {
-    // In a real app, this would process the payment
-    console.log('Processing payment:', {
-      amount: paymentAmount,
-      method: paymentMethod,
-      notes: notes
-    });
-    // For now, just show an alert and go back to dashboard
-    alert('Payment processing would happen here. Redirecting to dashboard...');
-    navigateTo('dashboard');
+  const handleConfirmPayment = async () => {
+    if (!isAuthenticated) {
+      setError('Please log in to make a payment');
+      return;
+    }
+
+    if (!actors.loanManagement) {
+      setError('Loan management service not available');
+      return;
+    }
+
+    if (!loanData) {
+      setError('Loan data not available');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const amountInCents = Math.round(parseFloat(paymentAmount) * 100);
+      const paymentMethodVariant = { [paymentMethod]: null };
+
+      const result = await actors.loanManagement.process_payment(
+        loanData.loanId,
+        amountInCents,
+        paymentMethodVariant
+      );
+
+      if (result?.Ok) {
+        alert('Payment processed successfully!');
+        navigateTo('loan'); // Go to loan dashboard
+      } else {
+        setError('Payment failed: ' + JSON.stringify(result?.Err));
+      }
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      setError('Failed to process payment');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,6 +165,17 @@ const PaymentPage = ({ navigateTo }) => {
         <div className="payment-header">
           <h1 className="page-title">Make a Payment</h1>
           <p className="page-description">Complete your loan payment securely and efficiently</p>
+          {error && (
+            <div style={{
+              backgroundColor: '#ff6b6b',
+              color: 'white',
+              padding: '10px',
+              borderRadius: '5px',
+              marginTop: '10px'
+            }}>
+              {error}
+            </div>
+          )}
         </div>
 
         <div className="payment-content">

@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { loan_management_service } from 'declarations/loan_management_service';
+import { useAuth } from '../contexts/AuthContext';
 
 const TreasuryDashboard = () => {
   const [treasuries, setTreasuries] = useState([]);
   const [multiTreasuryHealth, setMultiTreasuryHealth] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedTreasury, setSelectedTreasury] = useState('Loan');
+  const [error, setError] = useState(null);
+
+  const { isAuthenticated, actors } = useAuth();
 
   useEffect(() => {
-    loadTreasuryData();
-  }, []);
+    if (isAuthenticated && actors.loanManagement) {
+      loadTreasuryData();
+    }
+  }, [isAuthenticated, actors.loanManagement]);
 
   const loadTreasuryData = async () => {
+    if (!actors.loanManagement) {
+      setError('Loan management service not available');
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     try {
       const [treasuriesResult, healthResult] = await Promise.all([
-        loan_management_service.get_all_separate_treasuries(),
-        loan_management_service.get_multi_treasury_health()
+        actors.loanManagement.get_all_separate_treasuries(),
+        actors.loanManagement.get_multi_treasury_health()
       ]);
-      
-      setTreasuries(treasuriesResult);
-      if (healthResult.Ok) {
+
+      setTreasuries(treasuriesResult || []);
+      if (healthResult?.Ok) {
         setMultiTreasuryHealth(healthResult.Ok);
       }
     } catch (error) {
       console.error('Error loading treasury data:', error);
+      setError('Failed to load treasury data');
     } finally {
       setLoading(false);
     }

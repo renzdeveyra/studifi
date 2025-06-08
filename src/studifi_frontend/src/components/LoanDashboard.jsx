@@ -1,60 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { loan_management_service } from 'declarations/loan_management_service';
-import { AuthClient } from '@dfinity/auth-client';
+import { useAuth } from '../contexts/AuthContext';
 import { Wallet, CreditCard, Calendar, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
 
 
 const LoanDashboard = ({ addNotification }) => {
-  const [principal, setPrincipal] = useState(null);
   const [loans, setLoans] = useState([]);
   const [loanStats, setLoanStats] = useState(null);
   const [treasuryHealth, setTreasuryHealth] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const initAuth = async () => {
-      const client = await AuthClient.create();
-      const identity = client.getIdentity();
-      setPrincipal(identity.getPrincipal());
-    };
-    initAuth();
-  }, []);
+  const { isAuthenticated, actors, getPrincipal } = useAuth();
 
   useEffect(() => {
-    if (principal && !principal.isAnonymous()) {
+    if (isAuthenticated && actors.loanManagement && !getPrincipal()?.isAnonymous()) {
       loadLoanData();
     }
-  }, [principal]);
+  }, [isAuthenticated, actors.loanManagement]);
 
   const loadLoanData = async () => {
+    if (!actors.loanManagement) {
+      setError('Loan management service not available');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
       const [myLoans, myStats, treasuryHealthData] = await Promise.all([
-        loan_management_service.get_my_loans(),
-        loan_management_service.get_my_loan_stats(),
-        loan_management_service.get_treasury_health()
+        actors.loanManagement.get_my_loans(),
+        actors.loanManagement.get_my_loan_stats(),
+        actors.loanManagement.get_treasury_health()
       ]);
 
       // Handle Result types from Rust
-      if (myLoans.Ok) {
+      if (myLoans && Array.isArray(myLoans)) {
+        setLoans(myLoans);
+      } else if (myLoans?.Ok) {
         setLoans(myLoans.Ok);
       } else {
-        console.error('Error fetching loans:', myLoans.Err);
-        setError('Failed to load loans: ' + JSON.stringify(myLoans.Err));
+        console.error('Error fetching loans:', myLoans?.Err || 'Unknown error');
+        setError('Failed to load loans: ' + JSON.stringify(myLoans?.Err || 'Unknown error'));
       }
 
-      if (myStats.Ok) {
+      if (myStats?.Ok) {
         setLoanStats(myStats.Ok);
       } else {
-        console.error('Error fetching loan stats:', myStats.Err);
+        console.error('Error fetching loan stats:', myStats?.Err || 'Unknown error');
       }
 
-      if (treasuryHealthData.Ok) {
+      if (treasuryHealthData?.Ok) {
         setTreasuryHealth(treasuryHealthData.Ok);
       } else {
-        console.error('Error fetching treasury health:', treasuryHealthData.Err);
+        console.error('Error fetching treasury health:', treasuryHealthData?.Err || 'Unknown error');
       }
 
     } catch (error) {

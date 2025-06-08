@@ -1,13 +1,71 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import './LoanDashboard.scss';
 
 const LoanDashboard = ({ navigateTo }) => {
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [loans, setLoans] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { isAuthenticated, actors } = useAuth();
+
   useEffect(() => {
     console.log('LoanDashboard mounted successfully');
-  }, []); // Accept navigateTo as a prop
-  const [selectedPayment, setSelectedPayment] = useState(null);
+    if (isAuthenticated && actors.loanManagement) {
+      loadLoans();
+    }
+  }, [isAuthenticated, actors.loanManagement]);
 
-  const loanData = {
+  const loadLoans = async () => {
+    if (!actors.loanManagement) {
+      setError('Loan management service not available');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const myLoans = await actors.loanManagement.get_my_loans();
+      if (myLoans && Array.isArray(myLoans)) {
+        setLoans(myLoans);
+      } else {
+        // Use mock data if no loans found
+        setLoans([{
+          id: "ML-2024-001",
+          original_amount: 250000, // in cents
+          current_balance: 189000, // in cents
+          interest_rate: 3.5,
+          monthly_payment: 10500, // in cents
+          status: { Active: null },
+          created_at: Date.now() * 1000000,
+          first_payment_due: Date.now() * 1000000,
+          payments_made: 6,
+          term_months: 24
+        }]);
+      }
+    } catch (error) {
+      console.error('Error loading loans:', error);
+      setError('Failed to load loans');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Get the primary loan for display
+  const loanData = loans.length > 0 ? {
+    id: loans[0].id,
+    appliedDate: new Date(Number(loans[0].created_at) / 1000000).toLocaleDateString(),
+    disbursedDate: new Date(Number(loans[0].created_at) / 1000000).toLocaleDateString(),
+    amount: Number(loans[0].original_amount) / 100,
+    interestRate: loans[0].interest_rate,
+    monthlyPayment: Number(loans[0].monthly_payment) / 100,
+    remainingBalance: Number(loans[0].current_balance) / 100,
+    status: Object.keys(loans[0].status)[0] || "Active",
+    progressPercentage: Math.round(((Number(loans[0].original_amount) - Number(loans[0].current_balance)) / Number(loans[0].original_amount)) * 100),
+    currentPayment: loans[0].payments_made,
+    totalPayments: loans[0].term_months
+  } : {
     id: "ML-2024-001",
     appliedDate: "Jan 18, 2024",
     disbursedDate: "Jan 22, 2024",
@@ -67,7 +125,7 @@ const LoanDashboard = ({ navigateTo }) => {
 
   const quickActions = [
     { label: "View Loan Contract", icon: "📄", color: "blue", action: () => navigateTo('smart-contract', { contractType: 'loan' }) },
-    { label: "Make Payment", icon: "💳", color: "green", action: () => navigateTo('payment') },
+    { label: "Make Payment", icon: "💳", color: "green", action: () => navigateTo('payment', { loanId: loanData.id }) },
     { label: "Payment Calculator", icon: "🧮", color: "teal" },
     { label: "Contact Support", icon: "💬", color: "gray" },
     { label: "Apply for Another", icon: "➕", color: "purple", action: () => navigateTo('applyLoan') }

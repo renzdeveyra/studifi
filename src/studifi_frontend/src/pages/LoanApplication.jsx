@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { credit_assessment_service } from 'declarations/credit_assessment_service';
+import { useAuth } from '../contexts/AuthContext';
 import './LoanApplication.scss';
 
 const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
@@ -16,6 +16,10 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
     familyIncome: ''
   });
   const [applicationResult, setApplicationResult] = useState(null);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { isAuthenticated, actors } = useAuth();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -26,28 +30,46 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    if (!isAuthenticated) {
+      setError('Please log in to submit a loan application');
+      return;
+    }
+
+    if (!actors.creditAssessment) {
+      setError('Credit assessment service not available');
+      return;
+    }
+
+    const loading = setIsLoading || setLocalLoading;
+    loading(true);
+    setError(null);
 
     try {
       const academicInfo = {
         gpa: parseFloat(formData.gpa),
-        yearOfStudy: parseInt(formData.yearOfStudy),
+        year_of_study: parseInt(formData.yearOfStudy),
         program: formData.program,
         university: formData.university,
-        expectedGraduation: "2025" // Assuming a default value or fetching it
+        expected_graduation: "2025" // Assuming a default value or fetching it
       };
 
       const financialInfo = {
-        monthlyIncome: parseInt(formData.monthlyIncome),
-        monthlyExpenses: parseInt(formData.monthlyExpenses),
-        existingDebt: parseInt(formData.existingDebt),
-        familialIncome: parseInt(formData.familyIncome)
+        monthly_income: parseInt(formData.monthlyIncome),
+        monthly_expenses: parseInt(formData.monthlyExpenses),
+        existing_debt: parseInt(formData.existingDebt),
+        family_income: parseInt(formData.familyIncome),
+        savings: 0,
+        employment_status: { Student: null },
+        credit_history_length_months: 0,
+        previous_loans: [],
+        financial_aid: []
       };
 
       // Call the credit_assessment_service backend function
-      const result = await credit_assessment_service.submit_loan_application(
+      const result = await actors.creditAssessment.submit_loan_application(
         parseInt(formData.requestedAmount),
-        formData.purpose,
+        { [formData.purpose]: null }, // Convert to variant
         academicInfo,
         financialInfo
       );

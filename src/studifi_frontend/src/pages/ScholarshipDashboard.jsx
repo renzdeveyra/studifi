@@ -1,12 +1,74 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import './ScholarshipDashboard.scss'; // Import the SCSS file
 
 const ScholarshipDashboard = () => {
+  const [activeTab, setActiveTab] = useState('browse');
+  const [proposals, setProposals] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { isAuthenticated, actors } = useAuth();
+
   useEffect(() => {
     console.log('ScholarshipDashboard mounted successfully');
-  }, []);
-  const [activeTab, setActiveTab] = useState('browse');
+    if (isAuthenticated && actors.daoGovernance) {
+      loadScholarshipData();
+    }
+  }, [isAuthenticated, actors.daoGovernance]);
 
+  const loadScholarshipData = async () => {
+    if (!actors.daoGovernance) {
+      setError('DAO governance service not available');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const [proposalsResult, statsResult] = await Promise.all([
+        actors.daoGovernance.get_active_proposals(),
+        actors.daoGovernance.get_governance_stats()
+      ]);
+
+      // Filter for scholarship proposals
+      const scholarshipProposals = (proposalsResult || []).filter(proposal =>
+        proposal.proposal_type && 'ScholarshipCreation' in proposal.proposal_type
+      );
+
+      setProposals(scholarshipProposals);
+      setStats(statsResult);
+    } catch (error) {
+      console.error('Error loading scholarship data:', error);
+      setError('Failed to load scholarship data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVote = async (proposalId, voteType) => {
+    if (!actors.daoGovernance) {
+      setError('DAO governance service not available');
+      return;
+    }
+
+    try {
+      const result = await actors.daoGovernance.vote_on_proposal(proposalId, { [voteType]: null });
+      if (result?.Ok) {
+        console.log('Vote cast successfully');
+        loadScholarshipData(); // Refresh data
+      } else {
+        console.error('Vote failed:', result?.Err);
+        setError('Failed to cast vote: ' + JSON.stringify(result?.Err));
+      }
+    } catch (error) {
+      console.error('Error casting vote:', error);
+      setError('Error casting vote');
+    }
+  };
+
+  // Mock scholarship data for display (will be replaced with real data)
   const scholarshipData = [
     {
       id: 1,
@@ -58,7 +120,7 @@ const ScholarshipDashboard = () => {
     }
   ];
 
-  const stats = [
+  const mockStats = [
     { label: "Active Scholarship Tokens", value: "2,450 SCH", icon: "🎓", trend: "↗", color: "#7fff00" },
     { label: "My Voting Power", value: "3.2%", icon: "🗳️", trend: "↗", color: "#00ff88" },
     { label: "Total Proposals", value: "147", icon: "📄", trend: "↗", color: "#ffd700" },
@@ -72,11 +134,33 @@ const ScholarshipDashboard = () => {
     { label: "Treasury Balance", value: "$485K", icon: "💰" }
   ];
 
+  if (loading) {
+    return (
+      <div className="scholarship-dashboard">
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          <h2>Loading scholarship data...</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="scholarship-dashboard">
+      {error && (
+        <div style={{
+          backgroundColor: '#ff6b6b',
+          color: 'white',
+          padding: '10px',
+          borderRadius: '5px',
+          marginBottom: '20px'
+        }}>
+          {error}
+        </div>
+      )}
+
       {/* Header Stats */}
       <div className="stats-grid">
-        {stats.map((stat, index) => (
+        {mockStats.map((stat, index) => (
           <div key={index} className="stat-card">
             <div className="stat-header">
               <span className="stat-icon">{stat.icon}</span>
