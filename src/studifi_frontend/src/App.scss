@@ -1,163 +1,167 @@
-// App.scss
-// Color Variables
+// CSS Custom Properties
 :root {
-  --primary-color: #3b82f6;
-  --primary-dark: #2563eb;
-  --secondary-color: #10b981;
-  --accent-color: #f59e0b;
+  // Colors
+  --primary-color: #7fff00;
+  --secondary-color: #32cd32;
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2a2a2a;
+  --bg-tertiary: #3a3a3a;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --border-color: rgba(255, 255, 255, 0.1);
+
+  // Status Colors
+  --success-color: #10b981;
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
-  --success-color: #10b981;
   --info-color: #3b82f6;
 
-  --text-primary: #1a202c;
-  --text-secondary: #4a5568;
-  --text-muted: #718096;
-
-  --bg-primary: #ffffff;
-  --bg-secondary: #f7fafc;
-  --bg-tertiary: #edf2f7;
-
-  --border-color: #e2e8f0;
-  --border-light: #f1f5f9;
-
+  // Shadows
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  // Border Radius
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 }
 
-// Global Styles
+// Global Reset and Base Styles
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  line-height: 1.6;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  background-color: #1e1e1e; // Ensure no white background at root level
 }
 
-// StudiFi App Container
-.studifi-app {
+.App {
+  font-family: Arial, sans-serif;
+  color: white;
+  scroll-behavior: smooth;
+  background-color: #1e1e1e; // Ensure consistent dark background
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-// Button Styles (Common)
-.btn-primary {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 1rem;
-
-  &:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
-}
-
-.btn-secondary {
-  background: var(--bg-primary);
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 1rem;
-
-  &:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-  }
-}
-
-.btn-vote-for {
-  background: var(--success-color);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #059669;
-  }
-}
-
-.btn-vote-against {
-  background: var(--danger-color);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #dc2626;
-  }
-}
-
-// Main Content
-.main-content {
-  flex: 1;
-  padding: 2rem;
+// Shared Container
+.container {
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
+  padding: 0 2rem;
 }
 
-// Page Headers
-.page-header {
+// Shared Section Header
+.section-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 
   h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white;
   }
 
   p {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+  }
+
+  .cta-btn {
+    background: linear-gradient(135deg, #7fff00, #32cd32);
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 }
 
-// Responsive Design (General)
+// Shared Button Styles
+.cta-btn {
+  background: linear-gradient(135deg, #7fff00, #32cd32);
+  color: #000;
+  padding: 15px 30px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.learn-btn {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 13px 28px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #7fff00;
+    color: #7fff00;
+  }
+}
+
+// Shared animations
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  50% { transform: translateX(0%) translateY(0%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+// Global Media Queries
 @media (max-width: 768px) {
-  .main-content {
-    padding: 1rem;
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .cta-btn, .learn-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .cta-btn, .learn-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
   }
 }

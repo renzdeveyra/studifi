@@ -29,6 +29,9 @@ pub enum StudiFiError {
 
     #[error("Network error: {0}")]
     NetworkError(String),
+
+    #[error("External service error: {0}")]
+    ExternalServiceError(String),
 }
 
 /// Common timestamp type (nanoseconds since Unix epoch)

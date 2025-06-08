@@ -1,0 +1,546 @@
+/* KycVerification.scss - Fixed spacing issues and removed scroll */
+$primary-bg: #1e1e1e;
+$accent-color: #7fff00;
+$text-color: #ffffff;
+$border-color: rgba(255, 255, 255, 0.1);
+$card-bg: rgba(255, 255, 255, 0.08);
+$success-color: #22c55e;
+$error-color: #ef4444;
+$warning-color: #f59e0b;
+
+.kyc-verification-container {
+  background: transparent;
+  color: $text-color;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 0.4rem;
+  box-sizing: border-box;
+
+  .verification-alert {
+    margin-bottom: 0.4rem;
+    padding: 0.35rem;
+    border-radius: 4px;
+    border: 1px solid;
+    flex-shrink: 0;
+    min-height: 28px;
+    max-height: 48px;
+    overflow: hidden;
+
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      height: 100%;
+
+      .alert-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+        flex-shrink: 0;
+      }
+
+      .alert-text {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .alert-title {
+        font-weight: 500;
+        margin-bottom: 0.05rem;
+        font-size: 0.7rem;
+        line-height: 1.1;
+      }
+
+      .alert-subtitle {
+        font-size: 0.65rem;
+        opacity: 0.9;
+        line-height: 1.1;
+      }
+    }
+
+    .alert-close {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.1rem;
+      flex-shrink: 0;
+
+      svg {
+        width: 0.65rem;
+        height: 0.65rem;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    &.success {
+      background-color: rgba($success-color, 0.1);
+      border-color: rgba($success-color, 0.3);
+      color: #22c55e;
+    }
+
+    &.error {
+      background-color: rgba($error-color, 0.1);
+      border-color: rgba($error-color, 0.3);
+      color: #ef4444;
+
+      .alert-content {
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .verification-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    justify-content: flex-start;
+
+    .section-description {
+      color: rgba($text-color, 0.8);
+      font-size: 0.65rem;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+      flex-shrink: 0;
+      max-height: 28px;
+      overflow: hidden;
+    }
+  }
+
+  .verification-btn {
+    padding: 0.35rem 0.7rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    flex-shrink: 0;
+    height: 28px;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, #7fff00, #32cd32);
+      color: #000;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($accent-color, 0.3);
+      }
+    }
+
+    &.secondary {
+      background: transparent;
+      color: $text-color;
+      border: 1px solid $border-color;
+
+      &:hover:not(:disabled) {
+        border-color: $accent-color;
+        color: $accent-color;
+      }
+    }
+  }
+
+  .verification-requirement-message {
+    margin-top: 0.5rem;
+    padding: 0.4rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba($text-color, 0.8);
+    background-color: rgba($warning-color, 0.1);
+    border: 1px solid rgba($warning-color, 0.3);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .verification-form {
+    margin: 0;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: visible;
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem;
+      flex-shrink: 0;
+      margin-bottom: 0.3rem;
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+
+      label {
+        margin-bottom: 0.15rem;
+        font-size: 0.65rem;
+        color: rgba($text-color, 0.9);
+        font-weight: 500;
+        flex-shrink: 0;
+        line-height: 1.1;
+      }
+
+      input,
+      select {
+        background-color: rgba(0, 0, 0, 0.3);
+        border: 1px solid $border-color;
+        border-radius: 3px;
+        padding: 0.25rem;
+        color: rgba($text-color, 0.8);
+        font-size: 0.65rem;
+        transition: all 0.3s ease;
+        height: 24px;
+        flex-shrink: 0;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-color;
+          box-shadow: 0 0 0 2px rgba($accent-color, 0.2);
+          background-color: rgba(0, 0, 0, 0.5);
+          color: $text-color;
+        }
+
+        &::placeholder {
+          color: rgba($text-color, 0.4);
+          font-size: 0.65rem;
+        }
+      }
+
+      select {
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5"><path fill="%237fff00" d="M0,0 L4,5 L8,0 Z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 6px center;
+        background-size: 5px 3px;
+        padding-right: 18px;
+
+        option {
+          background-color: $primary-bg;
+          color: $text-color;
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.3rem;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      height: 30px;
+      align-items: flex-start;
+    }
+  }
+
+  .verification-history {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 140px;
+    margin-top: auto;
+
+    h4 {
+      color: $accent-color;
+      margin-bottom: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      height: 14px;
+      line-height: 1.1;
+    }
+
+    .history-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      overflow: hidden; // Removed scroll functionality
+      padding-right: 4px;
+      min-height: 0;
+    }
+
+    .history-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid $border-color;
+      border-radius: 3px;
+      padding: 0.3rem;
+      flex-shrink: 0;
+      min-height: 48px;
+      max-height: 65px;
+      overflow: hidden;
+
+      .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.15rem;
+        height: 12px;
+
+        .status-info {
+          display: flex;
+          align-items: center;
+          gap: 0.2rem;
+          min-width: 0;
+
+          .status-icon {
+            width: 0.65rem;
+            height: 0.65rem;
+            flex-shrink: 0;
+
+            &.completed {
+              color: $success-color;
+            }
+
+            &.failed {
+              color: $error-color;
+            }
+
+            &.pending {
+              color: $warning-color;
+            }
+
+            &.default {
+              color: rgba($text-color, 0.6);
+            }
+          }
+
+          .status-text {
+            font-weight: 500;
+            font-size: 0.65rem;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &.completed {
+              color: $success-color;
+            }
+
+            &.failed {
+              color: $error-color;
+            }
+
+            &.inprogress,
+            &.pending {
+              color: $warning-color;
+            }
+          }
+        }
+
+        .history-date {
+          font-size: 0.6rem;
+          color: rgba($text-color, 0.6);
+          flex-shrink: 0;
+          line-height: 1.1;
+        }
+      }
+
+      .history-details {
+        margin-bottom: 0.15rem;
+        flex: 1;
+        overflow: hidden;
+
+        p {
+          font-size: 0.6rem;
+          color: rgba($text-color, 0.8);
+          margin: 0.05rem 0;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      .history-error {
+        font-size: 0.6rem;
+        color: $error-color;
+        margin-top: 0.15rem;
+        line-height: 1.1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-success {
+        font-size: 0.6rem;
+        color: $success-color;
+        margin-top: 0.15rem;
+        line-height: 1.1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.kyc-verification-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  max-height: 260px;
+  overflow: hidden;
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 1rem;
+  }
+
+  .text-gray-500 {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .kyc-verification-container {
+    padding: 0.3rem;
+
+    .verification-requirement-message {
+      margin-top: 0.4rem;
+      padding: 0.3rem;
+      font-size: 0.7rem;
+    }
+
+    .verification-form {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .form-group {
+        label {
+          margin-bottom: 0.1rem;
+        }
+      }
+
+      .form-actions {
+        flex-direction: column;
+        height: 50px;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+        padding-top: 0.25rem;
+      }
+
+      .verification-btn {
+        width: 100%;
+        height: 24px;
+      }
+    }
+
+    .verification-alert {
+      padding: 0.25rem;
+      margin-bottom: 0.3rem;
+      min-height: 24px;
+      max-height: 40px;
+
+      .alert-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+      }
+    }
+
+    .verification-history {
+      max-height: 100px;
+
+      .history-item {
+        padding: 0.25rem;
+        min-height: 40px;
+        max-height: 55px;
+
+        .history-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.05rem;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+// Small screen adjustments
+@media (max-width: 480px) {
+  .kyc-verification-container {
+    padding: 0.25rem;
+
+    .verification-requirement-message {
+      margin-top: 0.3rem;
+      padding: 0.25rem;
+      font-size: 0.65rem;
+    }
+
+    .verification-section {
+      .section-description {
+        font-size: 0.6rem;
+        margin-bottom: 0.3rem;
+        max-height: 24px;
+      }
+    }
+
+    .verification-form {
+      .form-grid {
+        gap: 0.2rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .form-group {
+        label {
+          margin-bottom: 0.08rem;
+          font-size: 0.6rem;
+        }
+
+        input,
+        select {
+          padding: 0.2rem;
+          font-size: 0.6rem;
+          height: 22px;
+        }
+      }
+
+      .form-actions {
+        padding-top: 0.2rem;
+        height: 45px;
+        margin-top: 0.2rem;
+      }
+    }
+
+    .verification-history {
+      max-height: 80px;
+
+      .history-item {
+        min-height: 35px;
+        max-height: 50px;
+      }
+    }
+  }
+}

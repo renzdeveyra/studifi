@@ -7,6 +7,7 @@ use std::borrow::Cow;
 use std::cell::RefCell;
 
 use crate::types::*;
+use crate::verifiable_credentials::*;
 use shared::*;
 
 // Memory management for stable storage
@@ -16,6 +17,7 @@ type Memory = RestrictedMemory<DefaultMemoryImpl>;
 const STUDENT_PROFILES_MEMORY_ID: u64 = 0;
 const VERIFICATION_REQUESTS_MEMORY_ID: u64 = 1;
 const UNIVERSITY_CONFIGS_MEMORY_ID: u64 = 2;
+const VC_SESSIONS_MEMORY_ID: u64 = 3;
 
 // Implement Storable for StudentProfile
 impl Storable for StudentProfile {
@@ -56,11 +58,25 @@ impl Storable for UniversityApiConfig {
     }
 }
 
+// Implement Storable for VcVerificationSession
+impl Storable for VcVerificationSession {
+    const BOUND: Bound = Bound::Unbounded;
+
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(serde_json::to_vec(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        serde_json::from_slice(&bytes).unwrap()
+    }
+}
+
 // Storage structure
 pub struct IdentityStorage {
     pub student_profiles: StableBTreeMap<Principal, StudentProfile, Memory>,
     pub verification_requests: StableBTreeMap<String, VerificationRequest, Memory>,
     pub university_configs: StableBTreeMap<String, UniversityApiConfig, Memory>,
+    pub vc_sessions: StableBTreeMap<String, VcVerificationSession, Memory>,
 }
 
 impl IdentityStorage {
@@ -74,6 +90,9 @@ impl IdentityStorage {
             ),
             university_configs: StableBTreeMap::init(
                 RestrictedMemory::new(DefaultMemoryImpl::default(), UNIVERSITY_CONFIGS_MEMORY_ID..UNIVERSITY_CONFIGS_MEMORY_ID + 1)
+            ),
+            vc_sessions: StableBTreeMap::init(
+                RestrictedMemory::new(DefaultMemoryImpl::default(), VC_SESSIONS_MEMORY_ID..VC_SESSIONS_MEMORY_ID + 1)
             ),
         }
     }
@@ -242,6 +261,59 @@ impl IdentityStorage {
         }
     }
 
+    // VC Session operations
+    pub fn get_vc_session(&self, id: &str) -> Option<VcVerificationSession> {
+        self.vc_sessions.get(&id.to_string())
+    }
+
+    pub fn insert_vc_session(&mut self, id: String, session: VcVerificationSession) -> Option<VcVerificationSession> {
+        self.vc_sessions.insert(id, session)
+    }
+
+    pub fn update_vc_session(&mut self, id: String, session: VcVerificationSession) -> Option<VcVerificationSession> {
+        self.vc_sessions.insert(id, session)
+    }
+
+    pub fn remove_vc_session(&mut self, id: &str) -> Option<VcVerificationSession> {
+        self.vc_sessions.remove(&id.to_string())
+    }
+
+    pub fn get_all_vc_sessions(&self) -> Vec<(String, VcVerificationSession)> {
+        self.vc_sessions.iter().collect()
+    }
+
+    pub fn get_vc_sessions_by_user(&self, user: &Principal) -> Vec<VcVerificationSession> {
+        self.vc_sessions
+            .iter()
+            .filter_map(|(_, session)| {
+                if session.user_principal == *user {
+                    Some(session)
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    pub fn cleanup_expired_vc_sessions(&mut self) -> u32 {
+        let expired_sessions: Vec<String> = self.vc_sessions
+            .iter()
+            .filter_map(|(id, session)| {
+                if session.is_expired() {
+                    Some(id)
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        let count = expired_sessions.len() as u32;
+        for id in expired_sessions {
+            self.vc_sessions.remove(&id);
+        }
+        count
+    }
+
     // Utility methods
     pub fn count_students(&self) -> u64 {
         self.student_profiles.len()
@@ -253,6 +325,10 @@ impl IdentityStorage {
 
     pub fn count_university_configs(&self) -> u64 {
         self.university_configs.len()
+    }
+
+    pub fn count_vc_sessions(&self) -> u64 {
+        self.vc_sessions.len()
     }
 }
 
