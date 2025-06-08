@@ -210,11 +210,9 @@
   font-size: 1.2rem;
 }
 
-
-
 // Why Choose StudiFi Section (Section Two)
 .section-two {
-      text-align: center;
+  text-align: center;
   background-color: #1e1e1e;
   padding: 6rem 0;
   color: white;
@@ -409,52 +407,46 @@
 .education-image {
   position: relative;
 
-  .image-placeholder {
-    background: linear-gradient(135deg, rgba(127, 255, 0, 0.1), rgba(50, 205, 50, 0.05));
-    border: 2px solid rgba(127, 255, 0, 0.2);
-    border-radius: 20px;
+  .excellence-image {
+    width: 100%;
     height: 350px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    color: rgba(127, 255, 0, 0.7);
-    font-weight: 600;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
+    object-fit: cover;
+    border-radius: 20px;
+    border: 2px solid rgba(127, 255, 0, 0.2);
     transition: all 0.4s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(127, 255, 0, 0.05) 50%,
-        transparent 70%
-      );
-      animation: shimmer 3s ease-in-out infinite;
-    }
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    filter: brightness(0.9) saturate(1.1);
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.02);
       border-color: rgba(127, 255, 0, 0.4);
-      box-shadow: 0 15px 35px rgba(127, 255, 0, 0.1);
+      box-shadow: 0 20px 40px rgba(127, 255, 0, 0.15);
+      filter: brightness(1) saturate(1.2);
     }
+  }
 
-    &::after {
-      content: '🎓📚💡';
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-size: 1.5rem;
-      opacity: 0.6;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(127, 255, 0, 0.1) 0%,
+      transparent 30%,
+      transparent 70%,
+      rgba(127, 255, 0, 0.05) 100%
+    );
+    border-radius: 20px;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+  }
+
+  &:hover::after {
+    opacity: 1;
   }
 }
 
@@ -536,7 +528,6 @@
     position: relative;
 
     h3 {
-      
       font-size: 1.6rem;
       font-weight: bold;
       color: white;
@@ -809,9 +800,8 @@
     gap: 3rem;
   }
 
-  .education-image .image-placeholder {
+  .education-image .excellence-image {
     height: 250px;
-    font-size: 1.2rem;
   }
 
   .offering-card {
@@ -867,8 +857,7 @@
     }
   }
 
-  .education-image .image-placeholder {
+  .education-image .excellence-image {
     height: 200px;
-    font-size: 1rem;
   }
 }
