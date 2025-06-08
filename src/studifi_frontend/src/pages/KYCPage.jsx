@@ -6,7 +6,7 @@ import { KycVerification } from '../components/KycVerification'; // Import KycVe
 
 // Assume identityManagerActor is passed as a prop for this example
 // In a real app, you might initialize it here or pass it from a higher-level component
-const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add identityManagerActor prop
+const KYCPage = ({ onSubmissionComplete, identityManagerActor, onInternetIdentityLogin }) => { // Add identityManagerActor and onInternetIdentityLogin props
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -39,12 +39,19 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
   // Function to display a temporary pop-up message
   const showAppAlert = (message) => {
     const messageDiv = document.createElement('div');
-    messageDiv.className = 'app-alert-popup'; // Use the new SCSS class
+    messageDiv.className = 'app-alert-popup';
     messageDiv.textContent = message;
     document.body.appendChild(messageDiv);
+    
+    // Add animation
+    messageDiv.style.animation = 'fadeInOut 3s ease-in-out';
+    
     setTimeout(() => {
-      document.body.removeChild(messageDiv);
-    }, 3000); // Remove message after 3 seconds
+      messageDiv.style.opacity = '0';
+      setTimeout(() => {
+        document.body.removeChild(messageDiv);
+      }, 300);
+    }, 3000);
   };
 
   const nextStep = () => {
@@ -93,10 +100,19 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
     if (verified) {
       setFormData(prev => ({
         ...prev,
-        studentVerificationDetails: details // Store the returned details
+        studentVerificationDetails: details
       }));
+      
+      // Show success message
+      showAppAlert('Student verification completed successfully!');
+      
       // Automatically advance to the next step if verification is successful
-      setCurrentStep(prev => prev < 3 ? prev + 1 : prev); // Go to step 4 (Review) after VC
+      setTimeout(() => {
+        setCurrentStep(prev => prev < 3 ? prev + 1 : prev);
+      }, 1500);
+    } else {
+      // Show error message
+      showAppAlert('Student verification failed. Please try again.');
     }
   };
 
@@ -257,6 +273,7 @@ const KYCPage = ({ onSubmissionComplete, identityManagerActor }) => { // Add ide
                     <KycVerification
                       identityManagerActor={identityManagerActor}
                       onVerificationComplete={handleKycVerificationComplete}
+                      onInternetIdentityLogin={onInternetIdentityLogin}
                     />
                   </div>
                 </div>

@@ -1,0 +1,29 @@
+type StudiFiError = variant {
+  NotFound : text;
+  AlreadyExists : text;
+  Unauthorized : text;
+  InvalidInput : text;
+  InternalError : text;
+  InsufficientFunds : text;
+  Expired : text;
+  NetworkError : text;
+};
+
+type StudiFiResult = variant {
+  Ok : text;
+  Err : StudiFiError;
+};
+
+type Statistics = record {
+  total_count : nat32;
+  active_count : nat32;
+  completed_count : nat32;
+  failed_count : nat32;
+  total_amount : nat64;
+  average_amount : nat64;
+};
+
+service : {
+  perform_kyc_check : (principal) -> (StudiFiResult);
+  get_platform_stats : () -> (Statistics) query;
+}

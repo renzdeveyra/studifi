@@ -1,0 +1,242 @@
+type StudiFiError = variant {
+  NotFound : text;
+  AlreadyExists : text;
+  Unauthorized : text;
+  InvalidInput : text;
+  InternalError : text;
+  InsufficientFunds : text;
+  Expired : text;
+  NetworkError : text;
+};
+
+type StudiFiResult = variant {
+  Ok : text;
+  Err : StudiFiError;
+};
+
+type StudiFiResultToken = variant {
+  Ok : GovernanceToken;
+  Err : StudiFiError;
+};
+
+type StudiFiResultProposal = variant {
+  Ok : Proposal;
+  Err : StudiFiError;
+};
+
+type StudiFiResultVote = variant {
+  Ok : Vote;
+  Err : StudiFiError;
+};
+
+type StudiFiResultDelegation = variant {
+  Ok : Delegation;
+  Err : StudiFiError;
+};
+
+type Statistics = record {
+  total_count : nat32;
+  active_count : nat32;
+  completed_count : nat32;
+  failed_count : nat32;
+  total_amount : nat64;
+  average_amount : nat64;
+};
+
+type GovernanceToken = record {
+  holder : principal;
+  balance : nat64;
+  locked_until : opt nat64;
+  voting_power : nat64;
+  earned_from : TokenSource;
+  created_at : nat64;
+  last_updated : nat64;
+};
+
+type TokenSource = variant {
+  InitialDistribution;
+  LoanOrigination;
+  LoanRepayment;
+  ScholarshipDonation;
+  CommunityParticipation;
+  Delegation;
+  Staking;
+};
+
+type Proposal = record {
+  id : text;
+  proposer : principal;
+  title : text;
+  description : text;
+  proposal_type : ProposalType;
+  status : ProposalStatus;
+  voting_starts_at : nat64;
+  voting_ends_at : nat64;
+  votes_for : nat64;
+  votes_against : nat64;
+  votes_abstain : nat64;
+  total_voting_power : nat64;
+  quorum_required : nat64;
+  execution_delay : nat64;
+  executed_at : opt nat64;
+  created_at : nat64;
+  updated_at : nat64;
+};
+
+type ProposalType = variant {
+  ParameterChange : record {
+    parameter : text;
+    current_value : text;
+    new_value : text;
+  };
+  TreasuryAllocation : record {
+    treasury_type : TreasuryType;
+    amount : nat64;
+    recipient : opt principal;
+    purpose : text;
+  };
+  ScholarshipCreation : record {
+    name : text;
+    amount : nat64;
+    criteria : ScholarshipCriteria;
+    max_recipients : nat32;
+  };
+  CreditScoreAdjustment : record {
+    student_id : principal;
+    current_score : nat32;
+    proposed_score : nat32;
+    justification : text;
+  };
+  PlatformUpgrade : record {
+    canister : text;
+    version : text;
+    changes : vec text;
+  };
+  Emergency : record {
+    action : text;
+    justification : text;
+  };
+};
+
+type TreasuryType = variant {
+  Loan;
+  Scholarship;
+  Protocol;
+};
+
+type ProposalStatus = variant {
+  Active;
+  Passed;
+  Rejected;
+  Executed;
+  Expired;
+  Cancelled;
+};
+
+type Vote = record {
+  proposal_id : text;
+  voter : principal;
+  vote_type : VoteType;
+  voting_power : nat64;
+  delegated_from : opt principal;
+  cast_at : nat64;
+};
+
+type VoteType = variant {
+  For;
+  Against;
+  Abstain;
+};
+
+type Delegation = record {
+  delegator : principal;
+  delegate : principal;
+  voting_power : nat64;
+  expires_at : opt nat64;
+  created_at : nat64;
+};
+
+type ScholarshipCriteria = record {
+  min_gpa : float64;
+  required_programs : vec text;
+  max_recipients : nat32;
+  geographic_restrictions : vec text;
+  other_requirements : vec text;
+};
+
+type GovernanceStats = record {
+  total_proposals : nat32;
+  active_proposals : nat32;
+  passed_proposals : nat32;
+  rejected_proposals : nat32;
+  total_votes_cast : nat64;
+  total_voting_power : nat64;
+  total_token_holders : nat32;
+  total_tokens_issued : nat64;
+  total_tokens_locked : nat64;
+};
+
+type Stakeholder = record {
+  id : principal;
+  stakeholder_type : StakeholderType;
+  tokens : GovernanceToken;
+  delegations_received : vec Delegation;
+  delegations_given : vec Delegation;
+  proposals_created : nat32;
+  votes_cast : nat32;
+  reputation_score : nat32;
+  joined_at : nat64;
+};
+
+type StakeholderType = variant {
+  Student;
+  Donor;
+  University;
+  CommunityMember;
+  TeamMember;
+  Validator;
+};
+
+service : {
+  // Token Management
+  issue_tokens : (principal, nat64, TokenSource, StakeholderType) -> (StudiFiResultToken);
+  lock_tokens : (nat64) -> (StudiFiResultToken);
+  get_tokens : (principal) -> (opt GovernanceToken) query;
+  get_my_tokens : () -> (opt GovernanceToken) query;
+
+  // Proposal Management
+  create_proposal : (text, text, ProposalType, opt nat64) -> (StudiFiResultProposal);
+  get_proposal : (text) -> (opt Proposal) query;
+  get_active_proposals : () -> (vec Proposal) query;
+  get_all_proposals : () -> (vec Proposal) query;
+  get_proposals_by_status : (ProposalStatus) -> (vec Proposal) query;
+
+  // Voting Functions
+  vote_on_proposal : (text, VoteType) -> (StudiFiResultVote);
+  process_proposal : (text) -> (StudiFiResultProposal);
+  execute_proposal : (text) -> (StudiFiResult);
+  get_proposal_votes : (text) -> (vec Vote) query;
+  get_my_voting_history : () -> (vec Vote) query;
+
+  // Delegation Functions
+  delegate_voting_power : (principal, opt nat64) -> (StudiFiResultDelegation);
+  remove_delegation : (principal) -> (StudiFiResult);
+  get_my_delegations : () -> (vec Delegation) query;
+  get_delegations_to_me : () -> (vec Delegation) query;
+
+  // Stakeholder Functions
+  get_stakeholder : (principal) -> (opt Stakeholder) query;
+  get_my_stakeholder_info : () -> (opt Stakeholder) query;
+  get_stakeholders_by_type : (StakeholderType) -> (vec Stakeholder) query;
+
+  // Statistics and Reporting
+  get_governance_stats : () -> (GovernanceStats) query;
+  get_platform_stats : () -> (Statistics) query;
+  get_effective_voting_power : (principal) -> (nat64) query;
+  get_my_voting_power : () -> (nat64) query;
+
+  // Initialization and Demo Functions
+  initialize_demo_governance : () -> (StudiFiResult);
+  claim_demo_tokens : (nat64) -> (StudiFiResultToken);
+  create_demo_proposal : () -> (StudiFiResultProposal);
+};

@@ -7,11 +7,13 @@ import './KYCVerification.scss';
 interface KycVerificationProps {
   identityManagerActor?: any;
   onVerificationComplete?: (verified: boolean, details?: StartVerificationParams) => void;
+  onInternetIdentityLogin?: () => void;
 }
 
 export const KycVerification: React.FC<KycVerificationProps> = ({
   identityManagerActor,
-  onVerificationComplete
+  onVerificationComplete,
+  onInternetIdentityLogin
 }) => {
   const {
     isLoading,
@@ -37,11 +39,28 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
 
   const handleStartVerification = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Validate form data
+    if (!formData.universityName || !formData.studentId || !formData.program) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    // Check if identity manager actor is available
+    if (!identityManagerActor) {
+      alert('Please authenticate first to start verification');
+      return;
+    }
+
+    console.log('Starting verification with data:', formData);
+    console.log('Identity manager actor:', identityManagerActor);
+
     try {
+      // Show loading state
       const session = await startVerification(formData);
       setShowForm(false);
       
+      // Reset form data after successful submission
       setFormData({
         universityName: '',
         studentId: '',
@@ -50,11 +69,39 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
         expectedGraduation: '',
       });
 
+      // Show a success message to the user
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'verification-alert success';
+      messageDiv.innerHTML = `
+        <div class="alert-content">
+          <div>Verification request submitted successfully! Please wait while we process your credentials.</div>
+        </div>
+      `;
+      document.querySelector('.kyc-verification-container')?.appendChild(messageDiv);
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 5000);
+
+      // Call the completion handler if the session is completed
       if (onVerificationComplete && session.status === 'Completed') {
         onVerificationComplete(true, formData);
       }
     } catch (error) {
       console.error('Verification failed:', error);
+      
+      // Show error message
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'verification-alert error';
+      messageDiv.innerHTML = `
+        <div class="alert-content">
+          <div>Verification failed: ${error}</div>
+        </div>
+      `;
+      document.querySelector('.kyc-verification-container')?.appendChild(messageDiv);
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 5000);
+      
       if (onVerificationComplete) {
         onVerificationComplete(false);
       }
@@ -81,6 +128,26 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
 
   return (
     <div className="kyc-verification-container">
+      {!identityManagerActor && (
+        <div className="verification-alert error">
+          <div className="alert-content">
+            <AlertCircle className="alert-icon" />
+            <div>
+              <div>Please authenticate with Internet Identity first to start verification</div>
+              {onInternetIdentityLogin && (
+                <button
+                  onClick={onInternetIdentityLogin}
+                  className="verification-btn primary"
+                  style={{ marginTop: '0.5rem' }}
+                >
+                  Login with Internet Identity
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {error && (
         <div className="verification-alert error">
           <div className="alert-content">

@@ -19,12 +19,12 @@ const OAuthLogin = ({ navigateTo, onLogin }) => {
 
   const providers = [
     {
-      name: 'ICP',
+      name: 'Internet Computer',
       icon: '🌐',
       color: '#7fff00',
       bgColor: 'rgba(127, 255, 0, 0.1)',
       borderColor: 'rgba(127, 255, 0, 0.3)'
-    }
+    },
   ];
 
   return (
@@ -39,7 +39,7 @@ const OAuthLogin = ({ navigateTo, onLogin }) => {
               <div className="logo-tagline">Student Finance Revolution</div>
             </div>
             <h1>Welcome Back</h1>
-            <p>Choose your preferred login method to access your StudiFi account</p>
+            <p>Connect your wallet to access decentralized education finance on the Internet Computer blockchain</p>
           </div>
 
           <div className="oauth-providers">
@@ -91,9 +91,29 @@ const OAuthLogin = ({ navigateTo, onLogin }) => {
             </button>
           </div>
 
+          {/* Development Mode - Remove in production */}
+          {import.meta.env.VITE_DFX_NETWORK === 'local' && (
+            <div style={{marginTop: '1rem', padding: '1rem', background: 'rgba(255, 165, 0, 0.1)', borderRadius: '8px', border: '1px solid rgba(255, 165, 0, 0.3)'}}>
+              <p style={{fontSize: '0.8rem', color: 'rgba(255, 165, 0, 0.9)', margin: '0 0 0.5rem 0'}}>
+                🚧 Development Mode
+              </p>
+              <button
+                className="alt-btn"
+                onClick={() => {
+                  console.log('Demo mode - skipping authentication');
+                  onLogin('Demo');
+                }}
+                style={{width: '100%', background: 'rgba(255, 165, 0, 0.1)', borderColor: 'rgba(255, 165, 0, 0.3)'}}
+              >
+                <span className="alt-icon">🔧</span>
+                Continue Without Auth (Demo)
+              </button>
+            </div>
+          )}
+
           <div className="security-notice">
             <div className="security-icon">🔒</div>
-            <p>Your data is protected with enterprise-grade security. We never store your login credentials.</p>
+            <p>Your identity is secured by blockchain cryptography. StudiFi never stores private keys or personal data - everything runs on-chain with complete transparency.</p>
           </div>
         </div>
 
