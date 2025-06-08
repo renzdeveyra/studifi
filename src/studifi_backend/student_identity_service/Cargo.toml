@@ -1,5 +1,5 @@
 [package]
-name = "intelligent_credit"
+name = "student_identity_service"
 version = "0.1.0"
 edition = "2021"
 

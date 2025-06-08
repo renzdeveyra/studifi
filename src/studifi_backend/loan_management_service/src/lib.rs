@@ -19,7 +19,7 @@ static mut AUTOMATION_TIMER: Option<TimerId> = None;
 
 #[init]
 fn init() {
-    ic_cdk::println!("Autonomous Finance canister initialized");
+    ic_cdk::println!("Loan Management Service canister initialized");
 
     // Initialize treasury with default configuration
     with_storage_mut(|storage| {
@@ -47,12 +47,12 @@ fn init() {
 
 #[pre_upgrade]
 fn pre_upgrade() {
-    ic_cdk::println!("Autonomous Finance canister upgrading...");
+    ic_cdk::println!("Loan Management Service canister upgrading...");
 }
 
 #[post_upgrade]
 fn post_upgrade() {
-    ic_cdk::println!("Autonomous Finance canister upgraded successfully");
+    ic_cdk::println!("Loan Management Service canister upgraded successfully");
 
     // Restart automation timer after upgrade
     unsafe {

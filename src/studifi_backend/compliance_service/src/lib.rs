@@ -4,17 +4,17 @@ use shared::*;
 
 #[init]
 fn init() {
-    ic_cdk::println!("Compliance Gateway canister initialized");
+    ic_cdk::println!("Compliance Service canister initialized");
 }
 
 #[pre_upgrade]
 fn pre_upgrade() {
-    ic_cdk::println!("Compliance Gateway canister upgrading...");
+    ic_cdk::println!("Compliance Service canister upgrading...");
 }
 
 #[post_upgrade]
 fn post_upgrade() {
-    ic_cdk::println!("Compliance Gateway canister upgraded successfully");
+    ic_cdk::println!("Compliance Service canister upgraded successfully");
 }
 
 #[update]

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { intelligent_credit } from 'declarations/intelligent_credit';
+import { credit_assessment_service } from 'declarations/credit_assessment_service';
 import './LoanApplication.scss';
 
 const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
@@ -44,8 +44,8 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
         familialIncome: parseInt(formData.familyIncome)
       };
 
-      // Call the intelligent_credit backend function
-      const result = await intelligent_credit.submitLoanApplication(
+      // Call the credit_assessment_service backend function
+      const result = await credit_assessment_service.submit_loan_application(
         parseInt(formData.requestedAmount),
         formData.purpose,
         academicInfo,

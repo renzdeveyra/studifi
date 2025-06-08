@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { autonomous_finance } from 'declarations/autonomous_finance';
+import { loan_management_service } from 'declarations/loan_management_service';
 import { AuthClient } from '@dfinity/auth-client';
 import { Wallet, CreditCard, Calendar, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
 
@@ -32,9 +32,9 @@ const LoanDashboard = ({ addNotification }) => {
     setError(null);
     try {
       const [myLoans, myStats, treasuryHealthData] = await Promise.all([
-        autonomous_finance.get_my_loans(),
-        autonomous_finance.get_my_loan_stats(),
-        autonomous_finance.get_treasury_health()
+        loan_management_service.get_my_loans(),
+        loan_management_service.get_my_loan_stats(),
+        loan_management_service.get_treasury_health()
       ]);
 
       // Handle Result types from Rust

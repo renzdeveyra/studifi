@@ -139,6 +139,78 @@ pub fn check_authorization(caller: Principal, authorized_principals: &[Principal
     }
 }
 
+/// Create an audit event
+pub fn create_audit_event(
+    event_type: crate::types::AuditEventType,
+    user_principal: Principal,
+    canister_id: Principal,
+    function_name: &str,
+    details: &str,
+    success: bool,
+) -> crate::types::AuditEvent {
+    crate::types::AuditEvent {
+        event_id: generate_id("AUDIT", current_time()),
+        event_type,
+        user_principal,
+        canister_id,
+        function_name: function_name.to_string(),
+        details: details.to_string(),
+        timestamp: current_time(),
+        success,
+    }
+}
+
+/// Log an audit event (placeholder for actual implementation)
+pub fn log_audit_event(event: crate::types::AuditEvent) {
+    ic_cdk::println!("AUDIT: {:?}", event);
+    // In a real implementation, this would call the audit service
+}
+
+/// Validate session with authentication service
+pub async fn validate_session_with_auth_service(
+    _auth_canister_id: Principal,
+    session_id: String,
+    _required_permission: Option<String>,
+) -> StudiFiResult<bool> {
+    // This is a placeholder for actual inter-canister call
+    // In real implementation, this would call the authentication service
+    ic_cdk::println!("Validating session {} with auth service", session_id);
+
+    // For now, return success for demo purposes
+    Ok(true)
+}
+
+/// Call another canister with error handling and retry logic
+pub async fn call_canister<T, R>(
+    canister_id: Principal,
+    method: &str,
+    args: T,
+    retry_count: u32,
+) -> StudiFiResult<R>
+where
+    T: candid::CandidType + Clone,
+    R: for<'de> candid::Deserialize<'de> + candid::CandidType,
+{
+    let mut last_error = None;
+
+    for attempt in 0..=retry_count {
+        match ic_cdk::call::<(T,), (R,)>(canister_id, method, (args.clone(),)).await {
+            Ok((result,)) => return Ok(result),
+            Err(e) => {
+                last_error = Some(e);
+                if attempt < retry_count {
+                    // Simple delay for retry (in production, use proper async delay)
+                    ic_cdk::println!("Retrying inter-canister call, attempt {}", attempt + 1);
+                }
+            }
+        }
+    }
+
+    Err(StudiFiError::SystemError(
+        format!("Inter-canister call failed after {} retries: {:?}", retry_count, last_error)
+    ))
+}
+
 /// Sanitize text input
 pub fn sanitize_text(input: &str) -> String {
     input

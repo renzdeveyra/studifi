@@ -19,19 +19,19 @@ use shared::*;
 /// Initialize the canister
 #[init]
 fn init() {
-    ic_cdk::println!("Intelligent Credit canister initialized");
+    ic_cdk::println!("Credit Assessment Service canister initialized");
 }
 
 /// Pre-upgrade hook
 #[pre_upgrade]
 fn pre_upgrade() {
-    ic_cdk::println!("Intelligent Credit canister upgrading...");
+    ic_cdk::println!("Credit Assessment Service canister upgrading...");
 }
 
 /// Post-upgrade hook
 #[post_upgrade]
 fn post_upgrade() {
-    ic_cdk::println!("Intelligent Credit canister upgraded successfully");
+    ic_cdk::println!("Credit Assessment Service canister upgraded successfully");
 }
 
 /// Submit a loan application
@@ -81,6 +81,7 @@ async fn submit_loan_application(
         processed_at: None,
         notes: Vec::new(),
         risk_assessment: None,
+        loan_id: None,
     };
 
     // Store application
@@ -344,6 +345,101 @@ fn check_validation_eligibility(user: Principal) -> bool {
 #[candid_method(update)]
 async fn process_expired_validations() -> StudiFiResult<u32> {
     CommunityValidationEngine::process_expired_validations()
+}
+
+/// Create loan from approved application (inter-canister call)
+#[update]
+#[candid_method(update)]
+async fn create_loan_from_application(application_id: String) -> StudiFiResult<String> {
+    let caller = caller();
+
+    // Get the application
+    let application = with_storage(|storage| storage.get_application(&application_id))
+        .ok_or_else(|| StudiFiError::NotFound("Application not found".to_string()))?;
+
+    // Verify application is approved
+    if application.status != ApplicationStatus::Approved {
+        return Err(StudiFiError::InvalidInput("Application not approved".to_string()));
+    }
+
+    // Verify student identity with identity service
+    let identity_verified = validate_student_identity(application.student_id).await?;
+    if !identity_verified {
+        return Err(StudiFiError::Unauthorized("Student identity not verified".to_string()));
+    }
+
+    // Get effective credit score
+    let credit_score = get_effective_credit_score(application.student_id)
+        .unwrap_or_else(|| application.credit_score.as_ref().map(|cs| cs.score).unwrap_or(500));
+
+    // Generate loan terms
+    let terms = CreditScoringEngine::generate_loan_terms(
+        application.requested_amount,
+        &CreditScore::new(credit_score, Vec::new(), 0.9),
+        &application.purpose,
+    );
+
+    // Create loan via loan management service
+    let loan_result = create_loan_via_service(
+        application.student_id,
+        application.requested_amount,
+        terms.interest_rate,
+        terms.term_months,
+        application_id.clone(),
+    ).await?;
+
+    // Update application status
+    with_storage_mut(|storage| {
+        if let Some(mut app) = storage.get_application(&application_id) {
+            app.status = ApplicationStatus::LoanCreated;
+            app.loan_id = Some(loan_result.clone());
+            storage.update_application(application_id.clone(), app);
+        }
+    });
+
+    // Log audit event
+    log_audit_event(create_audit_event(
+        shared::AuditEventType::LoanCreated,
+        application.student_id,
+        ic_cdk::id(),
+        "create_loan_from_application",
+        &format!("Loan created from application {}", application_id),
+        true,
+    ));
+
+    Ok(loan_result)
+}
+
+/// Validate student identity with identity service
+async fn validate_student_identity(student_id: Principal) -> StudiFiResult<bool> {
+    // This would be an actual inter-canister call in production
+    // For now, we'll simulate the call
+    ic_cdk::println!("Validating student identity for: {:?}", student_id);
+
+    // Simulate identity verification
+    // In real implementation: call_canister(identity_service_id, "is_student_verified", student_id, 3).await
+    Ok(true)
+}
+
+/// Create loan via loan management service
+async fn create_loan_via_service(
+    student_id: Principal,
+    amount: Amount,
+    interest_rate: Percentage,
+    term_months: u32,
+    application_id: String,
+) -> StudiFiResult<String> {
+    // This would be an actual inter-canister call in production
+    // For now, we'll simulate the call
+    ic_cdk::println!(
+        "Creating loan via service: student={:?}, amount={}, rate={}, term={}",
+        student_id, amount, interest_rate, term_months
+    );
+
+    // Simulate loan creation
+    // In real implementation: call_canister(loan_service_id, "create_loan", args, 3).await
+    let loan_id = generate_id("LOAN", current_time());
+    Ok(loan_id)
 }
 
 /// Get platform statistics

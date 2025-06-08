@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { autonomous_finance } from 'declarations/autonomous_finance';
+import { loan_management_service } from 'declarations/loan_management_service';
 import { CreditCard, DollarSign, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
 
 
@@ -34,7 +34,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
 
   const loadEarlyPayoffInfo = async () => {
     try {
-      const result = await autonomous_finance.get_early_payoff_info(loanId);
+      const result = await loan_management_service.get_early_payoff_info(loanId);
       if (result.Ok) {
         setEarlyPayoffInfo(result.Ok);
       } else {
@@ -51,7 +51,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
     setCalculating(true);
     try {
       const amount = Math.round(parseFloat(paymentAmount) * 100); // Convert to cents
-      const result = await autonomous_finance.calculate_payment_breakdown(loanId, BigInt(amount));
+      const result = await loan_management_service.calculate_payment_breakdown(loanId, BigInt(amount));
       
       if (result.Ok) {
         setPaymentBreakdown(result.Ok);
@@ -84,7 +84,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
       const amount = Math.round(parseFloat(paymentAmount) * 100); // Convert to cents
       const methodVariant = { [paymentMethod]: null }; // Create variant object
       
-      const result = await autonomous_finance.process_payment(
+      const result = await loan_management_service.process_payment(
         loanId,
         BigInt(amount),
         methodVariant

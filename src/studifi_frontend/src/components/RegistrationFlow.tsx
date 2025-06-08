@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuthClient } from '@dfinity/auth-client';
-import { identity_manager } from '../../../declarations/identity_manager';
+import { student_identity_service } from '../../../declarations/student_identity_service';
 import { User, Shield, CheckCircle, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface RegistrationStep {
@@ -184,7 +184,7 @@ export const RegistrationFlow: React.FC<RegistrationFlowProps> = ({
       };
 
       // Create student profile on the backend
-      const result = await identity_manager.create_student_profile(verificationRequest);
+      const result = await student_identity_service.create_student_profile(verificationRequest);
       
       if ('Err' in result) {
         throw new Error(typeof result.Err === 'string' ? result.Err : JSON.stringify(result.Err));

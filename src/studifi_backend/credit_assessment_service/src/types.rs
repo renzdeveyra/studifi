@@ -104,6 +104,7 @@ pub struct LoanApplication {
     pub processed_at: Option<Timestamp>,
     pub notes: Vec<String>,
     pub risk_assessment: Option<RiskAssessment>,
+    pub loan_id: Option<String>,
 }
 
 impl Identifiable for LoanApplication {
@@ -273,6 +274,7 @@ pub enum ApplicationStatus {
     Rejected,
     Withdrawn,
     Expired,
+    LoanCreated,
 }
 
 /// Enhanced loan terms

@@ -32,6 +32,9 @@ pub enum StudiFiError {
 
     #[error("External service error: {0}")]
     ExternalServiceError(String),
+
+    #[error("System error: {0}")]
+    SystemError(String),
 }
 
 /// Common timestamp type (nanoseconds since Unix epoch)
@@ -142,39 +145,104 @@ pub struct Statistics {
 /// Inter-canister call types
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub enum CanisterCall {
-    IdentityManager(IdentityManagerCall),
-    IntelligentCredit(IntelligentCreditCall),
-    AutonomousFinance(AutonomousFinanceCall),
-    GovernanceEngine(GovernanceEngineCall),
-    ComplianceGateway(ComplianceGatewayCall),
+    StudentIdentityService(StudentIdentityServiceCall),
+    CreditAssessmentService(CreditAssessmentServiceCall),
+    LoanManagementService(LoanManagementServiceCall),
+    DaoGovernanceService(DaoGovernanceServiceCall),
+    ComplianceService(ComplianceServiceCall),
+    AuthenticationService(AuthenticationServiceCall),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub enum IdentityManagerCall {
+pub enum StudentIdentityServiceCall {
     GetStudentProfile(Principal),
     VerifyStudent(Principal),
+    IsStudentVerified(Principal),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub enum IntelligentCreditCall {
+pub enum CreditAssessmentServiceCall {
     GetCreditScore(Principal),
     ProcessApplication(String),
+    GetEffectiveCreditScore(Principal),
+    CreateLoanFromApplication(String),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub enum AutonomousFinanceCall {
-    CreateLoan(Principal, Amount, Percentage, u32, u32),
+pub enum LoanManagementServiceCall {
+    CreateLoan(Principal, Amount, Percentage, u32, u32, String),
     ProcessPayment(String, Amount),
+    GetStudentLoans(Principal),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub enum GovernanceEngineCall {
+pub enum DaoGovernanceServiceCall {
     GetStakeholder(Principal),
     ExecuteProposal(String),
+    CheckTreasuryApproval(Amount),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub enum ComplianceGatewayCall {
+pub enum ComplianceServiceCall {
     PerformKycCheck(Principal),
     LogAuditEvent(Principal, String, String),
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub enum AuthenticationServiceCall {
+    ValidateSession(String, Option<String>), // Use String instead of Permission enum
+    GetUserRoles(Principal),
+    LogAuthEvent(Principal, String, String),
+}
+
+
+
+/// Audit event for tracking system actions
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct AuditEvent {
+    pub event_id: String,
+    pub event_type: AuditEventType,
+    pub user_principal: Principal,
+    pub canister_id: Principal,
+    pub function_name: String,
+    pub details: String,
+    pub timestamp: Timestamp,
+    pub success: bool,
+}
+
+/// Types of audit events
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub enum AuditEventType {
+    ProfileCreated,
+    ProfileUpdated,
+    LoanApplicationSubmitted,
+    LoanApplicationProcessed,
+    LoanCreated,
+    PaymentProcessed,
+    CreditScoreCalculated,
+    ProposalCreated,
+    VoteCast,
+    RoleAssigned,
+    SessionCreated,
+    SystemConfigChanged,
+    TreasuryOperation,
+}
+
+/// Inter-canister communication result
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct InterCanisterResult<T> {
+    pub success: bool,
+    pub data: Option<T>,
+    pub error: Option<String>,
+    pub timestamp: Timestamp,
+}
+
+/// Canister configuration for inter-canister calls
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct CanisterConfig {
+    pub canister_id: Principal,
+    pub name: String,
+    pub is_active: bool,
+    pub retry_count: u32,
+    pub timeout_seconds: u64,
 }

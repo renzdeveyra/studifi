@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { autonomous_finance } from 'declarations/autonomous_finance';
+import { loan_management_service } from 'declarations/loan_management_service';
 
 const TreasuryDashboard = () => {
   const [treasuries, setTreasuries] = useState([]);
@@ -15,8 +15,8 @@ const TreasuryDashboard = () => {
     setLoading(true);
     try {
       const [treasuriesResult, healthResult] = await Promise.all([
-        autonomous_finance.get_all_separate_treasuries(),
-        autonomous_finance.get_multi_treasury_health()
+        loan_management_service.get_all_separate_treasuries(),
+        loan_management_service.get_multi_treasury_health()
       ]);
       
       setTreasuries(treasuriesResult);

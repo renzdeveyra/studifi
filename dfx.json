@@ -1,43 +1,49 @@
 {
   "canisters": {
-    "identity_manager": {
+    "student_identity_service": {
       "type": "rust",
-      "package": "identity_manager",
-      "candid": "src/studifi_backend/identity_manager/identity_manager.did"
+      "package": "student_identity_service",
+      "candid": "src/studifi_backend/student_identity_service/student_identity_service.did"
     },
-    "intelligent_credit": {
+    "credit_assessment_service": {
       "type": "rust",
-      "package": "intelligent_credit",
-      "candid": "src/studifi_backend/intelligent_credit/intelligent_credit.did"
+      "package": "credit_assessment_service",
+      "candid": "src/studifi_backend/credit_assessment_service/credit_assessment_service.did"
     },
-    "autonomous_finance": {
+    "loan_management_service": {
       "type": "rust",
-      "package": "autonomous_finance",
-      "candid": "src/studifi_backend/autonomous_finance/autonomous_finance.did"
+      "package": "loan_management_service",
+      "candid": "src/studifi_backend/loan_management_service/loan_management_service.did"
     },
-    "governance_engine": {
+    "dao_governance_service": {
       "type": "rust",
-      "package": "governance_engine",
-      "candid": "src/studifi_backend/governance_engine/governance_engine.did"
+      "package": "dao_governance_service",
+      "candid": "src/studifi_backend/dao_governance_service/dao_governance_service.did"
     },
-    "compliance_gateway": {
+    "compliance_service": {
       "type": "rust",
-      "package": "compliance_gateway",
-      "candid": "src/studifi_backend/compliance_gateway/compliance_gateway.did"
+      "package": "compliance_service",
+      "candid": "src/studifi_backend/compliance_service/compliance_service.did"
     },
-    "university_issuer": {
+    "authentication_service": {
       "type": "rust",
-      "package": "university_issuer",
-      "candid": "src/studifi_backend/university_issuer/university_issuer.did"
+      "package": "authentication_service",
+      "candid": "src/studifi_backend/authentication_service/authentication_service.did"
+    },
+    "university_credential_service": {
+      "type": "rust",
+      "package": "university_credential_service",
+      "candid": "src/studifi_backend/university_credential_service/university_credential_service.did"
     },
     "studifi_frontend": {
       "dependencies": [
-        "identity_manager",
-        "intelligent_credit",
-        "autonomous_finance",
-        "governance_engine",
-        "compliance_gateway",
-        "university_issuer"
+        "student_identity_service",
+        "credit_assessment_service",
+        "loan_management_service",
+        "dao_governance_service",
+        "compliance_service",
+        "authentication_service",
+        "university_credential_service"
       ],
       "source": [
         "src/studifi_frontend/dist"

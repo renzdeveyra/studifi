@@ -1,5 +1,5 @@
 [package]
-name = "autonomous_finance"
+name = "credit_assessment_service"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,7 +9,6 @@ crate-type = ["cdylib"]
 [dependencies]
 candid = { workspace = true }
 ic-cdk = { workspace = true }
-ic-cdk-timers = { workspace = true }
 ic-stable-structures = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

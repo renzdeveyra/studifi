@@ -1,0 +1,137 @@
+type StudiFiError = variant {
+  NotFound : text;
+  AlreadyExists : text;
+  Unauthorized : text;
+  InvalidInput : text;
+  InsufficientFunds : text;
+  SystemError : text;
+};
+
+type StudiFiResult = variant { Ok : text; Err : StudiFiError };
+type StudiFiResultSession = variant { Ok : UserSession; Err : StudiFiError };
+type StudiFiResultAuth = variant { Ok : AuthResponse; Err : StudiFiError };
+type StudiFiResultStats = variant { Ok : SessionStats; Err : StudiFiError };
+type StudiFiResultEvents = variant { Ok : vec AuthAuditEvent; Err : StudiFiError };
+type StudiFiResultUnit = variant { Ok : nat32; Err : StudiFiError };
+
+type Timestamp = nat64;
+
+type Role = variant {
+  Student;
+  Donor;
+  University;
+  CommunityValidator;
+  TeamMember;
+  Admin;
+  SystemAdmin;
+};
+
+type Permission = variant {
+  CreateProfile;
+  UpdateProfile;
+  SubmitLoanApplication;
+  MakePayment;
+  ViewOwnData;
+  ValidateCredit;
+  VoteOnProposals;
+  CreateProposals;
+  VerifyStudents;
+  IssueCredentials;
+  ManageUsers;
+  ViewAllData;
+  ManageSystem;
+  AccessAuditLogs;
+  ManageCanisters;
+  SystemMaintenance;
+};
+
+type UserSession = record {
+  session_id : text;
+  user_principal : principal;
+  roles : vec Role;
+  created_at : Timestamp;
+  expires_at : Timestamp;
+  last_activity : Timestamp;
+  is_active : bool;
+};
+
+type AuthRequest = record {
+  user_principal : principal;
+  requested_roles : vec Role;
+  session_duration_hours : opt nat64;
+};
+
+type AuthResponse = record {
+  session_id : text;
+  user_principal : principal;
+  granted_roles : vec Role;
+  expires_at : Timestamp;
+  permissions : vec Permission;
+};
+
+type RoleAssignmentRequest = record {
+  target_principal : principal;
+  roles : vec Role;
+  assigned_by : principal;
+  reason : text;
+};
+
+type AuthEventType = variant {
+  SessionCreated;
+  SessionExpired;
+  SessionTerminated;
+  RoleAssigned;
+  RoleRevoked;
+  PermissionDenied;
+  InvalidAccess;
+};
+
+type AuthAuditEvent = record {
+  event_id : text;
+  event_type : AuthEventType;
+  user_principal : principal;
+  session_id : opt text;
+  details : text;
+  timestamp : Timestamp;
+  ip_address : opt text;
+};
+
+type SessionStats = record {
+  total_sessions : nat32;
+  active_sessions : nat32;
+  expired_sessions : nat32;
+  total_users : nat32;
+  users_by_role : vec record { Role; nat32 };
+};
+
+type Statistics = record {
+  total_count : nat32;
+  active_count : nat32;
+  completed_count : nat32;
+  failed_count : nat32;
+  total_amount : nat64;
+  average_amount : nat64;
+};
+
+service : {
+  // Authentication functions
+  create_session : (AuthRequest) -> (StudiFiResultAuth);
+  validate_session : (text, opt Permission) -> (StudiFiResultSession) query;
+  terminate_session : (text) -> (StudiFiResult);
+  update_session_activity : (text) -> (StudiFiResultSession);
+
+  // Role management functions
+  assign_roles : (RoleAssignmentRequest) -> (StudiFiResult);
+  get_user_roles : (principal) -> (vec Role) query;
+  get_my_roles : () -> (vec Role) query;
+
+  // Query functions
+  get_user_sessions : (principal) -> (vec UserSession) query;
+  get_my_sessions : () -> (vec UserSession) query;
+  get_session_stats : () -> (StudiFiResultStats) query;
+  get_audit_events : (principal, opt nat32) -> (StudiFiResultEvents) query;
+  get_platform_stats : () -> (Statistics) query;
+
+  // Maintenance functions
+  cleanup_expired_sessions : () -> (StudiFiResultUnit);
+}

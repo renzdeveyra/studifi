@@ -1,7 +1,7 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
 import { AuthClient } from '@dfinity/auth-client';
-import { createActor } from 'declarations/identity_manager';
+import { createActor } from 'declarations/student_identity_service';
 import './App.scss';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -47,7 +47,7 @@ const App = () => {
 
         // Create identity manager actor with authenticated identity
         try {
-          const actor = createActor(import.meta.env.VITE_CANISTER_ID_IDENTITY_MANAGER, {
+          const actor = createActor(import.meta.env.VITE_CANISTER_ID_STUDENT_IDENTITY_SERVICE, {
             agentOptions: {
               identity: userIdentity,
             },
@@ -109,7 +109,7 @@ const App = () => {
           setIdentity(userIdentity);
 
           // Create identity manager actor with authenticated identity
-          const actor = createActor(import.meta.env.VITE_CANISTER_ID_IDENTITY_MANAGER, {
+          const actor = createActor(import.meta.env.VITE_CANISTER_ID_STUDENT_IDENTITY_SERVICE, {
             agentOptions: {
               identity: userIdentity,
             },

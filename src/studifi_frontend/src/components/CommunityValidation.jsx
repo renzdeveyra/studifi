@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { intelligent_credit } from 'declarations/intelligent_credit';
-import { governance_engine } from 'declarations/governance_engine';
+import { credit_assessment_service } from 'declarations/credit_assessment_service';
+import { dao_governance_service } from 'declarations/dao_governance_service';
 
 const CommunityValidation = () => {
   const [activeValidations, setActiveValidations] = useState([]);
@@ -24,9 +24,9 @@ const CommunityValidation = () => {
     setLoading(true);
     try {
       const [activeResult, statsResult, votingPowerResult] = await Promise.all([
-        intelligent_credit.get_active_validations(),
-        intelligent_credit.get_validation_stats(),
-        governance_engine.get_my_voting_power()
+        credit_assessment_service.get_active_validations(),
+        credit_assessment_service.get_validation_stats(),
+        dao_governance_service.get_my_voting_power()
       ]);
       
       setActiveValidations(activeResult);
@@ -44,7 +44,7 @@ const CommunityValidation = () => {
 
     try {
       setLoading(true);
-      const result = await intelligent_credit.cast_community_vote(
+      const result = await credit_assessment_service.cast_community_vote(
         selectedValidation.id,
         voteAdjustment,
         voteConfidence,

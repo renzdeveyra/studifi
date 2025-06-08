@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { governance_engine } from 'declarations/governance_engine';
+import { dao_governance_service } from 'declarations/dao_governance_service';
 
 const GovernancePage = () => {
   const [proposals, setProposals] = useState([]);
@@ -17,10 +17,10 @@ const GovernancePage = () => {
     setLoading(true);
     try {
       const [proposalsResult, statsResult, tokensResult, votingPowerResult] = await Promise.all([
-        governance_engine.get_active_proposals(),
-        governance_engine.get_governance_stats(),
-        governance_engine.get_my_tokens(),
-        governance_engine.get_my_voting_power()
+        dao_governance_service.get_active_proposals(),
+        dao_governance_service.get_governance_stats(),
+        dao_governance_service.get_my_tokens(),
+        dao_governance_service.get_my_voting_power()
       ]);
 
       setProposals(proposalsResult);
@@ -36,7 +36,7 @@ const GovernancePage = () => {
 
   const handleVote = async (proposalId, voteType) => {
     try {
-      const result = await governance_engine.vote_on_proposal(proposalId, { [voteType]: null });
+      const result = await dao_governance_service.vote_on_proposal(proposalId, { [voteType]: null });
       if (result.Ok) {
         console.log('Vote cast successfully');
         loadGovernanceData(); // Refresh data
@@ -51,7 +51,7 @@ const GovernancePage = () => {
   const handleInitializeDemo = async () => {
     setLoading(true);
     try {
-      const result = await governance_engine.initialize_demo_governance();
+      const result = await dao_governance_service.initialize_demo_governance();
       if (result.Ok) {
         console.log('Demo governance initialized');
         loadGovernanceData(); // Refresh data
@@ -68,7 +68,7 @@ const GovernancePage = () => {
   const handleClaimTokens = async () => {
     setLoading(true);
     try {
-      const result = await governance_engine.claim_demo_tokens(BigInt(250));
+      const result = await dao_governance_service.claim_demo_tokens(BigInt(250));
       if (result.Ok) {
         console.log('Tokens claimed successfully');
         loadGovernanceData(); // Refresh data
@@ -85,7 +85,7 @@ const GovernancePage = () => {
   const handleCreateDemoProposal = async () => {
     setLoading(true);
     try {
-      const result = await governance_engine.create_demo_proposal();
+      const result = await dao_governance_service.create_demo_proposal();
       if (result.Ok) {
         console.log('Demo proposal created');
         loadGovernanceData(); // Refresh data
