@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, University, CheckCircle, AlertCircle, Clock, X } from 'lucide-react';
+import { CheckCircle, AlertCircle, Clock, X } from 'lucide-react';
 import { useKycVerification, StartVerificationParams } from '../hooks/useKycVerification';
 import { vcService, formatVerificationStatus} from '../services/verifiableCredentials';
 import './KYCVerification.scss';
@@ -81,13 +81,6 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
 
   return (
     <div className="kyc-verification-container">
-      <div className="verification-header">
-        <div className="header-icon">
-          <Shield />
-        </div>
-        <h3>KYC Verification</h3>
-      </div>
-
       {error && (
         <div className="verification-alert error">
           <div className="alert-content">
@@ -117,24 +110,25 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
       <div className="verification-section">
         {!hasCompletedVerification && !hasPendingVerification && (
           <>
-            <div className="section-header">
-              <University className="section-icon" />
-              <span>Verify your student status with your university</span>
-            </div>
-            
             <p className="section-description">
               Use Internet Computer's Verifiable Credentials to securely prove your student status 
               without sharing personal information directly with StudiFi.
             </p>
             
             {!showForm ? (
-              <button
-                onClick={() => setShowForm(true)}
-                disabled={isLoading}
-                className="verification-btn primary"
-              >
-                {isLoading ? 'Processing...' : 'Start Verification'}
-              </button>
+              <>
+                <button
+                  onClick={() => setShowForm(true)}
+                  disabled={isLoading}
+                  className="verification-btn primary"
+                >
+                  {isLoading ? 'Processing...' : 'Start Verification'}
+                </button>
+                
+                <div className="verification-requirement-message">
+                  You must complete this verification step to proceed.
+                </div>
+              </>
             ) : (
               <form onSubmit={handleStartVerification} className="verification-form">
                 <div className="form-grid">
@@ -218,6 +212,10 @@ export const KycVerification: React.FC<KycVerificationProps> = ({
                   >
                     Cancel
                   </button>
+                </div>
+                
+                <div className="verification-requirement-message">
+                  You must complete this verification step to proceed.
                 </div>
               </form>
             )}

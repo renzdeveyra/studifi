@@ -1,4 +1,4 @@
-/* KycVerification.scss - Fixed spacing issues */
+/* KycVerification.scss - Fixed spacing issues and removed scroll */
 $primary-bg: #1e1e1e;
 $accent-color: #7fff00;
 $text-color: #ffffff;
@@ -15,38 +15,10 @@ $warning-color: #f59e0b;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 380px;
-  max-height: 380px;
   position: relative;
-  overflow: hidden; // Keep overflow hidden to prevent container scrollbar
+  overflow: hidden;
   padding: 0.4rem;
   box-sizing: border-box;
-
-  .verification-header {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 0.4rem;
-    flex-shrink: 0;
-    height: 20px;
-
-    .header-icon {
-      color: $accent-color;
-
-      svg {
-        width: 0.9rem;
-        height: 0.9rem;
-      }
-    }
-
-    h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: $text-color;
-      margin: 0;
-      line-height: 1.1;
-    }
-  }
 
   .verification-alert {
     margin-bottom: 0.4rem;
@@ -129,31 +101,8 @@ $warning-color: #f59e0b;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: hidden; // Changed to hidden to prevent internal scroll
+    overflow: hidden;
     justify-content: flex-start;
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      margin-bottom: 0.3rem;
-      flex-shrink: 0;
-      height: 16px;
-
-      .section-icon {
-        width: 0.75rem;
-        height: 0.75rem;
-        color: $accent-color;
-        flex-shrink: 0;
-      }
-
-      span {
-        color: $text-color;
-        font-weight: 500;
-        font-size: 0.75rem;
-        line-height: 1.1;
-      }
-    }
 
     .section-description {
       color: rgba($text-color, 0.8);
@@ -204,12 +153,25 @@ $warning-color: #f59e0b;
     }
   }
 
+  .verification-requirement-message {
+    margin-top: 0.5rem;
+    padding: 0.4rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba($text-color, 0.8);
+    background-color: rgba($warning-color, 0.1);
+    border: 1px solid rgba($warning-color, 0.3);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
   .verification-form {
+    margin: 0;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: visible; // Keep overflow visible as form should fit or push history down
+    overflow: visible;
 
     .form-grid {
       display: grid;
@@ -292,11 +254,11 @@ $warning-color: #f59e0b;
   }
 
   .verification-history {
-    flex: 1; // Allow history to take remaining space
-    min-height: 0; // Crucial for flex items with overflow
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    max-height: 140px; // Maintain this max-height for history section
+    max-height: 140px;
     margin-top: auto;
 
     h4 {
@@ -310,31 +272,13 @@ $warning-color: #f59e0b;
     }
 
     .history-list {
-      flex: 1; // Allow history list to fill available space within history section
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
-      overflow-y: auto; // Keep scrollbar for the history list ONLY
+      overflow: hidden; // Removed scroll functionality
       padding-right: 4px;
-      min-height: 0; // Crucial for flex items with overflow
-
-      &::-webkit-scrollbar {
-        width: 3px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 2px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: rgba($accent-color, 0.5);
-        border-radius: 2px;
-
-        &:hover {
-          background: rgba($accent-color, 0.7);
-        }
-      }
+      min-height: 0;
     }
 
     .history-item {
@@ -452,14 +396,13 @@ $warning-color: #f59e0b;
   }
 }
 
-// Additional constraint for the wrapper in KYCPage
 .kyc-verification-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 380px;
-  max-height: 380px;
-  overflow: hidden; // Ensure wrapper also doesn't overflow
+  min-height: 260px;
+  max-height: 260px;
+  overflow: hidden;
 
   .text-center {
     text-align: center;
@@ -480,9 +423,10 @@ $warning-color: #f59e0b;
   .kyc-verification-container {
     padding: 0.3rem;
 
-    .verification-header {
-      margin-bottom: 0.3rem;
-      height: 18px;
+    .verification-requirement-message {
+      margin-top: 0.4rem;
+      padding: 0.3rem;
+      font-size: 0.7rem;
     }
 
     .verification-form {
@@ -549,13 +493,10 @@ $warning-color: #f59e0b;
   .kyc-verification-container {
     padding: 0.25rem;
 
-    .verification-header {
-      margin-bottom: 0.25rem;
-      height: 16px;
-
-      h3 {
-        font-size: 0.8rem;
-      }
+    .verification-requirement-message {
+      margin-top: 0.3rem;
+      padding: 0.25rem;
+      font-size: 0.65rem;
     }
 
     .verification-section {
