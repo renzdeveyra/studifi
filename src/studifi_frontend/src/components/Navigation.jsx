@@ -14,8 +14,8 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
           <ul className="nav-menu">
             <li><a href="#" onClick={() => navigateTo('home')}>Home</a></li>
             <li><a href="#" onClick={() => navigateTo('services')}>Services</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#" onClick={() => navigateTo('about')}>About</a></li>
+            <li><a href="#" onClick={() => navigateTo('contact')}>Contact</a></li>
           </ul>
           <div className="nav-right">
             {/* Updated Login button to navigate to 'login' page */}

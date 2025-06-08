@@ -1,0 +1,488 @@
+// About Us Section Styles
+.about-us-section {
+  background-color: #1e1e1e;
+  color: white;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+
+  // Background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(169, 169, 169, 0.03) 1px, transparent 1px), 
+      linear-gradient(to right, rgba(169, 169, 169, 0.03) 1px, transparent 1px);
+    background-size: 120px 120px;
+    background-position: -30px -30px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Radial gradient overlay
+  &::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.08) 0%, transparent 60%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Team Introduction Section
+.team-intro {
+  text-align: center;
+  margin-bottom: 5rem;
+
+  .team-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(127, 255, 0, 0.1);
+    border: 1px solid rgba(127, 255, 0, 0.3);
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(127, 255, 0, 0.15);
+      border-color: rgba(127, 255, 0, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .badge-icon {
+      font-size: 1.2rem;
+    }
+
+    .badge-text {
+      font-weight: 600;
+      color: #7fff00;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .team-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+
+    .highlight {
+      color: #7fff00;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #7fff00, #32cd32);
+        border-radius: 2px;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .team-description {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+  }
+
+  .team-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+
+    .stat-item {
+      text-align: center;
+
+      .stat-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #7fff00;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// Team Members Grid
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 6rem;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 25px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.1),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(127, 255, 0, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 25px 50px rgba(127, 255, 0, 0.15),
+      0 0 0 1px rgba(127, 255, 0, 0.2);
+
+    &::before {
+      left: 100%;
+    }
+
+    .member-image img {
+      transform: scale(1.05);
+    }
+
+    .image-overlay {
+      opacity: 1;
+    }
+
+    .card-glow {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  .card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(127, 255, 0, 0.05) 0%,
+      rgba(50, 205, 50, 0.02) 50%,
+      transparent 100%
+    );
+    border-radius: 25px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover .card-background {
+    opacity: 1;
+  }
+
+  .card-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.1), transparent 70%);
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    transition: all 0.6s ease;
+    pointer-events: none;
+  }
+}
+
+.member-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(127, 255, 0, 0.3);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(127, 255, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .overlay-icon {
+      font-size: 2rem;
+      color: white;
+    }
+  }
+}
+
+.member-info {
+  text-align: center;
+
+  .member-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .member-role {
+    font-size: 1rem;
+    color: #7fff00;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+  }
+
+  .member-bio {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(127, 255, 0, 0.1);
+      transform: translateX(5px);
+    }
+
+    .contact-icon {
+      font-size: 1rem;
+    }
+
+    .contact-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Team Mission Section
+.team-mission {
+  text-align: center;
+  margin-top: 4rem;
+
+  .mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    > p {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      opacity: 0.9;
+      margin-bottom: 3rem;
+    }
+  }
+
+  .mission-values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .value-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(127, 255, 0, 0.3);
+    }
+
+    .value-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      color: #7fff00;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .team-intro {
+    .team-title {
+      font-size: 2.5rem;
+    }
+
+    .team-description {
+      font-size: 1.1rem;
+    }
+
+    .team-stats {
+      gap: 2rem;
+      
+      .stat-item .stat-number {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .team-card {
+    padding: 2rem;
+  }
+
+  .mission-values {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .value-item {
+    padding: 1.5rem;
+  }
+
+  .team-mission .mission-content h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-us-section {
+    padding: 4rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .team-intro {
+    margin-bottom: 3rem;
+
+    .team-title {
+      font-size: 2rem;
+    }
+
+    .team-description {
+      font-size: 1rem;
+    }
+
+    .team-stats {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+
+  .team-card {
+    padding: 1.5rem;
+  }
+
+  .member-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .contact-info .contact-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.3rem;
+  }
+
+  .team-mission .mission-content {
+    > p {
+      font-size: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+}
