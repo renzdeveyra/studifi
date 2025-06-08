@@ -2,6 +2,8 @@ mod types;
 mod scoring;
 mod storage;
 mod analytics;
+mod community_validation;
+mod community_engine;
 
 use candid::{candid_method, Principal};
 use ic_cdk::{query, update, caller, init, pre_upgrade, post_upgrade};
@@ -10,6 +12,8 @@ use types::*;
 use scoring::*;
 use storage::*;
 use analytics::*;
+use community_validation::*;
+use community_engine::*;
 use shared::*;
 
 /// Initialize the canister
@@ -109,11 +113,17 @@ async fn process_application(application_id: String) -> StudiFiResult<LoanApplic
     // Perform risk assessment
     let risk_assessment = CreditScoringEngine::assess_risk(&application, &credit_score);
 
+    // Get effective credit score (hybrid if available)
+    let effective_score = CommunityValidationEngine::get_effective_credit_score(application.student_id)
+        .unwrap_or(credit_score.score);
+
     // Generate loan terms if approved
-    let (status, loan_terms) = if credit_score.score >= 500 {
+    let (status, loan_terms) = if effective_score >= 500 {
+        // Use effective score for loan terms calculation
+        let effective_credit_score = CreditScore::new(effective_score, credit_score.factors.clone(), credit_score.confidence);
         let terms = CreditScoringEngine::generate_loan_terms(
             application.requested_amount,
-            &credit_score,
+            &effective_credit_score,
             &application.purpose,
         );
         (ApplicationStatus::Approved, Some(terms))
@@ -213,6 +223,127 @@ fn update_scoring_config(config: ScoringConfig) -> StudiFiResult<()> {
 #[candid_method(query)]
 fn get_scoring_config() -> ScoringConfig {
     with_storage(|storage| storage.get_scoring_config())
+}
+
+// ============================================================================
+// COMMUNITY VALIDATION FUNCTIONS
+// ============================================================================
+
+/// Create a community validation request for credit score adjustment
+#[update]
+#[candid_method(update)]
+async fn create_validation_request(
+    student_id: Principal,
+    application_id: String,
+    algorithm_score: u32,
+    proposed_adjustment: i32,
+    justification: String,
+    evidence: Vec<ValidationEvidence>,
+) -> StudiFiResult<CommunityValidationRequest> {
+    let caller = caller();
+    CommunityValidationEngine::create_validation_request(
+        student_id,
+        application_id,
+        algorithm_score,
+        proposed_adjustment,
+        justification,
+        evidence,
+        caller,
+    )
+}
+
+/// Cast a community vote on a validation request
+#[update]
+#[candid_method(update)]
+async fn cast_community_vote(
+    validation_id: String,
+    adjustment_vote: i32,
+    confidence: f64,
+    voting_power: u64,
+    justification: String,
+) -> StudiFiResult<CommunityVote> {
+    let caller = caller();
+    CommunityValidationEngine::cast_community_vote(
+        validation_id,
+        caller,
+        adjustment_vote,
+        confidence,
+        voting_power,
+        justification,
+    )
+}
+
+/// Process completed validation and calculate final adjustment
+#[update]
+#[candid_method(update)]
+async fn process_validation(validation_id: String) -> StudiFiResult<i32> {
+    CommunityValidationEngine::process_validation(validation_id)
+}
+
+/// Apply community validation to create hybrid credit score
+#[update]
+#[candid_method(update)]
+async fn apply_community_validation(
+    student_id: Principal,
+    validation_id: String,
+) -> StudiFiResult<HybridCreditScore> {
+    CommunityValidationEngine::apply_community_validation(student_id, validation_id)
+}
+
+/// Get effective credit score (hybrid if available, otherwise algorithm)
+#[query]
+#[candid_method(query)]
+fn get_effective_credit_score(student_id: Principal) -> Option<u32> {
+    CommunityValidationEngine::get_effective_credit_score(student_id)
+}
+
+/// Get validation requests for a student
+#[query]
+#[candid_method(query)]
+fn get_student_validations(student_id: Principal) -> Vec<CommunityValidationRequest> {
+    CommunityValidationEngine::get_student_validations(student_id)
+}
+
+/// Get active validation requests
+#[query]
+#[candid_method(query)]
+fn get_active_validations() -> Vec<CommunityValidationRequest> {
+    CommunityValidationEngine::get_active_validations()
+}
+
+/// Get community validation statistics
+#[query]
+#[candid_method(query)]
+fn get_validation_stats() -> CommunityValidationStats {
+    CommunityValidationEngine::get_validation_stats()
+}
+
+/// Get validator reputation
+#[query]
+#[candid_method(query)]
+fn get_validator_reputation(validator: Principal) -> Option<ValidatorReputation> {
+    CommunityValidationEngine::get_validator_reputation(validator)
+}
+
+/// Get hybrid credit score for a student
+#[query]
+#[candid_method(query)]
+fn get_hybrid_credit_score(student_id: Principal) -> Option<HybridCreditScore> {
+    with_storage(|storage| storage.get_hybrid_score(&student_id))
+}
+
+/// Check if user is eligible for community validation
+#[query]
+#[candid_method(query)]
+fn check_validation_eligibility(user: Principal) -> bool {
+    CommunityValidationEngine::check_validation_eligibility(user)
+}
+
+/// Process expired validations (automation function)
+#[update]
+#[candid_method(update)]
+async fn process_expired_validations() -> StudiFiResult<u32> {
+    CommunityValidationEngine::process_expired_validations()
 }
 
 /// Get platform statistics
