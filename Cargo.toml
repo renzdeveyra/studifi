@@ -5,6 +5,7 @@ members = [
     "src/studifi_backend/governance_engine",
     "src/studifi_backend/identity_manager",
     "src/studifi_backend/intelligent_credit",
+    "src/studifi_backend/university_issuer",
     "src/studifi_backend/shared"
 ]
 resolver = "2"

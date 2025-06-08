@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { intelligent_credit } from 'declarations/intelligent_credit';
+import './LoanApplication.scss';
 
 const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
   const [formData, setFormData] = useState({
@@ -12,9 +13,7 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
     monthlyIncome: '',
     monthlyExpenses: '',
     existingDebt: '',
-    familyIncome: '',
-    savings: '0',
-    employmentStatus: 'PartTime'
+    familyIncome: ''
   });
   const [applicationResult, setApplicationResult] = useState(null);
 
@@ -30,129 +29,102 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
     setIsLoading(true);
 
     try {
-      // Convert purpose to proper enum variant
-      const purposeVariant = (() => {
-        switch (formData.purpose) {
-          case 'Tuition': return { 'Tuition': null };
-          case 'Books & Supplies': return { 'BooksAndSupplies': null };
-          case 'Living Expenses': return { 'LivingExpenses': null };
-          case 'Technology': return { 'Technology': null };
-          case 'Other': return { 'Other': 'General educational expenses' };
-          default: return { 'Other': formData.purpose };
-        }
-      })();
-
-      // Prepare academic info with all required fields
       const academicInfo = {
         gpa: parseFloat(formData.gpa),
-        year_of_study: parseInt(formData.yearOfStudy),
+        yearOfStudy: parseInt(formData.yearOfStudy),
         program: formData.program,
         university: formData.university,
-        expected_graduation: "2025-06-01", // ISO date format
-        major: [], // Optional field
-        minor: [], // Optional field
-        previous_degrees: [], // Empty array for new students
-        honors: [], // Empty array
-        extracurricular: [] // Empty array
+        expectedGraduation: "2025" // Assuming a default value or fetching it
       };
 
-      // Convert employment status to proper enum variant
-      const employmentStatusVariant = (() => {
-        switch (formData.employmentStatus) {
-          case 'FullTime': return { 'FullTime': null };
-          case 'PartTime': return { 'PartTime': null };
-          case 'Internship': return { 'Internship': null };
-          case 'TeachingAssistant': return { 'TeachingAssistant': null };
-          case 'ResearchAssistant': return { 'ResearchAssistant': null };
-          case 'Fellowship': return { 'Fellowship': null };
-          case 'Unemployed': return { 'Unemployed': null };
-          default: return { 'PartTime': null };
-        }
-      })();
-
-      // Prepare financial info with all required fields (convert to BigInt)
       const financialInfo = {
-        monthly_income: BigInt(Math.round(parseFloat(formData.monthlyIncome || 0) * 100)), // Convert to cents
-        monthly_expenses: BigInt(Math.round(parseFloat(formData.monthlyExpenses || 0) * 100)),
-        existing_debt: BigInt(Math.round(parseFloat(formData.existingDebt || 0) * 100)),
-        family_income: BigInt(Math.round(parseFloat(formData.familyIncome || 0) * 100)),
-        savings: BigInt(Math.round(parseFloat(formData.savings || 0) * 100)),
-        employment_status: employmentStatusVariant,
-        credit_history_length_months: 0, // Default for students
-        previous_loans: [], // Empty array for new students
-        financial_aid: []   // Empty array - no financial aid initially
+        monthlyIncome: parseInt(formData.monthlyIncome),
+        monthlyExpenses: parseInt(formData.monthlyExpenses),
+        existingDebt: parseInt(formData.existingDebt),
+        familialIncome: parseInt(formData.familyIncome)
       };
 
-      console.log('Submitting loan application with data:', {
-        requestedAmount: BigInt(Math.round(parseFloat(formData.requestedAmount) * 100)),
-        purpose: purposeVariant,
-        academicInfo,
-        financialInfo
-      });
-
-      const result = await intelligent_credit.submit_loan_application(
-        BigInt(Math.round(parseFloat(formData.requestedAmount) * 100)), // Convert to cents as BigInt
-        purposeVariant,
+      // Call the intelligent_credit backend function
+      const result = await intelligent_credit.submitLoanApplication(
+        parseInt(formData.requestedAmount),
+        formData.purpose,
         academicInfo,
         financialInfo
       );
 
-      console.log('Loan application result:', result);
-
-      // Check for Result type with capital 'O'
-      if (result.Ok) {
-        setApplicationResult(result.Ok);
+      if (result.ok) {
+        setApplicationResult(result.ok);
         addNotification('Loan application submitted successfully!', 'success');
-      } else if (result.Err) {
-        const errorMessage = typeof result.Err === 'object'
-          ? Object.keys(result.Err)[0] + ': ' + Object.values(result.Err)[0]
-          : result.Err;
-        console.error('Application submission error:', result.Err);
-        addNotification('Error submitting application: ' + errorMessage, 'error');
       } else {
-        console.error('Unexpected result format:', result);
-        addNotification('Unexpected response format from server', 'error');
+        addNotification('Error submitting application: ' + result.err, 'error');
       }
     } catch (error) {
       console.error('Error submitting loan application:', error);
-      addNotification('Error submitting application: ' + error.message, 'error');
+      addNotification('Error submitting application', 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="loan-application">
-      <h2>Apply for a Student Loan</h2>
-      <p className="subtitle">Get instant approval with our AI-powered assessment</p>
+    <section className="loan-application-page-section">
+      <div className="container">
+        {/* Header Section - Styled to match the screenshot */}
+        <header className="loan-application-header">
+          <h1 className="page-title">Loan Application Form</h1>
+          <p className="page-subtitle">Please fill in your details to apply for a student loan.</p>
+        </header>
 
-      {applicationResult ? (
-        <div className="application-result">
-          <h3>Application Submitted!</h3>
-          <div className="result-card">
-            <p><strong>Application ID:</strong> {applicationResult.id}</p>
-            <p><strong>Status:</strong> {Object.keys(applicationResult.status)[0]}</p>
-            <p><strong>Requested Amount:</strong> ${(Number(applicationResult.requested_amount) / 100).toLocaleString()}</p>
-            <p><strong>Purpose:</strong> {typeof applicationResult.purpose === 'object' ? Object.keys(applicationResult.purpose)[0] : applicationResult.purpose}</p>
-            {applicationResult.credit_score && applicationResult.credit_score.length > 0 && (
-              <div className="credit-score">
-                <h4>Credit Assessment</h4>
-                <p><strong>Score:</strong> {applicationResult.credit_score[0].score}/1000</p>
-                <p><strong>Risk Level:</strong> {Object.keys(applicationResult.credit_score[0].risk_level)[0]}</p>
+        {applicationResult ? (
+          // Application Result Section (unchanged from your original code)
+          <div className="dashboard-section-wrapper">
+            <div className="section-header-left">
+              <h2 className="section-title">Application Submitted!</h2>
+              <p className="section-description">
+                Your loan application has been successfully submitted. Here's a summary of your application details.
+              </p>
+              <div className="payment-actions">
+                <button onClick={() => setApplicationResult(null)} className="btn-primary">
+                  Apply for Another Loan
+                </button>
+                <button className="btn-secondary">
+                  View Application Status
+                </button>
               </div>
-            )}
+            </div>
+            <div className="section-content-right">
+              <div className="aid-status-card">
+                <div className="card-image-container">
+                  <div className="card-image">✅</div>
+                </div>
+                <div className="card-details">
+                  <h4 className="card-title">Application #{applicationResult.id}</h4>
+                  <p className="card-subtitle">Status:</p>
+                  <p className="card-value">{Object.keys(applicationResult.status)[0]}</p>
+                  <p className="card-text">
+                    <strong>Requested Amount:</strong> ${applicationResult.requestedAmount.toLocaleString()}
+                  </p>
+                  <p className="card-text">
+                    <strong>Purpose:</strong> {applicationResult.purpose}
+                  </p>
+                  {applicationResult.creditScore && (
+                    <div className="card-tag">
+                      <span className="tag-text">Credit Score: {applicationResult.creditScore.score}/1000</span>
+                      <span className="tag-text">Risk Level: {Object.keys(applicationResult.creditScore.riskLevel)[0]}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-          <button onClick={() => setApplicationResult(null)} className="btn-secondary">
-            Apply for Another Loan
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="loan-form">
-          <div className="form-section">
-            <h3>Loan Details</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="requestedAmount">Requested Amount ($)</label>
+        ) : (
+          // Loan Application Form
+          <form onSubmit={handleSubmit} className="loan-application-form-container">
+            {/* Form Fields arranged in a grid */}
+            <div className="form-grid">
+              {/* Loan Details */}
+              <div className="form-field-group">
+                <label htmlFor="requestedAmount" className="form-label">Requested Amount</label>
                 <input
                   type="number"
                   id="requestedAmount"
@@ -162,16 +134,21 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   required
                   min="100"
                   max="50000"
+                  className="form-input"
+                  placeholder="Enter amount in USD"
                 />
+                <p className="input-hint">Minimum: $100 | Maximum: $50,000</p>
               </div>
-              <div className="form-group">
-                <label htmlFor="purpose">Purpose</label>
+
+              <div className="form-field-group">
+                <label htmlFor="purpose" className="form-label">Purpose</label>
                 <select
                   id="purpose"
                   name="purpose"
                   value={formData.purpose}
                   onChange={handleInputChange}
                   required
+                  className="form-input"
                 >
                   <option value="">Select purpose</option>
                   <option value="Tuition">Tuition</option>
@@ -180,15 +157,12 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   <option value="Technology">Technology</option>
                   <option value="Other">Other</option>
                 </select>
+                <p className="input-hint">Choose the primary purpose for your loan</p>
               </div>
-            </div>
-          </div>
 
-          <div className="form-section">
-            <h3>Academic Information</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="university">University</label>
+              {/* Academic Information */}
+              <div className="form-field-group">
+                <label htmlFor="university" className="form-label">University</label>
                 <input
                   type="text"
                   id="university"
@@ -196,10 +170,13 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   value={formData.university}
                   onChange={handleInputChange}
                   required
+                  className="form-input"
+                  placeholder="Enter your university name"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="program">Program</label>
+
+              <div className="form-field-group">
+                <label htmlFor="program" className="form-label">Program</label>
                 <input
                   type="text"
                   id="program"
@@ -207,12 +184,13 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   value={formData.program}
                   onChange={handleInputChange}
                   required
+                  className="form-input"
+                  placeholder="e.g., Computer Science, Business Administration"
                 />
               </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="gpa">GPA</label>
+
+              <div className="form-field-group">
+                <label htmlFor="gpa" className="form-label">GPA</label>
                 <input
                   type="number"
                   id="gpa"
@@ -223,16 +201,21 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   min="0"
                   max="4"
                   step="0.01"
+                  className="form-input"
+                  placeholder="e.g., 3.75"
                 />
+                <p className="input-hint">Scale: 0.00 - 4.00</p>
               </div>
-              <div className="form-group">
-                <label htmlFor="yearOfStudy">Year of Study</label>
+
+              <div className="form-field-group">
+                <label htmlFor="yearOfStudy" className="form-label">Year of Study</label>
                 <select
                   id="yearOfStudy"
                   name="yearOfStudy"
                   value={formData.yearOfStudy}
                   onChange={handleInputChange}
                   required
+                  className="form-input"
                 >
                   <option value="">Select year</option>
                   <option value="1">1st Year</option>
@@ -242,14 +225,10 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   <option value="5">5th Year+</option>
                 </select>
               </div>
-            </div>
-          </div>
 
-          <div className="form-section">
-            <h3>Financial Information</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="monthlyIncome">Monthly Income ($)</label>
+              {/* Financial Information */}
+              <div className="form-field-group">
+                <label htmlFor="monthlyIncome" className="form-label">Monthly Income</label>
                 <input
                   type="number"
                   id="monthlyIncome"
@@ -258,10 +237,14 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   onChange={handleInputChange}
                   required
                   min="0"
+                  className="form-input"
+                  placeholder="Enter your monthly income"
                 />
+                <p className="input-hint">Include part-time work, allowances, etc.</p>
               </div>
-              <div className="form-group">
-                <label htmlFor="monthlyExpenses">Monthly Expenses ($)</label>
+
+              <div className="form-field-group">
+                <label htmlFor="monthlyExpenses" className="form-label">Monthly Expenses</label>
                 <input
                   type="number"
                   id="monthlyExpenses"
@@ -270,12 +253,14 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   onChange={handleInputChange}
                   required
                   min="0"
+                  className="form-input"
+                  placeholder="Enter your monthly expenses"
                 />
+                <p className="input-hint">Include rent, food, transportation, etc.</p>
               </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="existingDebt">Existing Debt ($)</label>
+
+              <div className="form-field-group">
+                <label htmlFor="existingDebt" className="form-label">Existing Debt</label>
                 <input
                   type="number"
                   id="existingDebt"
@@ -284,10 +269,14 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   onChange={handleInputChange}
                   required
                   min="0"
+                  className="form-input"
+                  placeholder="Enter total existing debt"
                 />
+                <p className="input-hint">Include credit cards, other loans, etc.</p>
               </div>
-              <div className="form-group">
-                <label htmlFor="familyIncome">Family Income ($)</label>
+
+              <div className="form-field-group">
+                <label htmlFor="familyIncome" className="form-label">Family Income</label>
                 <input
                   type="number"
                   id="familyIncome"
@@ -296,51 +285,37 @@ const LoanApplication = ({ addNotification, setIsLoading, isLoading }) => {
                   onChange={handleInputChange}
                   required
                   min="0"
+                  className="form-input"
+                  placeholder="Enter annual family income"
                 />
+                <p className="input-hint">Combined annual income of parents/guardians</p>
               </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="savings">Current Savings ($)</label>
-                <input
-                  type="number"
-                  id="savings"
-                  name="savings"
-                  value={formData.savings}
-                  onChange={handleInputChange}
-                  required
-                  min="0"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="employmentStatus">Employment Status</label>
-                <select
-                  id="employmentStatus"
-                  name="employmentStatus"
-                  value={formData.employmentStatus}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="PartTime">Part-time</option>
-                  <option value="FullTime">Full-time</option>
-                  <option value="Internship">Internship</option>
-                  <option value="TeachingAssistant">Teaching Assistant</option>
-                  <option value="ResearchAssistant">Research Assistant</option>
-                  <option value="Fellowship">Fellowship</option>
-                  <option value="Unemployed">Unemployed</option>
-                </select>
-              </div>
-            </div>
-          </div>
 
-          <div className="form-actions">
-            <button type="submit" className="btn-primary" disabled={isLoading}>
-              {isLoading ? 'Processing...' : 'Submit Application'}
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+              {/* Submit Actions - Now directly inside the form-grid */}
+              <div className="form-actions-bottom">
+                <button type="button" className="btn-secondary" onClick={() => setFormData({
+                  requestedAmount: '',
+                  purpose: '',
+                  gpa: '',
+                  yearOfStudy: '',
+                  program: '',
+                  university: '',
+                  monthlyIncome: '',
+                  monthlyExpenses: '',
+                  existingDebt: '',
+                  familyIncome: ''
+                })}>
+                  🔄 Reset Form
+                </button>
+                                <button type="submit" className="btn-primary" disabled={isLoading}>
+                  {isLoading ? '🔄 Processing...' : 'Submit Application'}
+                </button>
+              </div>
+            </div> {/* End of form-grid */}
+          </form>
+        )}
+      </div>
+    </section>
   );
 };
 

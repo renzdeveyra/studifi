@@ -1,44 +1,46 @@
-import { fileURLToPath, URL } from 'url';
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import environment from 'vite-plugin-environment';
-import dotenv from 'dotenv';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import EnvironmentPlugin from 'vite-plugin-environment';
 
-dotenv.config({ path: '../../.env' });
-
+// https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    emptyOutDir: true,
+  plugins: [
+    react(),
+    EnvironmentPlugin({
+      'DFX_NETWORK': 'local',
+      'CANISTER_ID_IDENTITY_MANAGER': 'vu5yx-eh777-77774-qaaga-cai',
+      'CANISTER_ID_INTELLIGENT_CREDIT': 'vt46d-j7777-77774-qaagq-cai',
+      'CANISTER_ID_AUTONOMOUS_FINANCE': 'vpyes-67777-77774-qaaeq-cai',
+      'CANISTER_ID_GOVERNANCE_ENGINE': 'vb2j2-fp777-77774-qaafq-cai',
+      'CANISTER_ID_COMPLIANCE_GATEWAY': 'vg3po-ix777-77774-qaafa-cai',
+      'CANISTER_ID_UNIVERSITY_ISSUER': 'v56tl-sp777-77774-qaahq-cai',
+      'CANISTER_ID_INTERNET_IDENTITY': 'rdmx6-jaaaa-aaaaa-aaadq-cai'
+    })
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      'declarations': path.resolve(__dirname, '../declarations'),
+    },
   },
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        global: "globalThis",
+  build: {
+    // generate manifest.json in outDir
+    manifest: true,
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
       },
     },
   },
   server: {
     proxy: {
-      "/api": {
-        target: "http://127.0.0.1:4943",
+      '/api': {
+        target: 'http://127.0.0.1:4943',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
-  },
-  plugins: [
-    react(),
-    environment("all", { prefix: "CANISTER_" }),
-    environment("all", { prefix: "DFX_" }),
-  ],
-  resolve: {
-    alias: [
-      {
-        find: "declarations",
-        replacement: fileURLToPath(
-          new URL("../declarations", import.meta.url)
-        ),
-      },
-    ],
-    dedupe: ['@dfinity/agent'],
   },
 });

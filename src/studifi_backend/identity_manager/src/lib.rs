@@ -1,14 +1,16 @@
 mod types;
 mod storage;
 mod verification;
+mod verifiable_credentials;
 
 use candid::{candid_method, Principal};
 use ic_cdk::{query, update, caller, init, pre_upgrade, post_upgrade};
-use ic_cdk::api::management_canister::http_request::{TransformArgs, HttpResponse};
+
 
 use types::*;
 use storage::*;
 use verification::*;
+use verifiable_credentials::*;
 use shared::*;
 
 /// Initialize the canister
@@ -326,6 +328,141 @@ fn get_platform_stats() -> Statistics {
             average_amount: 0, // Not applicable for identity manager
         }
     })
+}
+
+// ============================================================================
+// VERIFIABLE CREDENTIALS (RELYING PARTY)
+// ============================================================================
+
+/// Create a verifiable credential verification session
+#[update]
+#[candid_method(update)]
+fn create_vc_verification_session(
+    university_origin: String,
+    university_canister_id: Option<Principal>,
+    student_id: String,
+    program: String,
+) -> StudiFiResult<VcVerificationSession> {
+    let caller = caller();
+
+    // Validate inputs
+    if university_origin.is_empty() || student_id.is_empty() || program.is_empty() {
+        return Err(StudiFiError::InvalidInput("All fields are required".to_string()));
+    }
+
+    let session = VerifiableCredentialService::create_student_verification_session(
+        caller,
+        university_origin,
+        university_canister_id,
+        student_id,
+        program,
+    )?;
+
+    // Store the session
+    with_storage_mut(|storage| {
+        storage.insert_vc_session(session.id.clone(), session.clone());
+    });
+
+    ic_cdk::println!("Created VC verification session: {} for user: {:?}", session.id, caller);
+    Ok(session)
+}
+
+/// Process verifiable credential response
+#[update]
+#[candid_method(update)]
+fn process_vc_response(
+    session_id: String,
+    verifiable_presentation: String,
+) -> StudiFiResult<VcVerificationResponse> {
+    let caller = caller();
+
+    let mut session = with_storage_mut(|storage| {
+        storage.get_vc_session(&session_id)
+    }).ok_or_else(|| StudiFiError::NotFound("Verification session not found".to_string()))?;
+
+    // Verify the caller owns this session
+    if session.user_principal != caller {
+        return Err(StudiFiError::Unauthorized("Session does not belong to caller".to_string()));
+    }
+
+    // Check if session is expired
+    if session.is_expired() {
+        session.update_status(VcVerificationStatus::Expired);
+        with_storage_mut(|storage| {
+            storage.update_vc_session(session_id.clone(), session);
+        });
+        return Err(StudiFiError::Expired("Verification session has expired".to_string()));
+    }
+
+    // Process the credential response
+    match VerifiableCredentialService::process_credential_response(&mut session, verifiable_presentation) {
+        Ok(_) => {
+            // Update student profile with verified status
+            if let Some(response) = &session.response {
+                with_storage_mut(|storage| {
+                    if let Some(mut profile) = storage.get_student_profile(&caller) {
+                        profile.is_verified = response.verified;
+                        profile.kyc_status = if response.verified {
+                            KycStatus::Verified
+                        } else {
+                            KycStatus::Rejected
+                        };
+                        profile.set_updated_at(current_time());
+                        storage.update_student_profile(caller, profile);
+                    }
+                });
+            }
+
+            // Store updated session
+            with_storage_mut(|storage| {
+                storage.update_vc_session(session_id, session.clone());
+            });
+
+            Ok(session.response.unwrap())
+        },
+        Err(e) => {
+            session.fail_with_error(format!("Failed to process credential: {:?}", e));
+            with_storage_mut(|storage| {
+                storage.update_vc_session(session_id, session);
+            });
+            Err(e)
+        }
+    }
+}
+
+/// Get verification session status
+#[query]
+#[candid_method(query)]
+fn get_vc_session_status(session_id: String) -> Option<VcVerificationStatus> {
+    let caller = caller();
+
+    with_storage(|storage| {
+        storage.get_vc_session(&session_id)
+            .filter(|session| session.user_principal == caller)
+            .map(|session| session.status)
+    })
+}
+
+/// Get all verification sessions for the caller
+#[query]
+#[candid_method(query)]
+fn get_my_vc_sessions() -> Vec<VcVerificationSession> {
+    let caller = caller();
+
+    with_storage(|storage| {
+        storage.get_all_vc_sessions()
+            .into_iter()
+            .filter(|(_, session)| session.user_principal == caller)
+            .map(|(_, session)| session)
+            .collect()
+    })
+}
+
+/// Verify a verifiable presentation JWT (utility function)
+#[query]
+#[candid_method(query)]
+fn verify_presentation(jwt: String) -> StudiFiResult<bool> {
+    VerifiableCredentialService::verify_presentation(&jwt)
 }
 
 // Export Candid interface
