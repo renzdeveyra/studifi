@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircle, AlertCircle, Clock, X, Shield, Key } from 'lucide-react';
 import { useKycVerification, StartVerificationParams } from '../hooks/useKycVerification';
 import { vcService, formatVerificationStatus} from '../services/verifiableCredentials';
-import './KYCVerification.scss';
+import './KycVerification.scss';
 
 interface KycVerificationProps {
   identityManagerActor?: any;

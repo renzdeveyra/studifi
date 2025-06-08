@@ -7,6 +7,7 @@ use std::borrow::Cow;
 use std::cell::RefCell;
 
 use crate::types::*;
+use crate::treasury::{TreasuryType, SeparateTreasuryConfig};
 use shared::*;
 
 // Memory management for stable storage
@@ -16,7 +17,8 @@ type Memory = RestrictedMemory<DefaultMemoryImpl>;
 const LOANS_MEMORY_ID: u64 = 0;
 const PAYMENTS_MEMORY_ID: u64 = 1;
 const TREASURY_CONFIG_MEMORY_ID: u64 = 2;
-const COUNTERS_MEMORY_ID: u64 = 3;
+const SEPARATE_TREASURY_MEMORY_ID: u64 = 3;
+const COUNTERS_MEMORY_ID: u64 = 4;
 
 // Implement Storable for Loan
 impl Storable for Loan {
@@ -46,6 +48,19 @@ impl Storable for Payment {
 
 // Implement Storable for TreasuryConfig
 impl Storable for TreasuryConfig {
+    const BOUND: Bound = Bound::Unbounded;
+
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(serde_json::to_vec(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        serde_json::from_slice(&bytes).unwrap()
+    }
+}
+
+// Implement Storable for SeparateTreasuryConfig
+impl Storable for SeparateTreasuryConfig {
     const BOUND: Bound = Bound::Unbounded;
 
     fn to_bytes(&self) -> Cow<[u8]> {
@@ -93,6 +108,7 @@ pub struct FinanceStorage {
     pub loans: StableBTreeMap<String, Loan, Memory>,
     pub payments: StableBTreeMap<String, Payment, Memory>,
     pub treasury_config: StableBTreeMap<String, TreasuryConfig, Memory>,
+    pub separate_treasuries: StableBTreeMap<String, SeparateTreasuryConfig, Memory>,
     pub counters: StableBTreeMap<String, Counters, Memory>,
 }
 
@@ -107,6 +123,9 @@ impl FinanceStorage {
             ),
             treasury_config: StableBTreeMap::init(
                 RestrictedMemory::new(DefaultMemoryImpl::default(), TREASURY_CONFIG_MEMORY_ID..TREASURY_CONFIG_MEMORY_ID + 1)
+            ),
+            separate_treasuries: StableBTreeMap::init(
+                RestrictedMemory::new(DefaultMemoryImpl::default(), SEPARATE_TREASURY_MEMORY_ID..SEPARATE_TREASURY_MEMORY_ID + 1)
             ),
             counters: StableBTreeMap::init(
                 RestrictedMemory::new(DefaultMemoryImpl::default(), COUNTERS_MEMORY_ID..COUNTERS_MEMORY_ID + 1)
@@ -230,6 +249,21 @@ impl FinanceStorage {
 
     pub fn set_treasury_config(&mut self, config: TreasuryConfig) {
         self.treasury_config.insert("default".to_string(), config);
+    }
+
+    // Separate treasury operations
+    pub fn get_separate_treasury_config(&self, treasury_type: &TreasuryType) -> Option<SeparateTreasuryConfig> {
+        let key = format!("{:?}", treasury_type);
+        self.separate_treasuries.get(&key)
+    }
+
+    pub fn set_separate_treasury_config(&mut self, config: SeparateTreasuryConfig) {
+        let key = format!("{:?}", config.treasury_type);
+        self.separate_treasuries.insert(key, config);
+    }
+
+    pub fn get_all_separate_treasuries(&self) -> Vec<SeparateTreasuryConfig> {
+        self.separate_treasuries.iter().map(|(_, config)| config).collect()
     }
 
     // Counter operations
