@@ -1,79 +1,79 @@
-// Login Page Styles
+// Login Page Styles - Consistent with StudiFi Design
 .login-page {
-  min-height: 90vh;
+  min-height: 100vh;
   background-color: #1e1e1e;
   background-image:
-    linear-gradient(rgba(169, 169, 169, 0.05) 1px, transparent 1px), 
+    linear-gradient(rgba(169, 169, 169, 0.05) 1px, transparent 1px),
     linear-gradient(to right, rgba(169, 169, 169, 0.05) 1px, #1e1e1e 1px);
   background-size: 160px 160px, 160px 160px;
   background-position: -39px -39px, -39px -39px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem; // Slightly reduced padding
+  padding: 2rem;
   position: relative;
   overflow: hidden;
   margin-top: 70px; // Account for navbar
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100vw;
-        height: 100vh;
-        background: radial-gradient(circle, rgba(127, 255, 0, 0.12) 0%, transparent 50%);
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    &::after {
+  &::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, rgba(127, 255, 0, 0.12) 0%, transparent 50%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
     left: 0;
     right: 0;
     height: 200px;
-    background: 
-        linear-gradient(
-        to bottom, 
-        rgba(30, 30, 30, 1) 0%,
-        rgba(30, 30, 30, 0.7) 30%,
-        rgba(30, 30, 30, 0) 70%,
-        rgba(30, 30, 30, 0) 100%
-        ),
-        linear-gradient(
-        to top, 
-        rgba(30, 30, 30, 0) 100%,
-        rgba(30, 30, 30, 0) 70%,
-        rgba(30, 30, 30, 0.7) 30%,
-        rgba(30, 30, 30, 1) 0%
-        );
+    background: linear-gradient(
+      to bottom,
+      rgba(30, 30, 30, 0) 0%,
+      rgba(30, 30, 30, 0.3) 30%,
+      rgba(30, 30, 30, 0.7) 70%,
+      rgba(30, 30, 30, 1) 100%
+    );
     pointer-events: none;
     z-index: 1;
-    }
-
+  }
 }
 
 .login-container {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 380px; // Slightly narrower max-width
+  max-width: 450px;
 }
 
 .login-content {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   border-radius: 20px;
-  padding: 1.8rem; // Reduced padding
-  border: 1px solid rgba(127, 255, 0, 0.2);
-  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border: 1px solid rgba(127, 255, 0, 0.15);
+  backdrop-filter: blur(15px);
   box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.3), // Slightly smaller shadow
+    0 20px 40px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(127, 255, 0, 0.1);
   position: relative;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 25px 50px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(127, 255, 0, 0.2);
+    border-color: rgba(127, 255, 0, 0.3);
+  }
 
   &::before {
     content: '';
@@ -87,83 +87,119 @@
   }
 }
 
-// Header Section
+// Header Section - Enhanced StudiFi Branding
 .login-header {
   text-align: center;
-  margin-bottom: 1.2rem; // Reduced margin
+  margin-bottom: 2rem;
 
   .logo-section {
-    margin-bottom: 1.2rem; // Reduced margin
+    margin-bottom: 1.5rem;
 
     .logo {
-      font-size: 1.8rem; // Slightly smaller font
+      font-size: 2.2rem;
       font-weight: bold;
       color: white;
-      margin-bottom: 0.2rem; // Reduced margin
-      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
 
       .green {
         color: #7fff00;
-        filter: drop-shadow(0 0 8px rgba(127, 255, 0, 0.5)); // Slightly smaller shadow
+        filter: drop-shadow(0 0 10px rgba(127, 255, 0, 0.6));
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #7fff00, transparent);
+          border-radius: 1px;
+        }
       }
     }
 
     .logo-tagline {
-      font-size: 0.75rem; // Slightly smaller font
+      font-size: 0.85rem;
       color: rgba(127, 255, 0, 0.8);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       font-weight: 600;
     }
   }
 
   h1 {
-    font-size: 1.5rem; // Slightly smaller font
+    font-size: 1.8rem;
     font-weight: bold;
     color: white;
-    margin-bottom: 0.7rem; // Reduced margin
+    margin-bottom: 1rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   p {
-    font-size: 0.85rem; // Slightly smaller font
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.8);
-    line-height: 1.4;
+    line-height: 1.6;
+    max-width: 350px;
+    margin: 0 auto;
   }
 }
 
-// OAuth Providers
+// OAuth Providers - Enhanced StudiFi Style
 .oauth-providers {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem; // Reduced gap
-  margin-bottom: 1.2rem; // Reduced margin
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .oauth-btn {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   border: 1px solid var(--provider-border);
-  border-radius: 12px;
-  padding: 0.9rem; // Reduced padding
+  border-radius: 15px;
+  padding: 1.2rem;
   color: white;
-  font-size: 0.88rem; // Slightly smaller font
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.1),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
 
   &:hover:not(:disabled) {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-5px) scale(1.02);
     border-color: var(--provider-color);
-    background: linear-gradient(135deg, var(--provider-bg), rgba(255, 255, 255, 0.05));
+    background: linear-gradient(135deg, var(--provider-bg), rgba(255, 255, 255, 0.08));
     box-shadow:
-      0 12px 30px rgba(0, 0, 0, 0.2), // Adjusted shadow
-      0 0 15px var(--provider-border); // Adjusted shadow
+      0 15px 35px rgba(0, 0, 0, 0.3),
+      0 0 20px var(--provider-border);
+
+    &::before {
+      left: 100%;
+    }
 
     .oauth-arrow {
-      transform: translateX(5px);
+      transform: translateX(8px);
     }
 
     .oauth-shimmer {
@@ -172,13 +208,14 @@
   }
 
   &:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
   }
 
   &.loading {
-    background: linear-gradient(135deg, var(--provider-bg), rgba(255, 255, 255, 0.08));
+    background: linear-gradient(135deg, var(--provider-bg), rgba(255, 255, 255, 0.1));
     border-color: var(--provider-color);
+    box-shadow: 0 0 20px var(--provider-color);
   }
 }
 
@@ -191,24 +228,27 @@
 }
 
 .oauth-icon {
-  font-size: 1.4rem; // Slightly smaller icon
-  width: 22px; // Slightly smaller icon size
-  height: 22px; // Slightly smaller icon size
+  font-size: 1.6rem;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .oauth-text {
   flex: 1;
   text-align: center;
-  margin: 0 0.8rem; // Reduced margin
+  margin: 0 1rem;
+  letter-spacing: 0.3px;
 }
 
 .oauth-arrow {
-  font-size: 1.1rem; // Slightly smaller arrow
+  font-size: 1.2rem;
   transition: transform 0.3s ease;
   color: var(--provider-color);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .oauth-shimmer {
@@ -264,60 +304,109 @@
   }
 }
 
-// Alternative Actions
+// Alternative Actions - Enhanced StudiFi Style
 .alternative-actions {
   display: flex;
-  gap: 0.6rem; // Reduced gap
-  margin-bottom: 1.2rem; // Reduced margin
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .alt-btn {
   flex: 1;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 0.7rem; // Reduced padding
+  border-radius: 12px;
+  padding: 1rem;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.08),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
 
   &:hover {
     background: rgba(127, 255, 0, 0.1);
     border-color: rgba(127, 255, 0, 0.3);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(127, 255, 0, 0.1);
+
+    &::before {
+      left: 100%;
+    }
   }
 
   .alt-icon {
-    font-size: 0.85rem; // Slightly smaller icon
+    font-size: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
 }
 
-// Security Notice
+// Security Notice - Enhanced StudiFi Style
 .security-notice {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem; // Reduced gap
-  padding: 0.7rem; // Reduced padding
+  gap: 0.75rem;
+  padding: 1rem;
   background: rgba(127, 255, 0, 0.05);
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid rgba(127, 255, 0, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(127, 255, 0, 0.05),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
 
   .security-icon {
-    font-size: 0.9rem; // Slightly smaller icon
+    font-size: 1.1rem;
     flex-shrink: 0;
     margin-top: 0.1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
 
   p {
-    font-size: 0.75rem; // Slightly smaller font
+    font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.8);
-    line-height: 1.3;
+    line-height: 1.5;
     margin: 0;
   }
 }

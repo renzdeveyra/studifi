@@ -112,6 +112,8 @@ export const useKycVerification = (identityManagerActor?: any) => {
     params: StartVerificationParams
   ) => {
     try {
+      setState(prev => ({ ...prev, isLoading: true }));
+      
       // Use the VC service to request credentials
       const credentialResponse = await vcService.requestStudentCredential(
         params.universityName,
@@ -122,13 +124,42 @@ export const useKycVerification = (identityManagerActor?: any) => {
       );
 
       // Process the response through the backend
-      await processCredentialResponse(sessionId, credentialResponse.verifiable_presentation);
+      if (!identityManagerActor) {
+        throw new Error('Identity manager actor not available');
+      }
+
+      const result = await identityManagerActor.process_vc_response(
+        sessionId,
+        credentialResponse.verifiable_presentation
+      );
+
+      if ('Err' in result) {
+        throw new Error(result.Err);
+      }
+
+      const response = result.Ok;
       
+      // Update current session status to reflect completion
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        sessions: prev.sessions.map(session =>
+          session.id === sessionId
+            ? { ...session, status: 'Completed' as VcVerificationStatus, response }
+            : session
+        ),
+        currentSession: prev.currentSession?.id === sessionId ?
+          { ...prev.currentSession, status: 'Completed' as VcVerificationStatus, response } :
+          prev.currentSession
+      }));
+      
+      return credentialResponse;
     } catch (error) {
       console.error('Failed to request credential from university:', error);
+      setState(prev => ({ ...prev, isLoading: false, error: `Failed to request credential: ${error}` }));
       throw error;
     }
-  }, []);
+  }, [identityManagerActor]);
 
   // Process credential response
   const processCredentialResponse = useCallback(async (
