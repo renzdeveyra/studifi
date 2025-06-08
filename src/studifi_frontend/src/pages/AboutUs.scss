@@ -23,7 +23,7 @@
     z-index: 1;
   }
 
-  // Radial gradient overlay
+  //  overlay
   &::after {
     content: '';
     position: absolute;
@@ -31,7 +31,6 @@
     left: 50%;
     width: 80vw;
     height: 60vh;
-    background: radial-gradient(circle, rgba(127, 255, 0, 0.08) 0%, transparent 60%);
     transform: translateX(-50%);
     pointer-events: none;
     z-index: 1;
@@ -139,6 +138,60 @@
   }
 }
 
+.member-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(127, 255, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(127, 255, 0, 0.15);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    filter: brightness(0.9) contrast(1.1);
+    background: linear-gradient(135deg, #333, #555);
+    
+    // Fallback styling when image doesn't load
+    &::before {
+      content: '👤';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      color: rgba(127, 255, 0, 0.6);
+      z-index: 1;
+    }
+    
+    // Hide the fallback icon when image loads successfully
+    &[src]:not([src=""]) {
+      &::before {
+        display: none;
+      }
+    }
+  }
+  
+  // Default fallback background
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(127, 255, 0, 0.1) 0%, 
+      rgba(50, 205, 50, 0.05) 50%, 
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
 // Team Members Grid
 .team-grid {
   display: grid;

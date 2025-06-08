@@ -15,11 +15,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-      linear-gradient(rgba(169, 169, 169, 0.03) 1px, transparent 1px), 
+    background-image:
+      linear-gradient(rgba(169, 169, 169, 0.03) 1px, transparent 1px),
       linear-gradient(to right, rgba(169, 169, 169, 0.03) 1px, transparent 1px);
     background-size: 120px 120px;
-    background-position: -30px -30px;
+    background-position: 0px -30px;
     pointer-events: none;
     z-index: 1;
   }
@@ -32,7 +32,6 @@
     left: 50%;
     width: 90vw;
     height: 70vh;
-    background: radial-gradient(circle, rgba(127, 255, 0, 0.06) 0%, transparent 60%);
     transform: translateX(-50%);
     pointer-events: none;
     z-index: 1;
@@ -158,7 +157,7 @@
     transform: translateY(-8px) scale(1.02);
     border-color: rgba(127, 255, 0, 0.4);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 
+    box-shadow:
       0 20px 40px rgba(127, 255, 0, 0.15),
       0 0 0 1px rgba(127, 255, 0, 0.2);
 
@@ -246,15 +245,16 @@
 }
 
 .sf-contact-form {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(32, 32, 32, 0.9);
   border-radius: 25px;
   padding: 2.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 
   .sf-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex; /* Changed from grid to flex */
+    flex-direction: column; /* Stack items vertically */
     gap: 1.5rem;
     margin-bottom: 1.5rem;
   }
@@ -262,25 +262,28 @@
   .sf-form-group {
     display: flex;
     flex-direction: column;
+    width: 100%; /* Ensure each group takes full width */
 
     label {
       font-size: 1rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: #7fff00;
+      display: block;
     }
 
     input,
     select,
     textarea {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(60, 60, 60, 0.8);
+      border: 1px solid rgba(100, 100, 100, 0.4);
       border-radius: 12px;
       padding: 1rem;
       color: white;
       font-size: 1rem;
       transition: all 0.3s ease;
       resize: vertical;
+      font-family: inherit;
 
       &::placeholder {
         color: rgba(255, 255, 255, 0.5);
@@ -288,25 +291,43 @@
 
       &:focus {
         outline: none;
-        border-color: rgba(127, 255, 0, 0.5);
-        background: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.1);
+        border-color: #7fff00;
+        background: rgba(70, 70, 70, 0.9);
+        box-shadow: 0 0 0 3px rgba(127, 255, 0, 0.2);
+        transform: translateY(-1px);
+      }
+
+      &:hover {
+        border-color: rgba(127, 255, 0, 0.6);
+        background: rgba(65, 65, 65, 0.8);
       }
     }
 
     select {
       cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%237fff00' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
 
       option {
-        background: #2a2a2a;
+        background: #3a3a3a;
         color: white;
+        padding: 0.5rem;
       }
     }
 
     textarea {
       min-height: 120px;
-      font-family: inherit;
+      resize: vertical;
     }
+  }
+
+  /* Added margin-bottom to the message group for spacing */
+  .sf-message-group {
+    margin-bottom: 1.5rem;
   }
 
   .sf-submit-btn {
@@ -323,9 +344,11 @@
     align-items: center;
     gap: 0.5rem;
     box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
-    margin-top: 1rem;
+    /* Removed margin-top as it's now explicitly below the message group */
     position: relative;
     overflow: hidden;
+    width: fit-content; /* Adjust as needed, e.g., '100%' for full width */
+    margin-top: 0; /* Ensure no extra top margin from previous rules */
 
     &::before {
       content: '';
@@ -347,6 +370,10 @@
       }
     }
 
+    &:active:not(:disabled) {
+      transform: translateY(-1px) scale(1.01);
+    }
+
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
@@ -366,6 +393,19 @@
     border-radius: 12px;
     color: #7fff00;
     font-weight: 500;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -544,17 +584,40 @@
   }
 
   .sf-team-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7fff00, #32cd32);
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7fff00, #32cd32);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid rgba(127, 255, 0, 0.3);
+      transition: all 0.3s ease;
+
+      // For actual images
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        border-color: rgba(127, 255, 0, 0.6);
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(127, 255, 0, 0.3);
+
+        img {
+          transform: scale(1.05);
+        }
+      }
   }
 
   .sf-team-info {
@@ -632,14 +695,16 @@
   }
 
   .sf-contact-main-content {
-    grid-template-columns: 1fr; /* Stack content on smaller screens */
+    grid-template-columns: 1fr;
     gap: 3rem;
   }
 
   .sf-contact-form {
     padding: 2rem;
     .sf-form-row {
-      grid-template-columns: 1fr; /* Stack form fields */
+      grid-template-columns: 1fr; /* Ensures single column layout on smaller screens too */
+      display: flex; /* Keep flex display */
+      flex-direction: column; /* Keep vertical stacking */
     }
   }
 
@@ -675,18 +740,18 @@
       }
     }
     .sf-team-contact-grid {
-      grid-template-columns: 1fr; /* Stack team cards */
+      grid-template-columns: 1fr;
     }
   }
 
   .sf-contact-us-section {
-    padding: 4rem 0; /* Adjust padding for smaller screens */
+    padding: 4rem 0;
     &::before {
-      background-size: 80px 80px; /* Adjust background pattern size */
+      background-size: 80px 80px;
       background-position: -20px -20px;
     }
     &::after {
-      width: 95vw; /* Adjust radial gradient width */
+      width: 95vw;
       height: 60vh;
       top: 15%;
     }
