@@ -12,8 +12,8 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
             Studi<span className="green">fi</span>
           </div>
           <ul className="nav-menu">
-            <li><a href="#" onClick={() => navigateTo('home')}>Home</a></li>   
-            <li><a href="#service">Service</a></li>
+            <li><a href="#" onClick={() => navigateTo('home')}>Home</a></li>
+            <li><a href="#" onClick={() => navigateTo('services')}>Services</a></li>
             <li><a href="#about">About Us</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>

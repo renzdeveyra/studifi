@@ -14,6 +14,7 @@ import PaymentPage from './pages/PaymentPage';
 import SmartContractAgreement from './pages/SmartContractAgreement';
 import DeFiEducationHub from './pages/DeFiEducationHub';
 import OAuthLogin from './pages/OAuthLogin';
+import ServicesPage from './pages/ServicesPage'; // Import ServicesPage
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -170,6 +171,7 @@ const App = () => {
       {currentPage === 'smart-contract' && <SmartContractAgreement navigateTo={navigateTo} contractType={pageData?.contractType || 'loan'} />}
       {currentPage === 'defi-education' && <DeFiEducationHub navigateTo={navigateTo} />}
       {currentPage === 'login' && <OAuthLogin onLogin={handleOAuthLogin} navigateTo={navigateTo} />}
+      {currentPage === 'services' && <ServicesPage />} {/* Render ServicesPage when currentPage is 'services' */}
     </div>
   );
 };
