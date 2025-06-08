@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import './ContactUs.scss';
 
+// Import team member images
+import AdrianImage from '../assets/Adrian.jpg';
+import BaronImage from '../assets/Baron.jpg';
+import RenzImage from '../assets/Renz.jpg';
+
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -89,6 +94,33 @@ const ContactUs = () => {
     }
   ];
 
+  // Team members data with images
+  const teamMembers = [
+    {
+      name: 'Adrian Azures',
+      role: 'Team Leader & Strategy',
+      email: 'adrianazures6@gmail.com',
+      phone: '+639953677577',
+      expertise: 'Platform strategy, partnerships, and general inquiries',
+      image: AdrianImage,
+    },
+    {
+      name: 'Baron Ocasiones',
+      role: 'Lead Researcher',
+      email: 'mvbocasiones@tip.edu.ph',
+      phone: '+639509410759',
+      expertise: 'Blockchain research, DeFi protocols, and technical documentation',
+      image: BaronImage,
+    },
+    {
+      name: 'Renz De Veyra',
+      role: 'Backend Lead',
+      email: 'mrdeveyra@tip.edu.ph',
+      phone: '+639455933109',
+      expertise: 'Smart contracts, backend architecture, and API issues',
+      image: RenzImage,
+    }
+  ];
   return (
     <section className="sf-contact-us-section">
       <div className="sf-contact-container">
@@ -133,6 +165,7 @@ const ContactUs = () => {
             </div>
 
             <form className="sf-contact-form" onSubmit={handleSubmit}>
+              {/* First Row: Name and Email */}
               <div className="sf-form-row">
                 <div className="sf-form-group">
                   <label htmlFor="name">Full Name *</label>
@@ -160,6 +193,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
+              {/* Second Row: Category and Subject */}
               <div className="sf-form-row">
                 <div className="sf-form-group">
                   <label htmlFor="category">Category</label>
@@ -190,7 +224,8 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="sf-form-group">
+              {/* Third Row: Message (full width) */}
+              <div className="sf-form-group sf-message-group">
                 <label htmlFor="message">Message *</label>
                 <textarea
                   id="message"
@@ -203,6 +238,7 @@ const ContactUs = () => {
                 ></textarea>
               </div>
 
+              {/* Submit Button */}
               <button 
                 type="submit" 
                 className="sf-submit-btn"
@@ -214,6 +250,7 @@ const ContactUs = () => {
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
 
+              {/* Success Message */}
               {submitMessage && (
                 <div className="sf-submit-message">
                   {submitMessage}
@@ -261,62 +298,37 @@ const ContactUs = () => {
           </div>
           
           <div className="sf-team-contact-grid">
-            <div className="sf-team-contact-card">
-              <div className="sf-team-avatar">A</div>
-              <div className="sf-team-info">
-                <h4>Adrian Azures</h4>
-                <p className="sf-team-role">Team Leader & Strategy</p>
-                <div className="sf-team-contact-details">
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📧</span>
-                    <span>adrianazures6@gmail.com</span>
-                  </div>
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📞</span>
-                    <span>+639953677577</span>
-                  </div>
-                </div>
-                <p className="sf-team-expertise">Platform strategy, partnerships, and general inquiries</p>
-              </div>
-            </div>
-
-            <div className="sf-team-contact-card">
-              <div className="sf-team-avatar">B</div>
-              <div className="sf-team-info">
-                <h4>Baron Ocasiones</h4>
-                <p className="sf-team-role">Lead Researcher</p>
-                <div className="sf-team-contact-details">
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📧</span>
-                    <span>mvbocasiones@tip.edu.ph</span>
-                  </div>
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📞</span>
-                    <span>+639509410759</span>
+            {teamMembers.map((member, index) => (
+              <div key={index} className="sf-team-contact-card">
+                <div className="sf-team-avatar-container">
+                  <div className="sf-team-avatar">
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="sf-team-avatar-image"
+                    />
+                    <div className="sf-team-avatar-fallback">
+                      {member.avatar}
+                    </div>
                   </div>
                 </div>
-                <p className="sf-team-expertise">Blockchain research, DeFi protocols, and technical documentation</p>
-              </div>
-            </div>
-
-            <div className="sf-team-contact-card">
-              <div className="sf-team-avatar">R</div>
-              <div className="sf-team-info">
-                <h4>Renz De Veyra</h4>
-                <p className="sf-team-role">Backend Lead</p>
-                <div className="sf-team-contact-details">
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📧</span>
-                    <span>mrdeveyra@tip.edu.ph</span>
+                <div className="sf-team-info">
+                  <h4>{member.name}</h4>
+                  <p className="sf-team-role">{member.role}</p>
+                  <div className="sf-team-contact-details">
+                    <div className="sf-contact-detail">
+                      <span className="sf-contact-icon">📧</span>
+                      <span>{member.email}</span>
+                    </div>
+                    <div className="sf-contact-detail">
+                      <span className="sf-contact-icon">📞</span>
+                      <span>{member.phone}</span>
+                    </div>
                   </div>
-                  <div className="sf-contact-detail">
-                    <span className="sf-contact-icon">📞</span>
-                    <span>+639455933109</span>
-                  </div>
+                  <p className="sf-team-expertise">{member.expertise}</p>
                 </div>
-                <p className="sf-team-expertise">Smart contracts, backend architecture, and API issues</p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

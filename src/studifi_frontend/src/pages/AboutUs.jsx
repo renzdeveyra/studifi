@@ -1,6 +1,12 @@
 import React from 'react';
 import './AboutUs.scss';
 
+import AdrianImg from '../assets/Adrian.jpg';
+import BaronImg from '../assets/Baron.jpg';
+import RenzImg from '../assets/Renz.jpg';
+import FrancisImg from '../assets/Francis.jpg';
+import NazarethImg from '../assets/Nazareth.jpg';
+
 const AboutUs = () => {
   const teamMembers = [
     {
@@ -9,7 +15,7 @@ const AboutUs = () => {
       role: "Team Leader",
       phone: "+639953677577",
       email: "adrianazures6@gmail.com",
-      image: "/api/placeholder/300/300",
+      image: AdrianImg,
       bio: "Passionate full-stack developer and team leader with expertise in blockchain technology and DeFi solutions. Leads the Code Crusader team in building innovative educational finance platforms."
     },
     {
@@ -18,7 +24,7 @@ const AboutUs = () => {
       role: "Lead Researcher",
       phone: "+639509410759",
       email: "mvbocasiones@tip.edu.ph",
-      image: "/api/placeholder/300/300",
+      image: BaronImg,
       bio: "Expert researcher specializing in blockchain protocols and decentralized systems. Drives technical innovation and ensures our solutions meet the highest industry standards."
     },
     {
@@ -27,7 +33,7 @@ const AboutUs = () => {
       role: "Backend Lead",
       phone: "+639455933109",
       email: "mrdeveyra@tip.edu.ph",
-      image: "/api/placeholder/300/300",
+      image: RenzImg,
       bio: "Senior backend developer with deep expertise in smart contracts and blockchain architecture. Builds robust, scalable systems that power our DeFi education platform."
     },
     {
@@ -36,7 +42,7 @@ const AboutUs = () => {
       role: "Frontend Developer",
       phone: "+639152788004",
       email: "mfarayes@tip.edu.ph",
-      image: "/api/placeholder/300/300",
+      image: FrancisImg,
       bio: "Creative frontend developer focused on creating intuitive user experiences. Transforms complex blockchain interactions into simple, elegant interfaces."
     },
     {
@@ -45,11 +51,16 @@ const AboutUs = () => {
       role: "Backend Developer",
       phone: "+639508410759",
       email: "ncm.0001x@gmail.com",
-      image: "/api/placeholder/300/300",
+      image: NazarethImg,
       bio: "Skilled backend developer specializing in API development and database optimization. Ensures seamless integration between frontend and blockchain systems."
     }
   ];
 
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    e.target.parentElement.style.background = 'linear-gradient(135deg, #333, #555)';
+    e.target.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem; color: rgba(127, 255, 0, 0.6);">👤</div>';
+  };
   return (
     <section className="about-us-section">
       <div className="container">
@@ -85,33 +96,41 @@ const AboutUs = () => {
 
         {/* Team Members Grid */}
         <div className="team-grid">
-          {teamMembers.map((member) => (
-            <div key={member.id} className="team-card">
-              <div className="card-background"></div>
-              <div className="member-image">
-                <img src={member.image} alt={member.name} />
-                <div className="image-overlay">
-                  <div className="overlay-icon">👨‍💻</div>
-                </div>
-              </div>
-              <div className="member-info">
-                <h3 className="member-name">{member.name}</h3>
-                <p className="member-role">{member.role}</p>
-                <p className="member-bio">{member.bio}</p>
-                <div className="contact-info">
-                  <div className="contact-item">
-                    <span className="contact-icon">📞</span>
-                    <span className="contact-text">{member.phone}</span>
-                  </div>
-                  <div className="contact-item">
-                    <span className="contact-icon">✉️</span>
-                    <span className="contact-text">{member.email}</span>
+          {teamMembers.map((member) => {
+            const firstName = member.name.split(' ')[0];
+
+            return (
+              <div key={member.id} className="team-card">
+                <div className="card-background"></div>
+                <div className="member-image" data-member={firstName}>
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    onError={handleImageError}
+                  />
+                  <div className="image-overlay">
+                    <div className="overlay-icon"></div>
                   </div>
                 </div>
+                <div className="member-info">
+                  <h3 className="member-name">{member.name}</h3>
+                  <p className="member-role">{member.role}</p>
+                  <p className="member-bio">{member.bio}</p>
+                  <div className="contact-info">
+                    <div className="contact-item">
+                      <span className="contact-icon">📞</span>
+                      <span className="contact-text">{member.phone}</span>
+                    </div>
+                    <div className="contact-item">
+                      <span className="contact-icon">✉️</span>
+                      <span className="contact-text">{member.email}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-glow"></div>
               </div>
-              <div className="card-glow"></div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Team Mission */}

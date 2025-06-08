@@ -193,3 +193,390 @@
     }
   }
 }
+
+// Treasury Dashboard
+.treasury-dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  &.loading {
+    text-align: center;
+    padding: 4rem 2rem;
+
+    h2 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+    }
+
+    .refresh-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: var(--primary-dark);
+      }
+    }
+  }
+
+  .overall-health {
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+
+    h3 {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .health-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+
+      .health-metric {
+        text-align: center;
+
+        h4 {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+          margin-bottom: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .amount {
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--success-color);
+        }
+
+        .score {
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--primary-color);
+        }
+      }
+    }
+
+    .recommendations {
+      background: var(--bg-secondary);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--warning-color);
+
+      h4 {
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          color: var(--text-secondary);
+          margin-bottom: 0.5rem;
+          padding-left: 1rem;
+          position: relative;
+
+          &:before {
+            content: "•";
+            color: var(--warning-color);
+            position: absolute;
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .treasuries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+
+    .treasury-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid var(--primary-color);
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .treasury-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+
+        h3 {
+          color: var(--text-primary);
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .governance-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: var(--radius-sm);
+          font-size: 0.75rem;
+          font-weight: 600;
+
+          &.required {
+            background: var(--warning-color);
+            color: white;
+          }
+
+          &.not-required {
+            background: var(--success-color);
+            color: white;
+          }
+        }
+      }
+
+      .treasury-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        .metric {
+          display: flex;
+          flex-direction: column;
+
+          label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+          }
+
+          .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      .treasury-bars {
+        margin-bottom: 1.5rem;
+
+        .bar-container {
+          .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 0.5rem;
+
+            .progress-fill {
+              transition: width 0.3s ease;
+
+              &.available {
+                background: var(--success-color);
+              }
+
+              &.reserved {
+                background: var(--warning-color);
+              }
+            }
+          }
+
+          .bar-legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+
+            .legend-item {
+              display: flex;
+              align-items: center;
+              gap: 0.25rem;
+
+              &:before {
+                content: "";
+                width: 12px;
+                height: 12px;
+                border-radius: 2px;
+              }
+
+              &.available:before {
+                background: var(--success-color);
+              }
+
+              &.reserved:before {
+                background: var(--warning-color);
+              }
+            }
+          }
+        }
+      }
+
+      .treasury-actions {
+        .btn-secondary {
+          width: 100%;
+          padding: 0.75rem;
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--radius-md);
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+          }
+        }
+      }
+    }
+  }
+
+  .treasury-health-details {
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    h3 {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+
+      .health-card {
+        background: var(--bg-secondary);
+        padding: 1.5rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+
+        h4 {
+          color: var(--text-primary);
+          margin-bottom: 1rem;
+          font-size: 1.125rem;
+        }
+
+        .health-score {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1rem;
+
+          .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+          }
+
+          .status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+        }
+
+        .health-metrics {
+          margin-bottom: 1rem;
+
+          .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+
+            span:first-child {
+              color: var(--text-secondary);
+            }
+
+            span:last-child {
+              color: var(--text-primary);
+              font-weight: 600;
+            }
+          }
+        }
+
+        .health-recommendations {
+          h5 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+              color: var(--text-secondary);
+              font-size: 0.75rem;
+              margin-bottom: 0.25rem;
+              padding-left: 1rem;
+              position: relative;
+
+              &:before {
+                content: "→";
+                color: var(--primary-color);
+                position: absolute;
+                left: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
