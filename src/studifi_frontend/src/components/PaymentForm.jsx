@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { loan_management_service } from 'declarations/loan_management_service';
-import { CreditCard, DollarSign, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
+import { autonomous_finance } from 'declarations/autonomous_finance';
+import { CreditCard, DollarSign, AlertCircle } from 'lucide-react';
+import { CreditCard, DollarSign, AlertCircle } from 'lucide-react';
 
 
 const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) => {
@@ -34,7 +35,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
 
   const loadEarlyPayoffInfo = async () => {
     try {
-      const result = await loan_management_service.get_early_payoff_info(loanId);
+      const result = await autonomous_finance.get_early_payoff_info(loanId);
       if (result.Ok) {
         setEarlyPayoffInfo(result.Ok);
       } else {
@@ -51,7 +52,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
     setCalculating(true);
     try {
       const amount = Math.round(parseFloat(paymentAmount) * 100); // Convert to cents
-      const result = await loan_management_service.calculate_payment_breakdown(loanId, BigInt(amount));
+      const result = await autonomous_finance.calculate_payment_breakdown(loanId, BigInt(amount));
       
       if (result.Ok) {
         setPaymentBreakdown(result.Ok);
@@ -84,7 +85,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
       const amount = Math.round(parseFloat(paymentAmount) * 100); // Convert to cents
       const methodVariant = { [paymentMethod]: null }; // Create variant object
       
-      const result = await loan_management_service.process_payment(
+      const result = await autonomous_finance.process_payment(
         loanId,
         BigInt(amount),
         methodVariant
@@ -123,7 +124,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
   };
 
   return (
-    <div className="payment-form-container">
+    <div className="payment-form-container" data-tutorial="payment-form">
       <div className="payment-form-header">
         <h3>Make a Payment</h3>
         <button onClick={onCancel} className="close-button">×</button>
@@ -168,7 +169,7 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
 
         <div className="form-group">
           <label htmlFor="paymentMethod">Payment Method</label>
-          <div className="payment-methods">
+          <div className="payment-methods" data-tutorial="payment-methods">
             {paymentMethods.map((method) => (
               <label key={method.value} className="payment-method-option">
                 <input
@@ -181,6 +182,9 @@ const PaymentForm = ({ loanId, onPaymentSuccess, onCancel, addNotification }) =>
                 <div className="method-content">
                   <span className="method-icon">{method.icon}</span>
                   <span className="method-label">{method.label}</span>
+                  {method.value === 'ICP' && (
+                    <span className="zero-fee-badge" data-tutorial="zero-fee-badge">Zero Fees!</span>
+                  )}
                 </div>
               </label>
             ))}

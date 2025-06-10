@@ -167,6 +167,12 @@
   }
 }
 
+// Tutorial Button in Sidebar
+.sidebar-tutorial {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+
 // Responsive Design (Components)
 @media (max-width: 768px) {
   .studifi-nav {
@@ -191,6 +197,11 @@
     .notification {
       min-width: auto;
     }
+  }
+
+  .sidebar-tutorial {
+    margin: 0.5rem 0;
+    padding: 0 0.5rem;
   }
 }
 

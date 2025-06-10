@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navigation.scss';
+import TutorialButton from './TutorialButton';
 
 // Accept navigateTo, isKycSubmitted, onLogout, and currentPage as props
 const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
@@ -79,6 +80,21 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
                   <div className="menu-indicator"></div>
                 </a>
               </li>
+
+              <li className="menu-item">
+                <a
+                  href="#"
+                  onClick={() => navigateTo('defi-education')}
+                  className={`menu-link ${currentPage === 'defi-education' ? 'active' : ''}`}
+                  data-tutorial="education-link"
+                >
+                  <div className="menu-icon-wrapper">
+                    <span className="menu-icon">📚</span>
+                  </div>
+                  <span className="menu-text">DeFi Education</span>
+                  <div className="menu-indicator"></div>
+                </a>
+              </li>
               <li className="menu-item">
                 <a
                   href="#"
@@ -93,6 +109,11 @@ const Navigation = ({ navigateTo, isKycSubmitted, onLogout, currentPage }) => {
                 </a>
               </li>
             </ul>
+
+            {/* Tutorial Button in Sidebar */}
+            <div className="sidebar-tutorial">
+              <TutorialButton variant="help-menu" />
+            </div>
           </div>
 
           <div className="sidebar-footer">

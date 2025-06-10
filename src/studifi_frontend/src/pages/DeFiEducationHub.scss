@@ -8,6 +8,8 @@
   position: relative;
   line-height: 1.6; // Improved base line height for readability
   width: 100%; // Ensure full viewport width utilization
+  margin-left: 280px; // Account for sidebar width - CRITICAL FIX
+  transition: margin-left 0.3s ease; // Smooth transition for responsive behavior
 
   // Ensure seamless background coverage across entire viewport
   &::before {
@@ -36,11 +38,12 @@
   }
 
   .container {
-    max-width: 1400px; // Increased max-width to utilize additional space
+    max-width: 1200px; // Standard max-width for content
     margin: 0 auto;
-    padding: 0 4rem; // Increased horizontal padding for better content margins in full-width layout
+    padding: 0 2rem; // Standard padding
     position: relative;
     z-index: 1;
+    width: 100%;
   }
 }
 
@@ -674,6 +677,7 @@
 @media (max-width: 768px) {
   .defi-education-hub {
     padding: 2rem 0 4rem 0; // Maintain adequate padding for tablet
+    margin-left: 250px; // Adjust for smaller sidebar width
 
     &::after {
       left: 0; // Natural left edge for full-width
@@ -681,8 +685,8 @@
     }
 
     .container {
-      max-width: 1200px; // Slightly reduced for tablet
-      padding: 0 3rem; // Maintain adequate horizontal padding
+      max-width: 1000px; // Adjusted for tablet
+      padding: 0 2rem; // Standard padding
     }
 
     // Ensure background still covers full viewport on tablet
@@ -778,6 +782,7 @@
 @media (max-width: 600px) {
   .defi-education-hub {
     padding: 1.5rem 0 3rem 0; // Optimized padding for small tablet
+    margin-left: 220px; // Adjust for smaller sidebar width
 
     &::after {
       left: 0; // Natural left edge for full-width
@@ -785,8 +790,8 @@
     }
 
     .container {
-      max-width: 1000px; // Adjusted for small tablet
-      padding: 0 2rem; // Adequate horizontal padding
+      max-width: 800px; // Adjusted for small tablet
+      padding: 0 1.5rem; // Standard padding
     }
 
     // Ensure background still covers full viewport on small tablet
@@ -828,6 +833,7 @@
 @media (max-width: 480px) {
   .defi-education-hub {
     padding: 1rem 0 2rem 0; // Optimized padding for mobile
+    margin-left: 0; // Remove sidebar margin when sidebar becomes overlay
 
     &::after {
       left: 0; // Natural left edge for full-width
@@ -836,7 +842,7 @@
 
     .container {
       max-width: 100%; // Full width utilization on mobile
-      padding: 0 1.5rem; // Adequate horizontal padding for mobile
+      padding: 0 1rem; // Standard mobile padding
     }
 
     // Ensure background still covers full viewport on mobile

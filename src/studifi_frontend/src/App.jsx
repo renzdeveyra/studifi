@@ -1,6 +1,7 @@
 // App.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { TutorialProvider, useTutorial } from './contexts/TutorialContext';
 import './App.scss';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -16,7 +17,10 @@ import OAuthLogin from './pages/OAuthLogin';
 import ServicesPage from './pages/ServicesPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
-import GovernancePage from './pages/GovernancePage';
+
+import TutorialOverlay from './components/TutorialOverlay';
+import TutorialButton from './components/TutorialButton';
+import TutorialDebug from './components/TutorialDebug';
 
 
 
@@ -35,6 +39,18 @@ const AppContent = () => {
     logout,
     clearError
   } = useAuth();
+
+  const { shouldAutoStart, startTutorial } = useTutorial();
+
+  // Auto-start tutorial when user first reaches dashboard
+  useEffect(() => {
+    if (shouldAutoStart(isKycSubmitted)) {
+      // Small delay to ensure dashboard is fully rendered
+      setTimeout(() => {
+        startTutorial();
+      }, 1000);
+    }
+  }, [isKycSubmitted, shouldAutoStart, startTutorial]);
 
   const navigateTo = (page, data = null) => {
     setCurrentPage(page);
@@ -119,7 +135,7 @@ const AppContent = () => {
       {currentPage === 'loan' && <LoanDashboard navigateTo={navigateTo} />}
       {currentPage === 'applyLoan' && <LoanApplication navigateTo={navigateTo} />}
       {currentPage === 'scholarship' && <ScholarshipDashboard />}
-      {currentPage === 'governance' && <GovernancePage />}
+
       {currentPage === 'payment' && <PaymentPage navigateTo={navigateTo} loanId={pageData?.loanId} />}
       {currentPage === 'smart-contract' && <SmartContractAgreement navigateTo={navigateTo} contractType={pageData?.contractType || 'loan'} />}
       {currentPage === 'defi-education' && <DeFiEducationHub navigateTo={navigateTo} />}
@@ -127,15 +143,28 @@ const AppContent = () => {
       {currentPage === 'services' && <ServicesPage />}
       {currentPage === 'about' && <AboutUs />}
       {currentPage === 'contact' && <ContactUs />}
+
+      {/* Tutorial System */}
+      <TutorialOverlay navigateTo={navigateTo} />
+
+      {/* Floating Tutorial Button - only show on dashboard and related pages */}
+      {isKycSubmitted && (
+        <TutorialButton variant="floating" />
+      )}
+
+      {/* Debug Panel - Development Only */}
+      <TutorialDebug />
     </div>
   );
 };
 
-// Main App wrapper with AuthProvider
+// Main App wrapper with AuthProvider and TutorialProvider
 const App = () => {
   return (
     <AuthProvider>
-      <AppContent />
+      <TutorialProvider>
+        <AppContent />
+      </TutorialProvider>
     </AuthProvider>
   );
 };

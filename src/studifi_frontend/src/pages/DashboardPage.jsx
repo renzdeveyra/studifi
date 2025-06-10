@@ -17,10 +17,17 @@ const DashboardPage = ({ navigateTo }) => {
               <p className="welcome-message">Welcome to your financial aid dashboard.</p>
             </div>
             <div className="profile-actions">
-              <button className="btn-primary">
+              <button
+                className="btn-primary"
+                onClick={() => navigateTo('applyLoan')}
+                data-tutorial="apply-aid-btn"
+              >
                 <span className="material-icons">➕</span> Apply for Aid
               </button>
-              <button className="btn-secondary">
+              <button
+                className="btn-secondary"
+                data-tutorial="wallet-btn"
+              >
                 <span className="material-icons">👛</span> My Wallet
               </button>
             </div>
@@ -28,7 +35,7 @@ const DashboardPage = ({ navigateTo }) => {
         </header>
 
         {/* Current Financial Aid Status Section */}
-        <div className="dashboard-section-wrapper">
+        <div className="dashboard-section-wrapper" data-tutorial="loan-status">
           <div className="section-header-left">
             <h2 className="section-title">Current Financial Aid Status</h2>
             <p className="section-description">
@@ -105,7 +112,7 @@ const DashboardPage = ({ navigateTo }) => {
         </div>
 
         {/* Scholarship Status Section */}
-        <div className="dashboard-section-wrapper">
+        <div className="dashboard-section-wrapper" data-tutorial="scholarship-section">
           <div className="section-header-left">
             <h2 className="section-title">Scholarship Status</h2>
             <p className="section-description">

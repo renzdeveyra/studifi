@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthClient } from '@dfinity/auth-client';
-import { createActor as createStudentIdentityActor } from 'declarations/student_identity_service';
-import { createActor as createCreditAssessmentActor } from 'declarations/credit_assessment_service';
-import { createActor as createLoanManagementActor } from 'declarations/loan_management_service';
-import { createActor as createDAOGovernanceActor } from 'declarations/dao_governance_service';
-import { createActor as createComplianceActor } from 'declarations/compliance_service';
-import { createActor as createUniversityCredentialActor } from 'declarations/university_credential_service';
-import { createActor as createAuthenticationActor } from 'declarations/authentication_service';
+import { createActor as createIdentityManagerActor } from 'declarations/identity_manager';
+import { createActor as createIntelligentCreditActor } from 'declarations/intelligent_credit';
+import { createActor as createAutonomousFinanceActor } from 'declarations/autonomous_finance';
+import { createActor as createGovernanceEngineActor } from 'declarations/governance_engine';
+import { createActor as createComplianceGatewayActor } from 'declarations/compliance_gateway';
 
 const AuthContext = createContext();
 
@@ -27,13 +25,11 @@ export const AuthProvider = ({ children }) => {
   
   // Backend actors
   const [actors, setActors] = useState({
-    studentIdentity: null,
-    creditAssessment: null,
-    loanManagement: null,
-    daoGovernance: null,
-    compliance: null,
-    universityCredential: null,
-    authentication: null,
+    identityManager: null,
+    intelligentCredit: null,
+    autonomousFinance: null,
+    governanceEngine: null,
+    complianceGateway: null,
   });
 
   // Initialize authentication on mount
@@ -77,32 +73,24 @@ export const AuthProvider = ({ children }) => {
       };
 
       const newActors = {
-        studentIdentity: createStudentIdentityActor(
-          import.meta.env.VITE_CANISTER_ID_STUDENT_IDENTITY_SERVICE,
+        identityManager: createIdentityManagerActor(
+          import.meta.env.VITE_CANISTER_ID_IDENTITY_MANAGER,
           { agentOptions }
         ),
-        creditAssessment: createCreditAssessmentActor(
-          import.meta.env.VITE_CANISTER_ID_CREDIT_ASSESSMENT_SERVICE,
+        intelligentCredit: createIntelligentCreditActor(
+          import.meta.env.VITE_CANISTER_ID_INTELLIGENT_CREDIT,
           { agentOptions }
         ),
-        loanManagement: createLoanManagementActor(
-          import.meta.env.VITE_CANISTER_ID_LOAN_MANAGEMENT_SERVICE,
+        autonomousFinance: createAutonomousFinanceActor(
+          import.meta.env.VITE_CANISTER_ID_AUTONOMOUS_FINANCE,
           { agentOptions }
         ),
-        daoGovernance: createDAOGovernanceActor(
-          import.meta.env.VITE_CANISTER_ID_DAO_GOVERNANCE_SERVICE,
+        governanceEngine: createGovernanceEngineActor(
+          import.meta.env.VITE_CANISTER_ID_GOVERNANCE_ENGINE,
           { agentOptions }
         ),
-        compliance: createComplianceActor(
-          import.meta.env.VITE_CANISTER_ID_COMPLIANCE_SERVICE,
-          { agentOptions }
-        ),
-        universityCredential: createUniversityCredentialActor(
-          import.meta.env.VITE_CANISTER_ID_UNIVERSITY_CREDENTIAL_SERVICE,
-          { agentOptions }
-        ),
-        authentication: createAuthenticationActor(
-          import.meta.env.VITE_CANISTER_ID_AUTHENTICATION_SERVICE,
+        complianceGateway: createComplianceGatewayActor(
+          import.meta.env.VITE_CANISTER_ID_COMPLIANCE_GATEWAY,
           { agentOptions }
         ),
       };
@@ -160,13 +148,11 @@ export const AuthProvider = ({ children }) => {
       setIdentity(null);
       setIsAuthenticated(false);
       setActors({
-        studentIdentity: null,
-        creditAssessment: null,
-        loanManagement: null,
-        daoGovernance: null,
-        compliance: null,
-        universityCredential: null,
-        authentication: null,
+        identityManager: null,
+        intelligentCredit: null,
+        autonomousFinance: null,
+        governanceEngine: null,
+        complianceGateway: null,
       });
       setError(null);
     } catch (error) {

@@ -97,7 +97,7 @@ const DeFiEducationHub = ({ navigateTo }) => {
   ];
 
   return (
-    <section className="defi-education-hub">
+    <section className="defi-education-hub" data-tutorial="defi-education-page">
       <div className="container">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb">
@@ -107,7 +107,7 @@ const DeFiEducationHub = ({ navigateTo }) => {
         </nav>
 
         {/* Hero Section */}
-        <header className="education-hero">
+        <header className="education-hero" data-tutorial="education-hero">
           <div className="hero-content">
             <h1 className="hero-title">
               DeFi Education Hub
@@ -206,15 +206,15 @@ const DeFiEducationHub = ({ navigateTo }) => {
         </section>
 
         {/* Interactive Learning Modules */}
-        <section className="learning-modules">
+        <section className="learning-modules" data-tutorial="learning-modules">
           <div className="section-header">
             <h2 className="section-title">Interactive Learning Modules</h2>
             <p className="section-description">
               Click on any module below to learn more about the technology powering your education finance.
             </p>
           </div>
-          
-          <div className="modules-grid">
+
+          <div className="modules-grid" data-tutorial="modules-grid">
             {learningModules.map((module) => (
               <div 
                 key={module.id} 

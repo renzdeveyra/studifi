@@ -1,0 +1,181 @@
+// Tutorial Button Styles
+
+// Help Menu Button (for sidebar/navigation)
+.tutorial-help-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(127, 255, 0, 0.1);
+  border: 1px solid rgba(127, 255, 0, 0.3);
+  border-radius: 8px;
+  color: #7fff00;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: 100%;
+
+  &:hover {
+    background: rgba(127, 255, 0, 0.2);
+    border-color: rgba(127, 255, 0, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .tutorial-help-icon {
+    font-size: 1rem;
+  }
+
+  .tutorial-help-text {
+    flex: 1;
+    text-align: left;
+  }
+}
+
+// Floating Help Button (bottom-right corner)
+.tutorial-floating-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #7fff00, #9fff40);
+  border: none;
+  border-radius: 50%;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(127, 255, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(127, 255, 0, 0.4);
+
+    .tutorial-floating-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-10px);
+    }
+  }
+
+  .tutorial-floating-icon {
+    font-size: 1.5rem;
+  }
+
+  .tutorial-floating-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: #1e1e1e;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(127, 255, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1e1e1e;
+    }
+  }
+
+  // Pulse animation for first-time users
+  &.tutorial-floating-pulse {
+    animation: tutorialFloatingPulse 2s infinite;
+  }
+}
+
+@keyframes tutorialFloatingPulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(127, 255, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(127, 255, 0, 0.6), 0 0 0 10px rgba(127, 255, 0, 0.1);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(127, 255, 0, 0.3);
+  }
+}
+
+// Inline Button (for dashboard/content areas)
+.tutorial-inline-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #7fff00, #9fff40);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(127, 255, 0, 0.3);
+  }
+
+  .tutorial-inline-icon {
+    font-size: 1rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .tutorial-floating-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+
+    .tutorial-floating-icon {
+      font-size: 1.2rem;
+    }
+
+    .tutorial-floating-tooltip {
+      font-size: 0.7rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+
+  .tutorial-help-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .tutorial-inline-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+}
+
+// Dark theme compatibility
+@media (prefers-color-scheme: dark) {
+  .tutorial-floating-tooltip {
+    background: #2a2a2a;
+    border-color: rgba(127, 255, 0, 0.4);
+
+    &::after {
+      border-top-color: #2a2a2a;
+    }
+  }
+}

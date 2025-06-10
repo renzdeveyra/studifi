@@ -145,7 +145,7 @@ const ScholarshipDashboard = () => {
   }
 
   return (
-    <div className="scholarship-dashboard">
+    <div className="scholarship-dashboard" data-tutorial="scholarship-section">
       {error && (
         <div style={{
           backgroundColor: '#ff6b6b',
